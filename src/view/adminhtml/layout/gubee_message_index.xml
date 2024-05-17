@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <script src="Gubee_Integration::js/dist/main.js"/>
+        <css src="Gubee_Integration::js/dist/main.css"/>
+    </head>
+    <update handle="styles"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Gubee\Integration\Block\Adminhtml\Message\Status" name="gubee_integration_message_status" template="Gubee_Integration::message/index.phtml"/>
+            <uiComponent name="gubee_integration_message_listing"/>
+        </referenceContainer>
+    </body>
+</page>

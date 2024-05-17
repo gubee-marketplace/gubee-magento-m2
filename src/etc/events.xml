@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="model_save_after">
+        <observer name="Gubee\Integration\Observer\Catalog\Product\Attribute\Save\After" instance="Gubee\Integration\Observer\Catalog\Product\Attribute\Save\After" />
+        <observer name="Gubee\Integration\Observer\Sales\Invoice\Save\After" instance="Gubee\Integration\Observer\Sales\Invoice\Save\After" />
+    </event>
+    <event name="cataloginventory_stock_item_save_commit_after">
+        <observer name="Gubee\Integration\Observer\Catalog\Product\Stock\Item\Save\After" instance="Gubee\Integration\Observer\Catalog\Product\Stock\Item\Save\After" />
+        <observer name="Gubee\Integration\Observer\Catalog\Product\Stock\Item\Save\Status\After" instance="Gubee\Integration\Observer\Catalog\Product\Stock\Item\Save\Status\After" />
+    </event>
+    <event name="catalog_product_attribute_update_before">
+        <observer name="Gubee\Integration\Observer\Catalog\Product\Attribute\Update\Before" instance="Gubee\Integration\Observer\Catalog\Product\Attribute\Update\Before" />
+    </event>
+    <event name="catalog_product_save_after">
+        <observer name="Gubee\Integration\Observer\Catalog\Product\Save\After" instance="Gubee\Integration\Observer\Catalog\Product\Save\After" />
+        <observer name="Gubee\Integration\Observer\Catalog\Product\Save\Desativate" instance="Gubee\Integration\Observer\Catalog\Product\Save\Desativate" />
+        <observer name="Gubee\Integration\Observer\Catalog\Product\Price\Save\After" instance="Gubee\Integration\Observer\Catalog\Product\Price\Save\After" />
+        <observer name="Gubee\Integration\Observer\Catalog\Product\Stock\Item\Save\After" instance="Gubee\Integration\Observer\Catalog\Product\Stock\Item\Save\After" />
+    </event>
+    <event name="catalog_product_delete_after_done">
+        <observer name="Gubee\Integration\Observer\Catalog\Product\Delete\After" instance="Gubee\Integration\Observer\Catalog\Product\Delete\After" />
+    </event>
+    <event name="catalog_category_save_after">
+        <observer name="Gubee\Integration\Observer\Catalog\Category\Save\After" instance="Gubee\Integration\Observer\Catalog\Category\Save\After" />
+    </event>
+
+    <event name="sales_order_shipment_save_after">
+        <observer name="Gubee\Integration\Observer\Sales\Order\Shipment\Save\After" instance="Gubee\Integration\Observer\Sales\Order\Shipment\Save\After" />
+    </event>
+    <event name="gubee_command_execute_before">
+        <observer name="Gubee\Integration\Observer\Gubee\Command\Execute\Before" instance="Gubee\Integration\Observer\Gubee\Command\Execute\Before" />
+    </event>
+    <event name="gubee_command_gubee_sales_order_processor_created_run_before">
+        <observer name="Gubee\Integration\Observer\Gubee\Command\Sales\Order\Processor\Created\Run\Before" instance="Gubee\Integration\Observer\Gubee\Command\Sales\Order\Processor\Created\Run\Before" />
+    </event>
+    <event name="order_cancel_after">
+        <observer name="Gubee\Integration\Observer\Sales\Order\Cancel\After" instance="Gubee\Integration\Observer\Sales\Order\Cancel\After" />
+    </event>
+
+    <event name="sales_order_place_after">
+        <observer name="Gubee\Integration\Observer\Sales\Order\Place\After" instance="Gubee\Integration\Observer\Sales\Order\Place\After" />
+    </event>
+</config>

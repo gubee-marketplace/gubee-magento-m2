@@ -1,0 +1,63 @@
+{
+    "name": "gubee/integration",
+    "description": "Gubee Integration Module for Magento 2",
+    "type": "magento2-module",
+    "authors": [
+        {
+            "name": "Marcos Aurelio",
+            "email": "marcos.aurelio@bis2bis.com.br"
+        }
+    ],
+    "require": {
+        "gubee/sdk": "1.0.0",
+        "laminas/laminas-hydrator": "^2",
+        "magento/framework": "^103",
+        "magento/module-catalog": "^104",
+        "magento/module-configurable-product": "^100",
+        "symfony/console": "^4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gubee\\Integration\\": "src/"
+        },
+        "files": [
+            "src/registration.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Gubee\\Integration\\Test\\": "test/"
+        }
+    },
+    "repositories": {
+        "magento": {
+            "type": "composer",
+            "url": "https://repo.magento.com/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "magento/composer-dependency-version-audit-plugin": true,
+            "php-http/discovery": true
+        }
+    },
+    "scripts": {
+        "cs:check": "phpcs",
+        "cs:fix": "phpcbf",
+        "cs:stan": "phpstan analyse src test --level=7",
+        "test": [
+            "@test:unit"
+        ],
+        "test:unit": "phpunit --testsuite=Unit"
+    },
+    "require-dev": {
+        "captainhook/captainhook": "^5.10",
+        "laminas/laminas-coding-standard": "^2.5",
+        "phpstan/phpstan": "^1.10",
+        "phpunit/phpunit": "^9.6",
+        "squizlabs/php_codesniffer": "^3.9"
+    }
+}

@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+    <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label><![CDATA[Gubee \ Integration]]></label>
+        <field id="active" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label><![CDATA[Active]]></label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+        <field id="api_key" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>API Key</label>
+            <comment><![CDATA[API Key is the token to access the Gubee API, you can get it in the Gubee panel.]]></comment>
+            <validate>required-entry</validate>
+            <depends>
+                <field id="active">1</field>
+            </depends>
+        </field>
+        <field id="api_token" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>API Token</label>
+            <frontend_model>Gubee\Integration\Block\Adminhtml\System\Config\Form\Field\Disabled</frontend_model>
+            <comment>
+                <![CDATA[API Token is generated based on API Key and is used to authenticate the request.]]>
+            </comment>
+            <depends>
+                <field id="active">1</field>
+            </depends>
+        </field>
+        <field id="api_timeout" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>API Timeout</label>
+            <frontend_model>Gubee\Integration\Block\Adminhtml\System\Config\Form\Field\Disabled</frontend_model>
+            <comment><![CDATA[API Timeout indicate the valid time of the token.]]></comment>
+            <depends>
+                <field id="active">1</field>
+            </depends>
+        </field>
+        <field id="queue_page_size" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Queue Page Size</label>
+            <validate>required-entry validate-digits</validate>
+            <comment>
+                <![CDATA[Queue Page Size is the number of records that will be processed in each queue process, by <b>default it is 100.</b>]]>
+            </comment>
+            <depends>
+                <field id="active">1</field>
+            </depends>
+        </field>
+        <field id="max_backoff_attempts" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Max Backoff Attempts</label>
+            <validate>required-entry validate-digits</validate>
+            <comment>
+                <![CDATA[Max Backoff Attempts is the maximum number of attempts to retry the integration of a product in case of failure, by <b>default it is 3.</b>]]>
+            </comment>
+            <depends>
+                <field id="active">1</field>
+            </depends>
+        </field>
+        <field id="max_attempts" type="text" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Max Attempts</label>
+            <validate>required-entry validate-digits</validate>
+            <comment>
+                <![CDATA[Max Attempts is the maximum number of attempts to execute a queue process, by <b>default it is 3.</b>]]>
+            </comment>
+            <depends>
+                <field id="active">1</field>
+            </depends>
+        </field>
+        <field id="log_level" type="multiselect" sortOrder="30" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Log Level</label>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Log\Level</source_model>
+            <comment>
+                <![CDATA[Log Level is the level of logs that will be saved, by <b>default it is Error.</b>]]>
+            </comment>
+            <depends>
+                <field id="active">1</field>
+            </depends>
+        </field>
+        <field id="fulfilment_enable" type="select" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Enable order fulfillment import</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            <depends>
+                <field id="active">1</field>
+            </depends>
+            <comment>
+                <![CDATA[If this option is enabled, the fulfilment rule will be applied to each order, if not, the all order will be processed normally.]]>
+            </comment>
+        </field>
+        <field id="fulfilment_rules" type="multiselect" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Marketplace order fulfillment</label>
+            <comment>
+                <![CDATA[Enter the rules to allow the fulfilment of the order, by <b>default it is empty.</b>]]>
+            </comment>
+            <source_model>Gubee\Integration\Model\Source\System\Config\General\Fullfilment</source_model>
+            <depends>
+                <field id="active">1</field>
+                <field id="fulfilment_enable">1</field>
+            </depends>
+        </field>
+    </group>
+</include>

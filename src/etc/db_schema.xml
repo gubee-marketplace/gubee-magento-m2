@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="gubee_integration_queue_message">
+        <column name="message_id" xsi:type="int" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column name="command" xsi:type="varchar" length="255" nullable="false" comment="Command"/>
+        <column name="status" xsi:type="int" padding="10" unsigned="true" nullable="false" comment="Status" default="0"/>
+        <column name="payload" xsi:type="text" nullable="true" comment="Payload"/>
+        <column name="priority" xsi:type="int" padding="10" unsigned="true" nullable="false" comment="Priority" default="0"/>
+        <column name="attempts" xsi:type="int" padding="10" unsigned="true" nullable="false" comment="Attempts" default="0"/>
+        <column name="message" xsi:type="text" nullable="true" comment="Message"/>
+        <column name="product_id" xsi:type="int" padding="10" unsigned="true" nullable="true" comment="Product ID"/>
+        <column name="created_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column name="updated_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" on_update="true" comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="message_id"/>
+        </constraint>
+        <index referenceId="GUBEE_INTEGRATION_QUEUE_MESSAGE_COMMAND" indexType="btree">
+            <column name="command"/>
+        </index>
+        <index referenceId="GUBEE_INTEGRATION_QUEUE_MESSAGE_STATUS" indexType="btree">
+            <column name="status"/>
+        </index>
+        <index referenceId="GUBEE_INTEGRATION_QUEUE_MESSAGE_PRIORITY" indexType="btree">
+            <column name="priority"/>
+        </index>
+        <index referenceId="GUBEE_INTEGRATION_QUEUE_MESSAGE_PRODUCT_ID" indexType="btree">
+            <column name="product_id"/>
+        </index>
+        <constraint xsi:type="foreign" referenceId="GUBEE_INTEGRATION_QUEUE_MESSAGE_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID" table="gubee_integration_queue_message" column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="SET NULL"/>
+    </table>
+
+    <table name="gubee_integration_queue_message_detail">
+        <column name="detail_id" xsi:type="int" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column name="level" xsi:type="int" padding="10" unsigned="true" nullable="false" comment="Level" default="0"/>
+        <column name="message_id" xsi:type="int" padding="10" unsigned="true" nullable="true" comment="Message ID"/>
+        <column name="message" xsi:type="text" nullable="true" comment="Message"/>
+        <column name="context" xsi:type="text" nullable="true" comment="Context"/>
+        <column name="created_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <constraint xsi:type="foreign" referenceId="GUBEE_INTEGRATION_QUEUE_MESSAGE_DETAIL_MESSAGE_ID_GUBEE_INTEGRATION_QUEUE_MESSAGE_MESSAGE_ID" table="gubee_integration_queue_message_detail" column="message_id" referenceTable="gubee_integration_queue_message" referenceColumn="message_id" onDelete="SET NULL"/>
+        <index referenceId="GUBEE_INTEGRATION_QUEUE_MESSAGE_DETAIL_MESSAGE_ID" indexType="btree">
+            <column name="message_id"/>
+        </index>
+        <index referenceId="GUBEE_INTEGRATION_QUEUE_MESSAGE_DETAIL_LEVEL" indexType="btree">
+            <column name="level"/>
+        </index>
+        <!-- primary key -->
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="detail_id"/>
+        </constraint>
+    </table>
+
+    <table name="gubee_integration_invoice" resource="default" engine="innodb" comment="gubee_integration_invoice Table">
+        <column xsi:type="int" name="invoice_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity Id"/>
+        <column name="danfeLink" nullable="true" xsi:type="text" comment="danfeLink"/>
+        <column name="danfeXml" nullable="true" xsi:type="text" comment="danfeXml"/>
+        <column name="issueDate" nullable="true" xsi:type="timestamp" comment="issueDate"/>
+        <column name="key" nullable="true" xsi:type="varchar" comment="key" length="44"/>
+        <column name="line" nullable="true" xsi:type="text" comment="line"/>
+        <column name="number" nullable="true" xsi:type="text" comment="number"/>
+        <column name="origin" nullable="false" xsi:type="int" comment="origin" default="0"/>
+        <column name="shipment_id" nullable="true" xsi:type="int" padding="10" unsigned="true" comment="shipment_id"/>
+        <column name="order_id" nullable="true" xsi:type="int" padding="10" unsigned="true" comment="order_id"/>
+        <column name="created_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column name="updated_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" on_update="true" comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="invoice_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="GUBEE_INTEGRATION_INVOICE_ORDER_ID_SALES_ORDER_ENTITY_ENTITY_ID" table="gubee_integration_invoice" column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="SET NULL"/>
+        <constraint xsi:type="foreign" referenceId="GUBEE_INTEGRATION_INVOICE_SHIPMENT_ID_SALES_SHIPMENT_ENTITY_ENTITY_ID" table="gubee_integration_invoice" column="shipment_id" referenceTable="sales_shipment" referenceColumn="entity_id" onDelete="SET NULL"/>
+        <index referenceId="GUBEE_INTEGRATION_INVOICE_KEY" indexType="btree">
+            <column name="key"/>
+        </index>
+    </table>
+
+    <table name="gubee_integration_order" resource="default" engine="innodb" comment="gubee_integration_order Table">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity Id"/>
+        <column name="order_id" nullable="true" xsi:type="int" padding="10" unsigned="true" comment="order_id"/>
+        <column name="gubee_order_id" nullable="true" xsi:type="varchar" comment="gubee_order_id" length="255"/>
+        <column name="gubee_marketplace" nullable="true" xsi:type="varchar" comment="gubee_marketplace" length="255"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="GUBEE_INTEGRATION_ORDER_ORDER_ID_SALES_ORDER_ENTITY_ENTITY_ID" table="gubee_integration_order" column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="SET NULL"/>
+    </table>
+
+
+    <table name="sales_order" resource="default">
+        <column xsi:type="decimal" name="gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Finance Cost Amount"/>
+        <column xsi:type="decimal" name="base_gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Base Finance Cost Amount"/>
+    </table>
+    <table name="quote" resource="default">
+        <column xsi:type="decimal" name="gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Finance Cost Amount"/>
+        <column xsi:type="decimal" name="base_gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Base Finance Cost Amount"/>
+    </table>
+    <table name="sales_invoice" resource="default">
+        <column xsi:type="decimal" name="gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Finance Cost Amount"/>
+        <column xsi:type="decimal" name="base_gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Base Finance Cost Amount"/>
+    </table>
+    <table name="sales_creditmemo" resource="default">
+        <column xsi:type="decimal" name="gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Finance Cost Amount"/>
+        <column xsi:type="decimal" name="base_gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Base Finance Cost Amount"/>
+    </table>
+    <table name="quote_address" resource="default">
+        <column xsi:type="decimal" name="gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Finance Cost Amount"/>
+        <column xsi:type="decimal" name="base_gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Base Finance Cost Amount"/>
+    </table>
+
+</schema>

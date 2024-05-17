@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="admin_system_config_changed_section_gubee">
+        <observer name="Gubee\Integration\Observer\Adminhtml\System\Config\Gubee\OnChange" instance="Gubee\Integration\Observer\Adminhtml\System\Config\Gubee\OnChange"/>
+    </event>
+    <event name="controller_action_postdispatch_adminhtml_order_shipment_new">
+        <observer name="Gubee\Integration\Observer\Sales\Order\Shipment\NewShipment" instance="Gubee\Integration\Observer\Sales\Order\Shipment\NewShipment"/>
+    </event>
+    <event name="sales_order_shipment_save_before">
+        <observer name="Gubee\Integration\Observer\Sales\Order\Shipment\Save\Before" instance="Gubee\Integration\Observer\Sales\Order\Shipment\Save\Before" />
+    </event>
+    <event name="sales_order_shipment_save_after">
+        <observer name="Gubee\Integration\Observer\Sales\Order\Shipment\Save\Invoice\Capture" instance="Gubee\Integration\Observer\Sales\Order\Shipment\Save\Invoice\Capture" />
+    </event>
+</config>

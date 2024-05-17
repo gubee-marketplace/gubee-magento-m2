@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <gubee>
+            <attributes>
+                <identifier>sku</identifier>
+                <brand>gubee_brand</brand>
+                <price>price</price>
+                <nbm>gubee_nbm</nbm>
+                <ean>gubee_ean</ean>
+                <color>color</color>
+                <width>gubee_width</width>
+                <height>gubee_height</height>
+                <depth>gubee_depth</depth>
+                <measure_unit>CENTIMETER</measure_unit>
+                <warranty_time>gubee_warranty_time</warranty_time>
+                <main_category>deeper</main_category>
+            </attributes>
+            <settings>
+                <max_backoff_attempts>3</max_backoff_attempts>
+                <max_attempts>3</max_attempts>
+            </settings>
+        </gubee>
+        <payment>
+            <gubee>
+                <active>1</active>
+                <model>Gubee\Integration\Model\Payment\Gubee</model>
+                <order_status>pending</order_status>
+                <title>gubee</title>
+                <allowspecific>0</allowspecific>
+                <group>offline</group>
+            </gubee>
+        </payment>
+        <carriers>
+            <gubee>
+                <model>Gubee\Integration\Model\Carrier\Gubee</model>
+                <active>0</active>
+                <title>gubee</title>
+                <name>gubee</name>
+                <price>0.00</price>
+                <specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.</specificerrmsg>
+                <sallowspecific>0</sallowspecific>
+            </gubee>
+        </carriers>
+    </default>
+</config>

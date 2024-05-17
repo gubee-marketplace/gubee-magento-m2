@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <columns name="sales_order_columns">
+        <column name="gubee_marketplace" class="Gubee\Integration\Ui\Component\Sales\Order\Listing\Column\Marketplace">
+            <settings>
+                <label translate="true">Gubee Marketplace</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+            </settings>
+        </column>
+        <column name="gubee_order_id">
+            <settings>
+                <label translate="true">Gubee Order Id</label>
+            </settings>
+        </column>
+    </columns>
+</listing>

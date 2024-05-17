@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Gubee::top_level" title="Gubee" module="Gubee_Integration" sortOrder="9999" resource="Magento_Backend::content"  dependsOnConfig="gubee/general/active"/>
+        <add id="Gubee_Integration::gubee_integration_message" title="Message" module="Gubee_Integration" sortOrder="9999" resource="Magento_Backend::content" parent="Gubee::top_level" action="gubee/message/index" dependsOnConfig="gubee/general/active"/>
+        <add id="Gubee_Integration::gubee_integration_unsuccessful_order" title="Unsuccessful orders integration" module="Gubee_Integration" sortOrder="9999" resource="Magento_Backend::content" parent="Gubee::top_level" action="gubee/message_order_unsuccessful/index" dependsOnConfig="gubee/general/active"/>
+        <add id="Gubee_Integration::gubee_integration_settings" title="Settings" module="Gubee_Integration" sortOrder="9999" resource="Magento_Backend::content" parent="Gubee::top_level" action="admin/system_config/edit/section/gubee/" dependsOnConfig="gubee/general/active"/>
+    </menu>
+</config>

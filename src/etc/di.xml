@@ -1,0 +1,100 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Gubee\Integration\Api\MessageRepositoryInterface" type="Gubee\Integration\Model\MessageRepository"/>
+    <preference for="Gubee\Integration\Api\Data\MessageInterface" type="Gubee\Integration\Model\Message"/>
+    <preference for="Gubee\Integration\Api\Data\MessageSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Gubee\SDK\Api\ServiceProviderInterface" type="Gubee\Integration\Service\Gubee\ServiceProvider"/>
+    <preference for="Gubee\SDK\Client" type="Gubee\Integration\Service\Gubee\Client"/>
+    <preference for="Gubee\Integration\Api\Message\DetailRepositoryInterface" type="Gubee\Integration\Model\Message\DetailRepository"/>
+    <preference for="Gubee\Integration\Api\Data\Message\DetailInterface" type="Gubee\Integration\Model\Message\Detail"/>
+    <preference for="Gubee\Integration\Api\Data\Message\DetailSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Gubee\Integration\Api\Queue\ManagementInterface" type="Gubee\Integration\Model\Queue\Management"/>
+    <preference for="Gubee\Integration\Api\Message\ManagementInterface" type="Gubee\Integration\Model\Message\Management"/>
+
+    <preference for="Gubee\Integration\Api\InvoiceRepositoryInterface" type="Gubee\Integration\Model\InvoiceRepository"/>
+    <preference for="Gubee\Integration\Api\Data\InvoiceInterface" type="Gubee\Integration\Model\Invoice"/>
+    <preference for="Gubee\Integration\Api\Data\InvoiceSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+
+    <preference for="Gubee\Integration\Api\OrderRepositoryInterface" type="Gubee\Integration\Model\OrderRepository"/>
+    <preference for="Gubee\Integration\Api\Data\OrderInterface" type="Gubee\Integration\Model\Order"/>
+    <preference for="Gubee\Integration\Api\Data\OrderSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <plugin name="Gubee\Integration\Plugin\Sales\Order\Grid\Marketplace\Column" type="Gubee\Integration\Plugin\Sales\Order\Grid\Marketplace\Column" sortOrder="100" disabled="false" />
+    </type>
+
+
+    <type name="Gubee\Integration\Service\Gubee\Client">
+        <arguments>
+            <argument name="logger" xsi:type="object">Gubee\Integration\Model\Message\Detail\Logger</argument>
+        </arguments>
+    </type>
+    <virtualType name="Gubee\Integration\Model\ResourceModel\Message\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">gubee_integration_queue_message</argument>
+            <argument name="resourceModel" xsi:type="string">Gubee\Integration\Model\ResourceModel\Message\Collection</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Gubee\Integration\Model\ResourceModel\Message\Grid\Unsuccessful\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">gubee_integration_queue_message</argument>
+            <argument name="resourceModel" xsi:type="string">Gubee\Integration\Model\ResourceModel\Message\Grid\Unsuccessful\Collection</argument>
+        </arguments>
+    </virtualType>
+    <type name="Gubee\Integration\Observer\AbstractObserver">
+        <arguments>
+            <argument name="logger" xsi:type="object">Gubee\Integration\Model\Message\Detail\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Gubee\Integration\Command\AbstractCommand">
+        <arguments>
+            <argument name="logger" xsi:type="object">Gubee\Integration\Model\Message\Detail\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Gubee\Integration\Service\Model\Catalog\Product">
+        <arguments>
+            <argument name="strategies" xsi:type="array">
+                <item name="id" xsi:type="object">Gubee\Integration\Service\Hydrator\Strategy\Product\Id</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Gubee\Integration\Model\Message\Management">
+        <arguments>
+            <argument name="logger" xsi:type="object">Gubee\Integration\Model\Message\Detail\Logger</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="gubee_integration_queue_message_listing_data_source" xsi:type="string">Gubee\Integration\Model\ResourceModel\Message\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="gubee_message_order_unsuccessful_listing_data_source" xsi:type="string">Gubee\Integration\Model\ResourceModel\Message\Grid\Unsuccessful\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="Gubee\Integration\Command\Gubee\Queue\ConsumeCommand" xsi:type="object">Gubee\Integration\Command\Gubee\Queue\ConsumeCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Gubee\Integration\Setup\Migration\Context">
+        <arguments>
+            <argument name="logger" xsi:type="object">Gubee\Integration\Model\Message\Detail\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Gubee\Integration\Setup\Migration\Facade\ProductAttribute">
+        <arguments>
+            <argument name="logger" xsi:type="object">Gubee\Integration\Model\Message\Detail\Logger</argument>
+        </arguments>
+    </type>
+</config>

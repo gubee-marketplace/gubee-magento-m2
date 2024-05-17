@@ -1,0 +1,18 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <script src="Gubee_Integration::js/dist/main.js"/>
+        <css src="Gubee_Integration::js/dist/main.css"/>
+    </head>
+    <body>
+        <referenceBlock name="sales_order_tabs">
+            <action method="addTab">
+                <argument name="name" xsi:type="string">gubee_invoice</argument>
+                <argument name="block" xsi:type="string">Gubee\Integration\Block\Adminhtml\Sales\Order\View\Tab\Gubee\Invoice\Form</argument>
+            </action>
+            <action method="addTab">
+                <argument name="name" xsi:type="string">gubee_invoice_list</argument>
+                <argument name="block" xsi:type="string">Gubee\Integration\Block\Adminhtml\Sales\Order\View\Tab\Gubee\Invoice\Grid</argument>
+            </action>
+        </referenceBlock>
+    </body>
+</page>

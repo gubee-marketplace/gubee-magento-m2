@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="gubee" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <class>service_gubee</class>
+            <label>Gubee</label>
+            <tab>service</tab>
+            <resource>Gubee_Integration::config_gubee_integration</resource>
+            <include path="Gubee_Integration::system/01-general.xml"/>
+            <include path="Gubee_Integration::system/02-attributes.xml"/>
+            <include path="Gubee_Integration::system/03-payment.xml"/>
+            <include path="Gubee_Integration::system/04-shipping.xml"/>
+        </section>
+    </system>
+</config>

@@ -1,0 +1,106 @@
+@tailwind components;
+@tailwind utilities;
+
+#gubee_integration-head::before,
+li[data-ui-id="menu-gubee-integration-catalog"] .submenu-group-title span::before,
+.service_gubee a span::before,
+i.gubee-black::before,
+#gubee_validation::before,
+#gubee_sync span::before,
+.fieldset-wrapper[data-index="gubee"] .admin__collapsible-title span[data-bind="i18n: label"]::before {
+    background-image: url('./../img/logo-black.svg');
+    width: 30px;
+    height: 30px;
+    @apply bg-no-repeat bg-center bg-contain top-0 left-0 z-0 content-[''] inline-block pr-10 relative align-middle mr-2;
+}
+
+.gubeeIcon {
+    width: 30px;
+    height: 30px;
+    @apply bg-no-repeat bg-center bg-contain top-0 left-0 z-0 content-[''] inline-block pr-10 relative align-middle mr-2;
+}
+
+li[data-ui-id="menu-gubee-integration-catalog"] .submenu-group-title span::before,
+#gubee_sync span::before {
+    background-image: url('./../img/logo-white.svg');
+}
+
+i.gubee-black::before {
+    @apply mr-0;
+}
+
+i.gubee-black {
+    @apply m-auto block text-center;
+}
+
+#gubee_validation::before {
+    display: initial;
+}
+
+#gubee_validation .notifications-counter {
+    @apply relative inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-4 right-4 dark:border-gray-900 motion-safe:animate-pulse;
+}
+
+
+
+.gubee-tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.gubee-tooltip .gubee-tooltiptext {
+    visibility: hidden;
+    left: -250%;
+    @apply bg-white absolute text-black shadow-lg w-screen max-w-md flex-auto overflow-hidden bg-white z-50 p-4;
+}
+
+.gubee-tooltip:hover .gubee-tooltiptext {
+    visibility: visible;
+}
+
+
+#gubee_sync {
+    background-color: purple;
+    border-color: purple;
+}
+
+#gubee_sync:active {
+    background-color: #6c0c6c;
+    border-color: purple;
+    @apply items-center justify-center align-middle;
+}
+
+
+.fieldset-wrapper-title strong span:contains("Gubee") {
+    @apply text-2xl;
+}
+
+
+.data-grid tr td {
+    vertical-align: top !important;
+}
+
+#gubee_validation::before {
+    @apply w-6 h-6 text-gray-800 dark:text-white bg-no-repeat bg-center bg-contain top-0 left-0 z-0 content-[''] inline-block pr-10 relative align-middle mr-2 gubee-logo-white;
+}
+
+.gubee-logo-white {
+    background-image: url('../img/logo-white.svg');
+}
+
+.gubee-logo-black {
+    background-image: url('../img/logo-black.svg');
+}
+
+.gubee-logo {
+    background-image: url('../img/logo.svg');
+}
+
+#gubee_validation::after {
+    @apply absolute inline-flex items-center justify-center text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem;
+    content: attr(data-errors);
+}
