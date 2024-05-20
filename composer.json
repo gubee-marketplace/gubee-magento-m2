@@ -1,15 +1,19 @@
 {
-    "name": "gubee/integration",
+    "name": "gubee-marketplace/integration-module",
     "description": "Gubee Integration Module for Magento 2",
     "type": "magento2-module",
     "authors": [
         {
             "name": "Marcos Aurelio",
             "email": "marcos.aurelio@bis2bis.com.br"
+        },
+        {
+            "name": "Matheus Heiden",
+            "email": "matheus.heiden@bis2bis.com.br"
         }
     ],
     "require": {
-        "gubee/sdk": "1.0.0",
+        "gubee-marketplace/php-sdk": "1.0.0",
         "laminas/laminas-hydrator": "^2",
         "magento/framework": "^103",
         "magento/module-catalog": "^104",
