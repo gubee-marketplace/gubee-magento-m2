@@ -10,4 +10,4 @@ interface CommandInterface
      * Get the command max attempts.
      */
     public function getMaxAttempts(): int;
-}
+} 
