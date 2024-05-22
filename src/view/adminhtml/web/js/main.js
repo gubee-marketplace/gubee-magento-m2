@@ -12,11 +12,11 @@ if (!window.gubeeIntegration) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    if (!document.querySelector('body.sales-order-view')) {
+    if (!document.querySelector('body.sales-order-view') || Object.keys(window.gubeeOrderInfo).length == 0 ) {
         return
     }
     var container;
-    if (container = document.querySelector('.gubee-payment-placeholder')) {
+    if (container = document.querySelector('.gubee-payment-placeholder') ) {
         createApp(
             PaymentInfo
         ).mount(
@@ -61,6 +61,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 document.addEventListener('DOMContentLoaded', () => {
+    if (!document.querySelector('body.catalog-product-edit')) {
+        return;
+    }
     var errors = document.querySelector('body.catalog-product-edit #gubee_validation span').innerText;
     if (errors) {
         errors = JSON.parse(errors);
