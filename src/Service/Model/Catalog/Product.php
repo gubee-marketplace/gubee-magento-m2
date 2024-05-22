@@ -50,6 +50,7 @@ class Product
     protected StockItemInterface $stockItem;
     protected ValidateResource $validateResource;
     private ?array $variations = null;
+    private bool $lazyMode = false;
 
     public function __construct(
         ProductInterface $product,
@@ -60,9 +61,11 @@ class Product
         ObjectManagerInterface $objectManager,
         CollectionFactory $categoryCollectionFactory,
         AttributeCollectionFactory $attributeCollectionFactory,
-        StockRegistryInterface $stockRegistry
+        StockRegistryInterface $stockRegistry,
+        bool $lazyMode = false
     )
     {
+        $this->lazyMode = $lazyMode;
         $this->validateResource = $validateResource;
         $this->attributeCollection = $attributeCollectionFactory->create();
         $this->categoryCollectionFactory = $categoryCollectionFactory;
@@ -152,6 +155,7 @@ class Product
 
     private function buildBrand()
     {
+        if ($this->lazyMode) return null;
         $brand = $this->attribute->getAttributeValueLabel(
             $this->config->getBrandAttribute(),
             $this->product

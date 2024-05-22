@@ -88,6 +88,7 @@ class SendCommand extends AbstractCommand
             Product::class,
             [
                 'product' => $product,
+                'lazyMode' => true
             ]
         );
 
