@@ -6,6 +6,7 @@ namespace Gubee\Integration\Api\Data;
 
 use DateTimeInterface;
 use Gubee\Integration\Api\Enum\MainCategoryEnum;
+use Gubee\SDK\Enum\Catalog\Product\Attribute\Dimension\Weight\TypeEnum;
 
 interface ConfigInterface
 {
@@ -57,6 +58,13 @@ interface ConfigInterface
      * @var string
      */
     public const CONFIG_PATH_LOG_LEVEL = "gubee/general/log_level";
+     
+    /**
+     * Path to 'default_stock_id' system config.
+     *
+     * @var string
+     */
+    public const CONFIG_PATH_DEFAULT_STOCK_ID = "gubee/general/default_stock_id";
 
     /**
      * Path to 'product_heading' system config.
@@ -205,6 +213,11 @@ interface ConfigInterface
      * Get the 'api_token' system config.
      */
     public function getApiToken(): string;
+    
+    /**
+     * Get the 'default_stock_id' system config.
+     */
+    public function getDefaultStockId(): int;
 
     /**
      * Set the 'api_timeout' system config.
@@ -371,6 +384,12 @@ interface ConfigInterface
      * Get the 'measure_unit' attribute.
      */
     public function getMeasureUnitAttribute(): string;
+
+
+    /**
+     * Get the 'weight_unit' attribute.
+     */
+    public function getWeightUnit(): TypeEnum;
 
     /**
      * Set the 'cross_docking_time' attribute.
