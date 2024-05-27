@@ -15,7 +15,7 @@
     "require": {
         "gubee-marketplace/php-sdk": "1.0.0",
         "laminas/laminas-hydrator": "^2",
-        "magento/framework": "^103",
+        "magento/framework": "^101",
         "magento/module-catalog": "^103",
         "magento/module-configurable-product": "^100",
         "symfony/console": "^4"
