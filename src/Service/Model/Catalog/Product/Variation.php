@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Gubee\Integration\Service\Model\Catalog\Product;
 
 use Gubee\Integration\Helper\Catalog\Attribute;
-use Gubee\Integration\Model\Config;
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Model\ResourceModel\Catalog\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Gubee\SDK\Enum\Catalog\Product\Attribute\Dimension\Measure\TypeEnum;
 use Gubee\SDK\Enum\Catalog\Product\Attribute\Dimension\UnitTime\TypeEnum as UnitTimeTypeEnum;
@@ -24,6 +24,8 @@ use Magento\Catalog\Model\Product\Gallery\ReadHandler;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
+use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 
 use function array_map;
 use function in_array;
@@ -42,19 +44,26 @@ class Variation
     protected ?ProductInterface $parent = null;
     protected \Gubee\SDK\Model\Catalog\Product\Variation $variation;
     protected Attribute $attribute;
-    protected Config $config;
+    protected ConfigInterface $config;
     /** @var AttributeSearchResultsInterface|ProductAttributeSearchResultsInterface */
     protected $attributeCollection;
     protected ObjectManagerInterface $objectManager;
-    protected StockItemInterface $stockItem;
+    protected GetProductSalableQtyInterface $salableQtyGetter;
+    protected IsProductSalableInterface $isProductSalableGetter;
+    /**
+     * @var float product stock qty
+     * default it to 0
+     */
+    protected $productQty = 0;
 
     public function __construct(
         ProductInterface $product,
         Attribute $attribute,
-        Config $config,
+        ConfigInterface $config,
         ObjectManagerInterface $objectManager,
         AttributeCollectionFactory $attributeCollectionFactory,
-        StockRegistryInterface $stockRegistry,
+        GetProductSalableQtyInterface $salableQtyGetter,
+        IsProductSalableInterface $isProductSalableGetter,
         ReadHandler $galleryReadHandler,
         ?ProductInterface $parent = null
     )
@@ -68,7 +77,8 @@ class Variation
         $this->attribute = $attribute;
         $this->config = $config;
         $this->objectManager = $objectManager;
-        $this->stockItem = $stockRegistry->getStockItem($product->getId());
+        $this->salableQtyGetter = $salableQtyGetter;
+        $this->isProductSalableGetter = $isProductSalableGetter;
         $this->variation = $this->objectManager->create(
                 \Gubee\SDK\Model\Catalog\Product\Variation::class,
             [
@@ -84,8 +94,8 @@ class Variation
                 'ean' => $this->buildEan() ?: '',
                 'main' => $this->buildMain() ?: '',
                 'prices' => $this->buildPrices(),
-                'status' => $this->buildStatus(),
                 'stocks' => $this->buildStocks(),
+                'status' => $this->buildStatus(),
                 'variantSpecification' => $this->buildVariantSpecification(),
             ]
         );
@@ -317,12 +327,10 @@ class Variation
             return StatusEnum::INACTIVE();
         }
 
-        if ($this->stockItem->getQty() < 1) {
+        if ($this->productQty < 1) {
             return StatusEnum::INACTIVE();
         }
-        if (!$this->stockItem->getIsInStock()) {
-            return StatusEnum::INACTIVE();
-        }
+
         return $status;
     }
 
@@ -349,10 +357,14 @@ class Variation
                 'type' => $type,
             ]
         );
+        if ($this->isProductSalableGetter->execute($this->product->getSku(), $this->config->getDefaultStockId())) // if product is salable
+        {
+            $this->productQty = $this->salableQtyGetter->execute($this->product->getSku(), $this->config->getDefaultStockId()); // fetch its salable qty
+        }
         $stock = $this->objectManager->create(
             Stock::class,
             [
-                'qty' => $this->stockItem->getIsInStock() ? ((int) $this->stockItem->getQty()) : 0,
+                'qty' => $this->productQty,
                 'crossDockingTime' => $crossDockingTime,
             ]
         );

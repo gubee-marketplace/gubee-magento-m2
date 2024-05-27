@@ -79,6 +79,15 @@ class Config extends AbstractHelper implements ConfigInterface
     }
 
     /**
+     * Get the 'default_stock_id' system config
+     */
+    public function getDefaultStockId()  : int
+    {
+        
+        return (int) $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_DEFAULT_STOCK_ID);
+    }
+
+    /**
      * Set the 'api_token' system config.
      *
      * @param mixed $apiToken

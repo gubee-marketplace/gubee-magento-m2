@@ -93,5 +93,15 @@
                 <field id="fulfilment_enable">1</field>
             </depends>
         </field>
+        <field id="default_stock_id" type="select" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Default Stock to be Submitted to Gubee</label>
+            <comment>
+                <![CDATA[Select the default stock to be used by gubee, by <b>default it is is the default stock.</b>]]>
+            </comment>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Inventory\Stock</source_model>
+            <depends>
+                <field id="active">1</field>
+            </depends>
+        </field>
     </group>
 </include>
