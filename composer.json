@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-        "gubee-marketplace/php-sdk": "dev/relase-legacy",
+        "gubee-marketplace/php-sdk": "dev/release-legacy",
         "laminas/laminas-hydrator": "^2",
         "magento/framework": "^102",
         "magento/module-catalog": "^103",
