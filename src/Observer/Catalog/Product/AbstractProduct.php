@@ -17,11 +17,11 @@ use Psr\Log\LoggerInterface;
 
 abstract class AbstractProduct extends AbstractObserver
 {
-    protected Attribute $attribute;
+    protected $attribute;
     /** @var ProductInterface|null */
     protected $product;
-    protected ProductRepositoryInterface $productRepository;
-    protected ObjectManagerInterface $objectManager;
+    protected $productRepository;
+    protected $objectManager;
 
     public function __construct(
         Config $config,
@@ -130,7 +130,7 @@ abstract class AbstractProduct extends AbstractObserver
         return $this->product;
     }
 
-    public function setProduct(ProductInterface $product): self
+    public function setProduct(ProductInterface $product)
     {
         $this->product = $product;
         return $this;

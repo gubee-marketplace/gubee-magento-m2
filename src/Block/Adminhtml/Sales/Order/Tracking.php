@@ -12,7 +12,7 @@ use Magento\Shipping\Model\Config;
 
 class Tracking extends OrderTracking
 {
-    protected CollectionFactory $invoiceCollectionFactory;
+    protected $invoiceCollectionFactory;
 
     public function __construct(
         Context $context,

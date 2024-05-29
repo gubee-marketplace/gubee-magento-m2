@@ -15,32 +15,32 @@ class StatusEnum extends AbstractEnum
     private const FINISHED = "4";
     private const FAILED   = "5";
 
-    public static function PENDING(): self
+    public static function PENDING()
     {
         return new self(self::PENDING);
     }
 
-    public static function RUNNING(): self
+    public static function RUNNING()
     {
         return new self(self::RUNNING);
     }
 
-    public static function DONE(): self
+    public static function DONE()
     {
         return new self(self::DONE);
     }
 
-    public static function ERROR(): self
+    public static function ERROR()
     {
         return new self(self::ERROR);
     }
 
-    public static function FINISHED(): self
+    public static function FINISHED()
     {
         return new self(self::FINISHED);
     }
 
-    public static function FAILED(): self
+    public static function FAILED()
     {
         return new self(self::FAILED);
     }
@@ -52,7 +52,7 @@ class StatusEnum extends AbstractEnum
      * @param mixed $value The value to create the enum instance from.
      * @return self The enum instance.
      */
-    public static function fromValue($value): self
+    public static function fromValue($value)
     {
         return new self($value);
     }

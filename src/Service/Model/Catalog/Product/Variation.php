@@ -40,16 +40,16 @@ class Variation
 {
     public const SEPARATOR = '-|GI|-';
 
-    protected ProductInterface $product;
-    protected ?ProductInterface $parent = null;
-    protected \Gubee\SDK\Model\Catalog\Product\Variation $variation;
-    protected Attribute $attribute;
-    protected ConfigInterface $config;
+    protected  $product;
+    protected  $parent = null;
+    protected  $variation;
+    protected  $attribute;
+    protected  $config;
     /** @var AttributeSearchResultsInterface|ProductAttributeSearchResultsInterface */
     protected $attributeCollection;
-    protected ObjectManagerInterface $objectManager;
-    protected GetProductSalableQtyInterface $salableQtyGetter;
-    protected IsProductSalableInterface $isProductSalableGetter;
+    protected  $objectManager;
+    protected  $salableQtyGetter;
+    protected  $isProductSalableGetter;
     /**
      * @var float product stock qty
      * default it to 0

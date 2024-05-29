@@ -10,7 +10,7 @@ use Magento\Framework\Option\ArrayInterface;
 
 class Fullfilment implements ArrayInterface
 {
-    protected PlatformResource $platformResource;
+    protected $platformResource;
 
     public function toOptionArray()
     {

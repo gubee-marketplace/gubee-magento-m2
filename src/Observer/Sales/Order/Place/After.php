@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
 
 class After extends AbstractObserver
 {
-    protected OrderRepositoryInterface $orderRepository;
+    protected $orderRepository;
 
     public function __construct(
         Config $config,

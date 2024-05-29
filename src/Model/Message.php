@@ -30,7 +30,7 @@ use const JSON_UNESCAPED_UNICODE;
 
 class Message extends AbstractModel implements MessageInterface
 {
-    protected CollectionFactory $detailCollectionFactory;
+    protected $detailCollectionFactory;
 
     public function __construct(
         Context $context,
@@ -54,7 +54,7 @@ class Message extends AbstractModel implements MessageInterface
     }
     // phpcs:enable
 
-    public function beforeSave(): self
+    public function beforeSave()
     {
         if ($this->getData(self::STATUS) instanceof StatusEnum) {
             $this->setData(
@@ -98,7 +98,7 @@ class Message extends AbstractModel implements MessageInterface
      *
      * @param int $messageId The message ID.
      */
-    public function setMessageId(int $messageId): self
+    public function setMessageId(int $messageId)
     {
         return $this->setData(self::MESSAGE_ID, $messageId);
     }
@@ -118,7 +118,7 @@ class Message extends AbstractModel implements MessageInterface
      *
      * @param string $command The command.
      */
-    public function setCommand(string $command): self
+    public function setCommand(string $command)
     {
         if (! is_subclass_of($command, AbstractCommand::class)) {
             throw new InvalidArgumentException(
@@ -147,7 +147,7 @@ class Message extends AbstractModel implements MessageInterface
      *
      * @param int $productId The product ID.
      */
-    public function setProductId(int $productId): self
+    public function setProductId(int $productId)
     {
         return $this->setData(self::PRODUCT_ID, $productId);
     }
@@ -167,7 +167,7 @@ class Message extends AbstractModel implements MessageInterface
      *
      * @param StatusEnum $status The status.
      */
-    public function setStatus(StatusEnum $status): self
+    public function setStatus(StatusEnum $status)
     {
         return $this->setData(self::STATUS, $status);
     }
@@ -191,7 +191,7 @@ class Message extends AbstractModel implements MessageInterface
      *
      * @param array<int|string, mixed> $payload The payload.
      */
-    public function setPayload(array $payload): self
+    public function setPayload(array $payload)
     {
         if ($payload === []) {
             $payload = null;
@@ -214,7 +214,7 @@ class Message extends AbstractModel implements MessageInterface
      *
      * @param int $attempts The number of attempts.
      */
-    public function setAttempts(int $attempts): self
+    public function setAttempts(int $attempts)
     {
         return $this->setData(self::ATTEMPTS, $attempts);
     }
@@ -234,7 +234,7 @@ class Message extends AbstractModel implements MessageInterface
      *
      * @param string $message The message.
      */
-    public function setMessage(string $message): self
+    public function setMessage(string $message)
     {
         return $this->setData(self::MESSAGE, $message);
     }
@@ -254,7 +254,7 @@ class Message extends AbstractModel implements MessageInterface
      *
      * @param string $createdAt The creation date and time.
      */
-    public function setCreatedAt(string $createdAt): self
+    public function setCreatedAt(string $createdAt)
     {
         return $this->setData(self::CREATED_AT, $createdAt);
     }
@@ -274,7 +274,7 @@ class Message extends AbstractModel implements MessageInterface
      *
      * @param string $updatedAt The last update date and time.
      */
-    public function setUpdatedAt(string $updatedAt): self
+    public function setUpdatedAt(string $updatedAt)
     {
         return $this->setData(self::UPDATED_AT, $updatedAt);
     }

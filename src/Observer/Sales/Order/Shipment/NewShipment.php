@@ -22,13 +22,13 @@ use function __;
 
 class NewShipment extends AbstractObserver
 {
-    protected RequestInterface $request;
-    protected InvoiceRepository $invoiceRepository;
-    protected Registry $registry;
-    protected ResponseFactory $responseFactory;
-    protected UrlInterface $url;
-    protected CollectionFactory $invoiceCollectionFactory;
-    protected ManagerInterface $messageManager;
+    protected $request;
+    protected $invoiceRepository;
+    protected $registry;
+    protected $responseFactory;
+    protected $url;
+    protected $invoiceCollectionFactory;
+    protected $messageManager;
 
     public function __construct(
         Config $config,

@@ -14,11 +14,11 @@ use Magento\Framework\Api\SearchCriteria;
 
 class CollectionFactory
 {
-    protected ProductAttributeRepositoryInterface $productAttributeRepository;
-    protected SearchCriteriaBuilder $searchCriteriaBuilder;
-    protected SearchCriteria $searchCriteria;
-    protected FilterBuilder $filterBuilder;
-    protected Config $config;
+    protected $productAttributeRepository;
+    protected $searchCriteriaBuilder;
+    protected $searchCriteria;
+    protected $filterBuilder;
+    protected $config;
 
     public function __construct(
         ProductAttributeRepositoryInterface $productAttributeRepository,
@@ -138,7 +138,7 @@ class CollectionFactory
         $value,
         string $field,
         $conditionType = 'eq'
-    ): self {
+    ) {
         $this->searchCriteriaBuilder->addFilter(
             $this->filterBuilder->setField($field)
                 ->setValue($value)
@@ -154,7 +154,7 @@ class CollectionFactory
         return $this->productAttributeRepository;
     }
 
-    public function setProductAttributeRepository(ProductAttributeRepositoryInterface $productAttributeRepository): self
+    public function setProductAttributeRepository(ProductAttributeRepositoryInterface $productAttributeRepository)
     {
         $this->productAttributeRepository = $productAttributeRepository;
         return $this;

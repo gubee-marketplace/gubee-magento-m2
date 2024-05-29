@@ -13,8 +13,8 @@ use function array_combine;
 
 abstract class AbstractAttribute implements ArrayInterface
 {
-    protected Type $entityType;
-    protected Attribute $attributeResource;
+    protected $entityType;
+    protected $attributeResource;
 
     public function __construct(
         Attribute $attributeResource,

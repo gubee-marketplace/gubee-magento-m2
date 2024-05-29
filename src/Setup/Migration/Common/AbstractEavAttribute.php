@@ -20,12 +20,12 @@ use function sprintf;
 abstract class AbstractEavAttribute implements ScopedAttributeInterface
 {
     public const ENTITY_TYPE = 'OVERRIDE THIS IS CHILD CLASSES';
-    protected Config $config;
-    protected EavSetupFactory $eavSetupFactory; /** @phpstan-ignore-line */
+    protected $config;
+    protected $eavSetupFactory; /** @phpstan-ignore-line */
 
-    protected ResourceConnection $resourceConnection;
+    protected $resourceConnection;
 
-    protected LoggerInterface $logger;
+    protected $logger;
 
     // phpcs:ignore
     public function __construct(

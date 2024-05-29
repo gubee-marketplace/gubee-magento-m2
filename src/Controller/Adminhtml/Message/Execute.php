@@ -14,8 +14,8 @@ use function __;
 
 class Execute extends Action
 {
-    protected MessageRepositoryInterface $messageRepository;
-    protected Management $management;
+    protected $messageRepository;
+    protected $management;
 
     public function __construct(
         MessageRepositoryInterface $messageRepository,

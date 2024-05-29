@@ -11,8 +11,8 @@ use Magento\Framework\Controller\Result\JsonFactory;
 
 class Index extends Action
 {
-    protected JsonFactory $resultPageFactory;
-    protected CollectionFactory $detailCollectionFactory;
+    protected $resultPageFactory;
+    protected $detailCollectionFactory;
     /**
      * Constructor
      */

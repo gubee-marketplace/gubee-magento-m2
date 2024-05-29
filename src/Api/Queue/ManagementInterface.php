@@ -11,5 +11,5 @@ interface ManagementInterface
      *
      * @param array<int|string, mixed> $params
      */
-    public function append(string $command, array $params = []): self;
+    public function append(string $command, array $params = []);
 }

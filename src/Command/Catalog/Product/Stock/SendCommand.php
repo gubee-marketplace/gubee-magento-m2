@@ -26,23 +26,23 @@ class SendCommand extends AbstractCommand
     /**
      * @var ProductRepositoryInterface
      */
-    protected ProductRepositoryInterface $productRepository;
-    protected ObjectManagerInterface $objectManager;
-    protected Attribute $attribute;
+    protected $productRepository;
+    protected $objectManager;
+    protected $attribute;
     /**
      * @var Configurable
      */
-    protected Configurable $configurableType;
+    protected $configurableType;
 
     /**
      * @var SearchCriteriaBuilder
      */
-    protected SearchCriteriaBuilder $searchCriteriaBuilder;
+    protected $searchCriteriaBuilder;
 
     /**
      * @var FilterBuilder 
      */
-    protected FilterBuilder $filterBuilder;
+    protected $filterBuilder;
 
     public function __construct(
         ManagerInterface $eventDispatcher,

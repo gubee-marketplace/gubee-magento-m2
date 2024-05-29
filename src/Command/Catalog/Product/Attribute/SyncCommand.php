@@ -14,8 +14,8 @@ use Psr\Log\LoggerInterface;
 
 class SyncCommand extends AbstractCommand
 {
-    protected ObjectManagerInterface $objectManager;
-    protected AttributeResource $attributeResource;
+    protected $objectManager;
+    protected $attributeResource;
 
     public function __construct(
         ManagerInterface $eventDispatcher,

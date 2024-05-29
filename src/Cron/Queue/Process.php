@@ -16,10 +16,10 @@ use function __;
 
 class Process
 {
-    protected Management $queueManagement;
-    protected LoggerInterface $logger;
-    protected ObjectManagerInterface $objectManager;
-    protected Config $config;
+    protected  $queueManagement;
+    protected  $logger;
+    protected  $objectManager;
+    protected  $config;
     public function __construct(
         LoggerInterface $logger,
         ObjectManagerInterface $objectManager,

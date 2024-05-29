@@ -26,9 +26,9 @@ use function is_object;
 class ProductAttribute extends AbstractEavAttribute
 {
     public const ENTITY_TYPE = ProductAttributeInterface::ENTITY_TYPE_CODE;
-    protected AttributeManagement $attributeManagement;
-    protected AttributeSetRepository $attributeSetRepository;
-    protected ProductAction $productAction;
+    protected $attributeManagement;
+    protected $attributeSetRepository;
+    protected $productAction;
 
     public function __construct(
         LoggerInterface $logger,

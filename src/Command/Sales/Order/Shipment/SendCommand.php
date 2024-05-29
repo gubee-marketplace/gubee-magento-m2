@@ -28,7 +28,7 @@ use function strpos;
 
 class SendCommand extends AbstractProcessorCommand
 {
-    protected Config $config;
+    protected $config;
 
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()

@@ -28,7 +28,7 @@ interface DetailInterface
      *
      * @param int $detailId The detail ID.
      */
-    public function setDetailId($detailId): self;
+    public function setDetailId($detailId);
 
     /**
      * Get the level.
@@ -42,7 +42,7 @@ interface DetailInterface
      *
      * @param int $level The level.
      */
-    public function setLevel(int $level): self;
+    public function setLevel(int $level);
 
     /**
      * Get the message ID.
@@ -56,7 +56,7 @@ interface DetailInterface
      *
      * @param int $messageId The message ID.
      */
-    public function setMessageId(int $messageId): self;
+    public function setMessageId(int $messageId);
 
     /**
      * Get the message.
@@ -70,7 +70,7 @@ interface DetailInterface
      *
      * @param string $message The message.
      */
-    public function setMessage(string $message): self;
+    public function setMessage(string $message);
 
     /**
      * Get the context.
@@ -84,7 +84,7 @@ interface DetailInterface
      *
      * @param array $context The context.
      */
-    public function setContext(array $context): self;
+    public function setContext(array $context);
 
     /**
      * Get the creation date and time.
@@ -98,5 +98,5 @@ interface DetailInterface
      *
      * @param DateTimeInterface $createdAt The creation date and time.
      */
-    public function setCreatedAt(DateTimeInterface $createdAt): self;
+    public function setCreatedAt(DateTimeInterface $createdAt);
 }

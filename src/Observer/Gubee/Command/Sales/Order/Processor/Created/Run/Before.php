@@ -26,9 +26,9 @@ use function strtoupper;
 class Before extends AbstractObserver
 {
     protected static $platform = [];
-    protected Registry $registry;
-    protected PlatformResource $platformResource;
-    protected OrderResource $orderResource;
+    protected $registry;
+    protected $platformResource;
+    protected $orderResource;
 
     public function __construct(
         Config $config,

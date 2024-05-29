@@ -27,7 +27,7 @@ class Detail extends AbstractModel implements DetailInterface
         $this->_init(\Gubee\Integration\Model\ResourceModel\Message\Detail::class);
     }
 
-    public function beforeSave(): self
+    public function beforeSave()
     {
         if ($this->getData(self::CONTEXT) !== null) {
             $context = $this->getData(self::CONTEXT);
@@ -58,7 +58,7 @@ class Detail extends AbstractModel implements DetailInterface
      *
      * @param int $detailId The detail ID.
      */
-    public function setDetailId($detailId): self
+    public function setDetailId($detailId)
     {
         return $this->setData(self::DETAIL_ID, $detailId);
     }
@@ -78,7 +78,7 @@ class Detail extends AbstractModel implements DetailInterface
      *
      * @param int $level The level.
      */
-    public function setLevel(int $level): self
+    public function setLevel(int $level)
     {
         return $this->setData(self::LEVEL, $level);
     }
@@ -98,7 +98,7 @@ class Detail extends AbstractModel implements DetailInterface
      *
      * @param int $messageId The message ID.
      */
-    public function setMessageId(int $messageId): self
+    public function setMessageId(int $messageId)
     {
         return $this->setData(self::MESSAGE_ID, $messageId);
     }
@@ -118,7 +118,7 @@ class Detail extends AbstractModel implements DetailInterface
      *
      * @param string $message The message.
      */
-    public function setMessage(string $message): self
+    public function setMessage(string $message)
     {
         return $this->setData(self::MESSAGE, $message);
     }
@@ -142,7 +142,7 @@ class Detail extends AbstractModel implements DetailInterface
      *
      * @param array<int|string, mixed> $context The context.
      */
-    public function setContext(array $context): self
+    public function setContext(array $context)
     {
         return $this->setData(self::CONTEXT, $context);
     }
@@ -162,7 +162,7 @@ class Detail extends AbstractModel implements DetailInterface
      *
      * @param DateTimeInterface $createdAt The creation date and time.
      */
-    public function setCreatedAt(DateTimeInterface $createdAt): self
+    public function setCreatedAt(DateTimeInterface $createdAt)
     {
         return $this->setData(self::CREATED_AT, $createdAt);
     }

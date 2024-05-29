@@ -26,11 +26,11 @@ use function explode;
 
 class Config extends AbstractHelper implements ConfigInterface
 {
-    protected Context $context;
-    protected WriterInterface $configWriter;
-    protected ReinitableConfigInterface $reinitableConfig;
-    protected ObjectManagerInterface $objectManager;
-    protected LoggerInterface $logger;
+    protected $context;
+    protected $configWriter;
+    protected $reinitableConfig;
+    protected $objectManager;
+    protected $logger;
 
     public function __construct(
         Context $context,
@@ -49,7 +49,7 @@ class Config extends AbstractHelper implements ConfigInterface
     /**
      * Set the 'active' system config.
      */
-    public function setActive(bool $active): self
+    public function setActive(bool $active)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_ACTIVE, $active);
     }
@@ -65,7 +65,7 @@ class Config extends AbstractHelper implements ConfigInterface
     /**
      * Set the 'api_key' system config.
      */
-    public function setApiKey(string $apiKey): self
+    public function setApiKey(string $apiKey)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_API_KEY, $apiKey);
     }
@@ -92,7 +92,7 @@ class Config extends AbstractHelper implements ConfigInterface
      *
      * @param mixed $apiToken
      */
-    public function setApiToken($apiToken): self
+    public function setApiToken($apiToken)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_API_TOKEN, $apiToken);
     }
@@ -152,7 +152,7 @@ class Config extends AbstractHelper implements ConfigInterface
      *
      * @param mixed $apiTimeout
      */
-    public function setApiTimeout($apiTimeout): self
+    public function setApiTimeout($apiTimeout)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_API_TIMEOUT, $apiTimeout);
     }
@@ -174,7 +174,7 @@ class Config extends AbstractHelper implements ConfigInterface
     /**
      * Set the 'max_backoff_attempts' system config.
      */
-    public function setMaxBackoffAttempts(int $maxBackoffAttempts): self
+    public function setMaxBackoffAttempts(int $maxBackoffAttempts)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_MAX_BACKOFF_ATTEMPTS, $maxBackoffAttempts);
     }
@@ -190,7 +190,7 @@ class Config extends AbstractHelper implements ConfigInterface
     /**
      * Set the 'max_attempts' system config.
      */
-    public function setMaxAttempts(int $maxAttempts): self
+    public function setMaxAttempts(int $maxAttempts)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_MAX_ATTEMPTS, $maxAttempts);
     }
@@ -208,7 +208,7 @@ class Config extends AbstractHelper implements ConfigInterface
      *
      * @param array<string, mixed> $logLevel
      */
-    public function setLogLevel(array $logLevel): self
+    public function setLogLevel(array $logLevel)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_LOG_LEVEL, $logLevel);
     }
@@ -228,7 +228,7 @@ class Config extends AbstractHelper implements ConfigInterface
      *
      * @param mixed $brand
      */
-    public function setBrandAttribute($brand): self
+    public function setBrandAttribute($brand)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_BRAND, $brand);
     }
@@ -246,7 +246,7 @@ class Config extends AbstractHelper implements ConfigInterface
      *
      * @param mixed $price
      */
-    public function setPriceAttribute($price): self
+    public function setPriceAttribute($price)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_PRICE, $price);
     }
@@ -264,7 +264,7 @@ class Config extends AbstractHelper implements ConfigInterface
      *
      * @param mixed $nbm
      */
-    public function setNbmAttribute($nbm): self
+    public function setNbmAttribute($nbm)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_NBM, $nbm);
     }
@@ -282,7 +282,7 @@ class Config extends AbstractHelper implements ConfigInterface
      *
      * @param mixed $ean
      */
-    public function setEanAttribute($ean): self
+    public function setEanAttribute($ean)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_EAN, $ean);
     }
@@ -300,7 +300,7 @@ class Config extends AbstractHelper implements ConfigInterface
      *
      * @param mixed $color
      */
-    public function setColorAttribute($color): self
+    public function setColorAttribute($color)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_COLOR, $color);
     }
@@ -318,7 +318,7 @@ class Config extends AbstractHelper implements ConfigInterface
      *
      * @param mixed $measureHeading
      */
-    public function setMeasureHeadingAttribute($measureHeading): self
+    public function setMeasureHeadingAttribute($measureHeading)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_MEASURE_HEADING, $measureHeading);
     }
@@ -336,7 +336,7 @@ class Config extends AbstractHelper implements ConfigInterface
      *
      * @param mixed $width
      */
-    public function setWidthAttribute($width): self
+    public function setWidthAttribute($width)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_WIDTH, $width);
     }
@@ -354,7 +354,7 @@ class Config extends AbstractHelper implements ConfigInterface
      *
      * @param mixed $height
      */
-    public function setHeightAttribute($height): self
+    public function setHeightAttribute($height)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_HEIGHT, $height);
     }
@@ -372,7 +372,7 @@ class Config extends AbstractHelper implements ConfigInterface
      *
      * @param mixed $depth
      */
-    public function setDepthAttribute($depth): self
+    public function setDepthAttribute($depth)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_DEPTH, $depth);
     }
@@ -390,7 +390,7 @@ class Config extends AbstractHelper implements ConfigInterface
      *
      * @param mixed $measureUnit
      */
-    public function setMeasureUnitAttribute($measureUnit): self
+    public function setMeasureUnitAttribute($measureUnit)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_MEASURE_UNIT, $measureUnit);
     }
@@ -408,7 +408,7 @@ class Config extends AbstractHelper implements ConfigInterface
      *
      * @param mixed $crossDockingTime
      */
-    public function setCrossDockingTimeAttribute($crossDockingTime): self
+    public function setCrossDockingTimeAttribute($crossDockingTime)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_CROSS_DOCKING_TIME, $crossDockingTime);
     }
@@ -426,7 +426,7 @@ class Config extends AbstractHelper implements ConfigInterface
      *
      * @param mixed $warrantyTime
      */
-    public function setWarrantyTimeAttribute($warrantyTime): self
+    public function setWarrantyTimeAttribute($warrantyTime)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_WARRANTY_TIME, $warrantyTime);
     }
@@ -442,7 +442,7 @@ class Config extends AbstractHelper implements ConfigInterface
     /**
      * Set the 'main_category' position.
      */
-    public function setMainCategoryPosition(MainCategoryEnum $mainCategory): self
+    public function setMainCategoryPosition(MainCategoryEnum $mainCategory)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_MAIN_CATEGORY, $mainCategory->__toString());
     }
@@ -462,7 +462,7 @@ class Config extends AbstractHelper implements ConfigInterface
      *
      * @param array<string> $blacklist
      */
-    public function setBlacklistAttribute(array $blacklist): self
+    public function setBlacklistAttribute(array $blacklist)
     {
         return $this->saveConfig(ConfigInterface::CONFIG_PATH_BLACKLIST, $blacklist);
     }
@@ -503,7 +503,7 @@ class Config extends AbstractHelper implements ConfigInterface
      * @param mixed $value
      * @return Config
      */
-    protected function saveConfig(string $path, $value): self
+    protected function saveConfig(string $path, $value)
     {
         $this->configWriter->save($path, $value);
         $this->reinitableConfig->reinit();
@@ -530,7 +530,7 @@ class Config extends AbstractHelper implements ConfigInterface
      *
      * @return ConfigInterface
      */
-    public function setDefaultDeliveryTime(int $defaultDeliveryTime): self
+    public function setDefaultDeliveryTime(int $defaultDeliveryTime)
     {
         return $this->saveConfig(
             self::CONFIG_PATH_DEFAULT_DELIVERY_TIME,
@@ -553,7 +553,7 @@ class Config extends AbstractHelper implements ConfigInterface
      *
      * @return ConfigInterface
      */
-    public function setFulfilmentEnable(bool $fulfilmentEnable): self
+    public function setFulfilmentEnable(bool $fulfilmentEnable)
     {
         return $this->saveConfig(
             self::CONFIG_PATH_FULFILMENT_ENABLE,

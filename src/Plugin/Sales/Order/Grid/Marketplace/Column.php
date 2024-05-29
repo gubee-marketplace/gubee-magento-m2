@@ -12,9 +12,9 @@ use Magento\Sales\Model\ResourceModel\Order\Grid\Collection as SalesOrderGridCol
 
 class Column
 {
-    protected MessageManager $messageManager;
-    protected SalesOrderGridCollection $collection;
-    protected Config $config;
+    protected  $messageManager;
+    protected  $collection;
+    protected  $config;
 
     public function __construct(
         Config $config,

@@ -8,7 +8,7 @@ use ArrayAccess;
 
 class ItemList implements ArrayAccess
 {
-    protected array $itens;
+    protected $itens;
 
     public function __construct(array $items)
     {
@@ -26,7 +26,7 @@ class ItemList implements ArrayAccess
     /**
      * @param array $itens
      */
-    public function setItens(array $itens): self
+    public function setItens(array $itens)
     {
         $this->itens = $itens;
         return $this;

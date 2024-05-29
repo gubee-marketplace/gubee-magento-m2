@@ -16,9 +16,9 @@ use function trim;
 
 class Attribute
 {
-    protected AttributeResource $attributeResource;
-    protected ProductAttribute $gubeeAttribute;
-    protected ProductAttributeInterface $attribute;
+    protected $attributeResource;
+    protected $gubeeAttribute;
+    protected $attribute;
 
     /**
      * @param array<string>|null $options
@@ -94,7 +94,7 @@ class Attribute
         return $this->gubeeAttribute;
     }
 
-    public function setGubeeAttribute(ProductAttribute $gubeeAttribute): self
+    public function setGubeeAttribute(ProductAttribute $gubeeAttribute)
     {
         $this->gubeeAttribute = $gubeeAttribute;
         return $this;

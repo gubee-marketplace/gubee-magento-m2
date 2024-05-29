@@ -13,7 +13,7 @@ use function __;
 
 class Index extends Action
 {
-    protected PageFactory $resultPageFactory;
+    protected $resultPageFactory;
 
     /**
      * Constructor

@@ -21,10 +21,10 @@ use function in_array;
 
 class OnChange extends AbstractObserver
 {
-    protected TypeListInterface $typeList;
-    protected Pool $pool;
-    protected RenewCommand $renewCommand;
-    protected ObjectManagerInterface $objectManager;
+    protected $typeList;
+    protected $pool;
+    protected $renewCommand;
+    protected $objectManager;
 
     public function __construct(
         Config $config,

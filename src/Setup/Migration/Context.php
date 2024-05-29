@@ -11,10 +11,10 @@ use Psr\Log\LoggerInterface;
 
 class Context
 {
-    protected ModuleDataSetupInterface $moduleDataSetup;
-    protected LoggerInterface $logger;
-    protected PatchHistory $patchHistory;
-    protected State $state;
+    protected $moduleDataSetup;
+    protected $logger;
+    protected $patchHistory;
+    protected $state;
 
     public function __construct(
         ModuleDataSetupInterface $moduleDataSetup,

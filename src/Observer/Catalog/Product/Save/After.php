@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
 
 class After extends AbstractProduct
 {
-    protected Registry $registry;
+    protected $registry;
 
     public function __construct(
         Config $config,

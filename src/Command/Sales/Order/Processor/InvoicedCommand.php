@@ -35,8 +35,8 @@ class InvoicedCommand extends AbstractProcessorCommand
     /** @var TransactionFactory */
     protected $transactionFactory;
 
-    protected InvoiceFactory $invoiceFactory;
-    protected InvoiceRepositoryInterface $invoiceRepository;
+    protected $invoiceFactory;
+    protected $invoiceRepository;
 
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()

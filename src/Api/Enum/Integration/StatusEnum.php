@@ -11,12 +11,12 @@ class StatusEnum extends AbstractEnum
     private const INTEGRATED     = "1";
     private const NOT_INTEGRATED = "0";
 
-    public static function INTEGRATED(): self
+    public static function INTEGRATED()
     {
         return new self(self::INTEGRATED);
     }
 
-    public static function NOT_INTEGRATED(): self
+    public static function NOT_INTEGRATED()
     {
         return new self(self::NOT_INTEGRATED);
     }
@@ -26,7 +26,7 @@ class StatusEnum extends AbstractEnum
      *
      * @param mixed $value
      */
-    public static function fromValue($value): self
+    public static function fromValue($value)
     {
         return new self($value);
     }

@@ -40,7 +40,7 @@ class Button extends Container
      * @var Emulation
      */
     protected $_emulation;
-    protected ObjectManagerInterface $objectManager;
+    protected  $objectManager;
     /**
      * @param array $data
      */

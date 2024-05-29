@@ -31,17 +31,17 @@ use function sprintf;
 
 class Management implements ManagementInterface
 {
-    protected DateTime $date;
-    protected FileDriver $fileDriver;
-    protected LoggerInterface $logger;
-    protected MessageRepositoryInterface $messageRepository;
-    protected ObjectManagerInterface $objectManager;
-    protected ScopeConfigInterface $scopeConfig;
-    protected SearchCriteriaBuilder $searchCriteriaBuilder;
-    protected Registry $registry;
-    protected Attribute $attribute;
-    protected ProductRepositoryInterface $productRepository;
-    protected Config $config;
+    protected $date;
+    protected $fileDriver;
+    protected $logger;
+    protected $messageRepository;
+    protected $objectManager;
+    protected $scopeConfig;
+    protected $searchCriteriaBuilder;
+    protected $registry;
+    protected $attribute;
+    protected $productRepository;
+    protected $config;
 
     public function __construct(
         DateTime $date,

@@ -19,8 +19,8 @@ use function php_sapi_name;
 
 class ConsumeCommand extends AbstractCommand
 {
-    protected Management $queueManagement;
-    protected State $state;
+    protected $queueManagement;
+    protected $state;
 
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()

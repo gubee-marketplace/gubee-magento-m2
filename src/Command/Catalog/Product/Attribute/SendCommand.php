@@ -15,9 +15,9 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class SendCommand extends AbstractCommand
 {
-    protected Client $client;
-    protected ProductAttributeRepositoryInterface $productAttributeRepository;
-    protected ObjectManagerInterface $objectManager;
+    protected $client;
+    protected $productAttributeRepository;
+    protected $objectManager;
 
     public function __construct(
         ManagerInterface $eventDispatcher,

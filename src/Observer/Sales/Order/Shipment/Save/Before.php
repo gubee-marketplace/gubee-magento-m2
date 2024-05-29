@@ -19,10 +19,10 @@ use function in_array;
 
 class Before extends AbstractObserver
 {
-    protected RequestInterface $request;
-    protected InvoiceRepository $invoiceRepository;
-    protected Registry $registry;
-    protected ManagerInterface $messageManager;
+    protected $request;
+    protected $invoiceRepository;
+    protected $registry;
+    protected $messageManager;
 
     public function __construct(
         Config $config,

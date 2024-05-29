@@ -22,9 +22,9 @@ use Symfony\Component\Console\Exception\LogicException;
 
 class ConsumeCommand extends AbstractCommand
 {
-    protected ManagementInterface $management;
-    protected NotificationResource $notificationResource;
-    protected ResultPager $resultPager;
+    protected $management;
+    protected $notificationResource;
+    protected $resultPager;
 
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()

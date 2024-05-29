@@ -25,8 +25,8 @@ use function sprintf;
 
 class CanceledCommand extends AbstractProcessorCommand
 {
-    protected RefundOrder $refundOrder;
-    protected ItemCreationFactory $itemCreationFactory;
+    protected $refundOrder;
+    protected $itemCreationFactory;
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()
      * @throws LogicException When the command name is empty.

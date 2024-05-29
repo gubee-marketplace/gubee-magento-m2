@@ -19,9 +19,9 @@ use function sprintf;
 
 class GubeeCatalogProductAttribute extends AbstractMigration
 {
-    protected ProductAttribute $productAttribute;
+    protected $productAttribute;
     /** @var array<string,array<string,mixed>> */
-    protected array $attributes = [
+    protected $attributes = [
         'gubee'                         => [
             'type'                    => 'int',
             'label'                   => 'Send product to Gubee',

@@ -21,11 +21,11 @@ use function __;
 
 class MessageRepository implements MessageRepositoryInterface
 {
-    protected ResourceMessage $resource;
-    protected MessageInterfaceFactory $messageFactory; /* @phpstan-ignore-line */
-    protected MessageCollectionFactory $messageCollectionFactory; /* @phpstan-ignore-line */
-    protected MessageSearchResultsInterfaceFactory $searchResultsFactory; /* @phpstan-ignore-line */
-    protected CollectionProcessorInterface $collectionProcessor;
+    protected $resource;
+    protected $messageFactory; /* @phpstan-ignore-line */
+    protected $messageCollectionFactory; /* @phpstan-ignore-line */
+    protected $searchResultsFactory; /* @phpstan-ignore-line */
+    protected $collectionProcessor;
 
     public function __construct(
         ResourceMessage $resource,

@@ -185,7 +185,7 @@ interface ConfigInterface
     /**
      * Set the 'active' system config.
      */
-    public function setActive(bool $active): self;
+    public function setActive(bool $active);
 
     /**
      * Get the 'active' system config.
@@ -195,7 +195,7 @@ interface ConfigInterface
     /**
      * Set the 'api_key' system config.
      */
-    public function setApiKey(string $apiKey): self;
+    public function setApiKey(string $apiKey);
 
     /**
      * Get the 'api_key' system config.
@@ -207,7 +207,7 @@ interface ConfigInterface
      *
      * @param mixed $apiToken
      */
-    public function setApiToken($apiToken): self;
+    public function setApiToken($apiToken);
 
     /**
      * Get the 'api_token' system config.
@@ -224,7 +224,7 @@ interface ConfigInterface
      *
      * @param mixed $apiTimeout
      */
-    public function setApiTimeout($apiTimeout): self;
+    public function setApiTimeout($apiTimeout);
 
     /**
      * Get the 'api_timeout' system config.
@@ -234,7 +234,7 @@ interface ConfigInterface
     /**
      * Set the 'max_backoff_attempts' system config.
      */
-    public function setMaxBackoffAttempts(int $maxBackoffAttempts): self;
+    public function setMaxBackoffAttempts(int $maxBackoffAttempts);
 
     /**
      * Get the 'max_backoff_attempts' system config.
@@ -244,7 +244,7 @@ interface ConfigInterface
     /**
      * Set the 'max_attempts' system config.
      */
-    public function setMaxAttempts(int $maxAttempts): self;
+    public function setMaxAttempts(int $maxAttempts);
 
     /**
      * Get the 'max_attempts' system config.
@@ -256,7 +256,7 @@ interface ConfigInterface
      *
      * @param array<string, mixed> $logLevel
      */
-    public function setLogLevel(array $logLevel): self;
+    public function setLogLevel(array $logLevel);
 
     /**
      * Get the 'log_level' system config.
@@ -270,7 +270,7 @@ interface ConfigInterface
      *
      * @param mixed $brand
      */
-    public function setBrandAttribute($brand): self;
+    public function setBrandAttribute($brand);
 
     /**
      * Get the 'brand' attribute.
@@ -282,7 +282,7 @@ interface ConfigInterface
      *
      * @param mixed $price
      */
-    public function setPriceAttribute($price): self;
+    public function setPriceAttribute($price);
 
     /**
      * Get the 'price' attribute.
@@ -294,7 +294,7 @@ interface ConfigInterface
      *
      * @param mixed $nbm
      */
-    public function setNbmAttribute($nbm): self;
+    public function setNbmAttribute($nbm);
 
     /**
      * Get the 'nbm' attribute.
@@ -306,7 +306,7 @@ interface ConfigInterface
      *
      * @param mixed $ean
      */
-    public function setEanAttribute($ean): self;
+    public function setEanAttribute($ean);
 
     /**
      * Get the 'ean' attribute.
@@ -318,7 +318,7 @@ interface ConfigInterface
      *
      * @param mixed $color
      */
-    public function setColorAttribute($color): self;
+    public function setColorAttribute($color);
 
     /**
      * Get the 'color' attribute.
@@ -330,7 +330,7 @@ interface ConfigInterface
      *
      * @param mixed $measureHeading
      */
-    public function setMeasureHeadingAttribute($measureHeading): self;
+    public function setMeasureHeadingAttribute($measureHeading);
 
     /**
      * Get the 'measure_heading' attribute.
@@ -342,7 +342,7 @@ interface ConfigInterface
      *
      * @param mixed $width
      */
-    public function setWidthAttribute($width): self;
+    public function setWidthAttribute($width);
 
     /**
      * Get the 'width' attribute.
@@ -354,7 +354,7 @@ interface ConfigInterface
      *
      * @param mixed $height
      */
-    public function setHeightAttribute($height): self;
+    public function setHeightAttribute($height);
 
     /**
      * Get the 'height' attribute.
@@ -366,7 +366,7 @@ interface ConfigInterface
      *
      * @param mixed $depth
      */
-    public function setDepthAttribute($depth): self;
+    public function setDepthAttribute($depth);
 
     /**
      * Get the 'depth' attribute.
@@ -378,7 +378,7 @@ interface ConfigInterface
      *
      * @param mixed $measureUnit
      */
-    public function setMeasureUnitAttribute($measureUnit): self;
+    public function setMeasureUnitAttribute($measureUnit);
 
     /**
      * Get the 'measure_unit' attribute.
@@ -396,7 +396,7 @@ interface ConfigInterface
      *
      * @param mixed $crossDockingTime
      */
-    public function setCrossDockingTimeAttribute($crossDockingTime): self;
+    public function setCrossDockingTimeAttribute($crossDockingTime);
 
     /**
      * Get the 'cross_docking_time' attribute.
@@ -408,7 +408,7 @@ interface ConfigInterface
      *
      * @param mixed $warrantyTime
      */
-    public function setWarrantyTimeAttribute($warrantyTime): self;
+    public function setWarrantyTimeAttribute($warrantyTime);
 
     /**
      * Get the 'warranty_time' attribute.
@@ -418,7 +418,7 @@ interface ConfigInterface
     /**
      * Set the 'main_category' position.
      */
-    public function setMainCategoryPosition(MainCategoryEnum $mainCategory): self;
+    public function setMainCategoryPosition(MainCategoryEnum $mainCategory);
 
     /**
      * Get the 'main_category' position.
@@ -430,7 +430,7 @@ interface ConfigInterface
      *
      * @param array<string, mixed> $blacklist
      */
-    public function setBlacklistAttribute(array $blacklist): self;
+    public function setBlacklistAttribute(array $blacklist);
 
     /**
      * Get the 'blacklist' attribute.
@@ -454,7 +454,7 @@ interface ConfigInterface
      *
      * @return ConfigInterface
      */
-    public function setDefaultDeliveryTime(int $defaultDeliveryTime): self;
+    public function setDefaultDeliveryTime(int $defaultDeliveryTime);
 
     /**
      * Get the 'fulfilment_enable' system config.
@@ -466,7 +466,7 @@ interface ConfigInterface
      *
      * @return ConfigInterface
      */
-    public function setFulfilmentEnable(bool $fulfilmentEnable): self;
+    public function setFulfilmentEnable(bool $fulfilmentEnable);
 
     /**
      * Get the 'fulfilment_rules' system config.

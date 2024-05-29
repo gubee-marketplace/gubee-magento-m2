@@ -23,8 +23,8 @@ use function is_subclass_of;
 
 class Before extends AbstractObserver
 {
-    protected Registry $registry;
-    protected OrderResource $orderResource;
+    protected $registry;
+    protected $orderResource;
 
     public function __construct(
         Config $config,

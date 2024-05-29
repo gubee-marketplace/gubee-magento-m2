@@ -20,10 +20,10 @@ abstract class AbstractCommand extends Command
 {
     public const SUCCESS = 0;
     public const FAILURE = 1;
-    protected InputInterface $input;
-    protected ManagerInterface $eventDispatcher;
-    protected LoggerInterface $logger;
-    protected OutputInterface $output;
+    protected $input;
+    protected $eventDispatcher;
+    protected $logger;
+    protected $output;
 
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()

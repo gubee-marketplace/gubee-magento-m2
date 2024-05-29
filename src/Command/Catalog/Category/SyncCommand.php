@@ -17,10 +17,10 @@ use Symfony\Component\Console\Exception\LogicException;
 
 class SyncCommand extends AbstractCommand
 {
-    protected ObjectManagerInterface $objectManager;
-    protected Collection $collection;
-    protected CategoryResource $categoryResource;
-    protected CategoryRepositoryInterface $categoryRepository;
+    protected $objectManager;
+    protected $collection;
+    protected $categoryResource;
+    protected $categoryRepository;
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()
      * @throws LogicException When the command name is empty.

@@ -15,8 +15,8 @@ use function __;
 
 class Queue extends Action
 {
-    protected MessageRepositoryInterface $messageRepository;
-    protected Management $management;
+    protected $messageRepository;
+    protected $management;
 
     public function __construct(
         MessageRepositoryInterface $messageRepository,

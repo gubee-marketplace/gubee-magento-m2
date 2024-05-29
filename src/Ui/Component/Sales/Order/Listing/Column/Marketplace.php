@@ -12,7 +12,7 @@ use Magento\Ui\Component\Listing\Columns\Column;
 
 class Marketplace extends Column {
     protected static $platform = [];
-    protected PlatformResource $platformResource;
+    protected $platformResource;
 
     public function __construct(
         PlatformResource $platformResource,

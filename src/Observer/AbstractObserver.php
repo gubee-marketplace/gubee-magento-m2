@@ -12,10 +12,10 @@ use Psr\Log\LoggerInterface;
 
 abstract class AbstractObserver implements ObserverInterface
 {
-    protected Observer $observer;
-    protected LoggerInterface $logger;
-    protected Config $config;
-    protected Management $queueManagement;
+    protected $observer;
+    protected $logger;
+    protected $config;
+    protected $queueManagement;
 
     public function __construct(
         Config $config,
@@ -62,7 +62,7 @@ abstract class AbstractObserver implements ObserverInterface
         return $this->observer;
     }
 
-    public function setObserver(Observer $observer): self
+    public function setObserver(Observer $observer)
     {
         $this->observer = $observer;
         return $this;

@@ -38,19 +38,19 @@ class Product
     /**
      * @var ProductInterface
      */
-    protected ProductInterface $product;
-    protected \Gubee\SDK\Model\Catalog\Product $gubeeProduct;
-    protected ProductResource $productResource;
-    protected Attribute $attribute;
-    protected Config $config;
-    protected ObjectManagerInterface $objectManager;
+    protected  $product;
+    protected $gubeeProduct;
+    protected  $productResource;
+    protected  $attribute;
+    protected  $config;
+    protected  $objectManager;
     /** @var AttributeSearchResultsInterface|ProductAttributeSearchResultsInterface */
     protected $attributeCollection;
-    protected CollectionFactory $categoryCollectionFactory;
-    protected StockItemInterface $stockItem;
-    protected ValidateResource $validateResource;
-    private ?array $variations = null;
-    private bool $lazyMode = false;
+    protected  $categoryCollectionFactory;
+    protected  $stockItem;
+    protected  $validateResource;
+    private  $variations = null;
+    private  $lazyMode = false;
 
     public function __construct(
         ProductInterface $product,

@@ -10,9 +10,9 @@ use Magento\Framework\App\ResourceConnection;
 
 class Context
 {
-    protected Config $config;
-    protected EavSetupFactory $eavSetupFactory; /* @phpstan-ignore-line */
-    protected ResourceConnection $resourceConnection;
+    protected $config;
+    protected $eavSetupFactory; /* @phpstan-ignore-line */
+    protected $resourceConnection;
 
     // phpcs:ignore
     public function __construct(

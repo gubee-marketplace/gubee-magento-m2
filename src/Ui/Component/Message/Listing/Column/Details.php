@@ -16,8 +16,8 @@ class Details extends Column
 {
     public const URL_PATH_DETAILS = 'gubee/message_detail/index';
 
-    protected UrlInterface $urlBuilder;
-    protected FormKey $formKey;
+    protected  $urlBuilder;
+    protected  $formKey;
 
     /**
      * @param array<int|string, mixed> $components

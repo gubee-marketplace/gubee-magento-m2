@@ -43,19 +43,19 @@ use Throwable;
 
 class CreatedCommand extends AbstractProcessorCommand
 {
-    protected ProductRepositoryInterface $productRepository;
-    protected QuoteManagement $quoteManagement;
-    protected CartManagementInterface $cartManagement;
-    protected Context $context;
-    protected StoreManagerInterface $storeManager;
-    protected Product $product;
-    protected FormKey $formkey;
-    protected QuoteFactory $quoteFactory;
-    protected CustomerFactory $customerFactory;
-    protected CustomerRepositoryInterface $customerRepository;
-    protected OrderService $orderService;
-    protected InvoiceFactory $invoiceFactory;
-    protected ConvertOrder $convertOrder;
+    protected $productRepository;
+    protected $quoteManagement;
+    protected $cartManagement;
+    protected $context;
+    protected $storeManager;
+    protected $product;
+    protected $formkey;
+    protected $quoteFactory;
+    protected $customerFactory;
+    protected $customerRepository;
+    protected $orderService;
+    protected $invoiceFactory;
+    protected $convertOrder;
 
     public function __construct(
         ManagerInterface $eventDispatcher,

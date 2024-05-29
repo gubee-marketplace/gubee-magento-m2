@@ -28,12 +28,12 @@ use function sprintf;
 
 abstract class AbstractProcessorCommand extends AbstractCommand
 {
-    protected OrderRepositoryInterface $orderRepository;
-    protected CollectionFactory $orderCollectionFactory;
-    protected OrderResource $orderResource;
-    protected HistoryFactory $historyFactory;
-    protected OrderManagementInterface $orderManagement;
-    protected GubeeOrderRepositoryInterface $gubeeOrderRepository;
+    protected $orderRepository;
+    protected $orderCollectionFactory;
+    protected $orderResource;
+    protected $historyFactory;
+    protected $orderManagement;
+    protected $gubeeOrderRepository;
 
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()

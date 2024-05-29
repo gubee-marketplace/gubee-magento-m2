@@ -37,10 +37,10 @@ document.addEventListener('DOMContentLoaded', function () {
     target.parentNode.insertBefore(placeholder, target)
     createApp(
         OrderInfo
-    ).mount(placeholder)
+    ).mount(placeholder);
 
 
-})
+});
 
 document.addEventListener('DOMContentLoaded', function () {
     var doc = document.querySelector('body.gubee-install-index .page-wrapper')
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
             storeUrl: "https://gubee.com.br/",
         }
     }).mount('#app')
-})
+});
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -128,8 +128,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return {
             showDetails: showDetails
         }
-    })()
+    })();
 
-    console.log(messageDetails)
+    console.log(messageDetails);
 
 });

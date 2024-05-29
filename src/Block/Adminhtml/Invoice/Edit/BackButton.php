@@ -13,7 +13,7 @@ use function sprintf;
 
 class BackButton extends GenericButton implements ButtonProviderInterface
 {
-    protected Registry $registry;
+    protected $registry;
 
     public function __construct(
         Context $context,

@@ -33,7 +33,7 @@ class MainCategoryEnum extends AbstractEnum
      * @param mixed $value The value to create the enum instance from.
      * @return self The enum instance.
      */
-    public static function fromValue($value): self
+    public static function fromValue($value)
     {
         return new self($value);
     }

@@ -16,9 +16,9 @@ use function php_sapi_name;
 
 class Logger implements LoggerInterface
 {
-    protected DetailFactory $detailFactory;
-    protected Registry $registry;
-    protected LoggerInterface $logger;
+    protected $detailFactory;
+    protected $registry;
+    protected $logger;
 
     public function __construct(
         DetailFactory $detailFactory,

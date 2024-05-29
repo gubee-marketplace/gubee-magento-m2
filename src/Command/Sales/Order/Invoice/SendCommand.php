@@ -23,7 +23,7 @@ use function __;
 
 class SendCommand extends AbstractProcessorCommand
 {
-    protected InvoiceRepositoryInterface $invoiceRepository;
+    protected $invoiceRepository;
 
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()

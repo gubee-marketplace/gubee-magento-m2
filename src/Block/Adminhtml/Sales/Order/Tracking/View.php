@@ -14,8 +14,8 @@ use Magento\Shipping\Model\Config;
 
 class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking\View
 {
-    protected InvoiceRepositoryInterface $invoiceRepository;
-    protected CollectionFactory $invoiceCollectionFactory;
+    protected $invoiceRepository;
+    protected $invoiceCollectionFactory;
 
     public function __construct(
         Context $context,
@@ -24,16 +24,14 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking\View
         CarrierFactory $carrierFactory,
         InvoiceRepositoryInterface $invoiceRepository,
         CollectionFactory $invoiceCollectionFactory,
-        array $data = [],
-        ?ShippingHelper $shippingHelper = null
+        array $data = []
     ) {
         parent::__construct(
             $context,
             $shippingConfig,
             $registry,
             $carrierFactory,
-            $data,
-            $shippingHelper
+            $data
         );
         $this->invoiceRepository        = $invoiceRepository;
         $this->invoiceCollectionFactory = $invoiceCollectionFactory;

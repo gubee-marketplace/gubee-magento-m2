@@ -13,7 +13,7 @@ use Magento\Framework\Json\Helper\Data as JsonHelper;
 
 class Status extends Template
 {
-    protected CollectionFactory $collectionFactory;
+    protected $collectionFactory;
 
     public function __construct(
         Context $context,
@@ -22,7 +22,7 @@ class Status extends Template
         ?JsonHelper $jsonHelper = null,
         ?DirectoryHelper $directoryHelper = null
     ) {
-        parent::__construct($context, $data, $jsonHelper, $directoryHelper);
+        parent::__construct($context, $data);
         $this->collectionFactory = $collectionFactory;
     }
 

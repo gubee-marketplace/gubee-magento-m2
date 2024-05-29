@@ -19,9 +19,9 @@ use function sprintf;
 
 class SendCommand extends AbstractCommand
 {
-    protected ProductRepositoryInterface $productRepository;
-    protected ObjectManagerInterface $objectManager;
-    protected Attribute $attribute;
+    protected $productRepository;
+    protected $objectManager;
+    protected $attribute;
 
     public function __construct(
         ManagerInterface $eventDispatcher,

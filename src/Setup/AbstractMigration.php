@@ -13,7 +13,7 @@ use Magento\Framework\Setup\Patch\PatchRevertableInterface;
 abstract class AbstractMigration implements DataPatchInterface, PatchRevertableInterface
 {
     protected const AREA_CODE = null;
-    protected Context $context;
+    protected $context;
 
     public function __construct(
         Context $context

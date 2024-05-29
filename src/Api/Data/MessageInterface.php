@@ -32,7 +32,7 @@ interface MessageInterface
      *
      * @param int $messageId The message ID.
      */
-    public function setMessageId(int $messageId): self;
+    public function setMessageId(int $messageId);
 
     /**
      * Get the command.
@@ -46,7 +46,7 @@ interface MessageInterface
      *
      * @param string $command The command.
      */
-    public function setCommand(string $command): self;
+    public function setCommand(string $command);
 
     /**
      * Get the status.
@@ -60,7 +60,7 @@ interface MessageInterface
      *
      * @param StatusEnum $status The status.
      */
-    public function setStatus(StatusEnum $status): self;
+    public function setStatus(StatusEnum $status);
 
     /**
      * Get the payload.
@@ -74,7 +74,7 @@ interface MessageInterface
      *
      * @param array<int|string, mixed> $payload The payload.
      */
-    public function setPayload(array $payload): self;
+    public function setPayload(array $payload);
 
     /**
      * Get the number of attempts.
@@ -88,7 +88,7 @@ interface MessageInterface
      *
      * @param int $productId The product ID.
      */
-    public function setProductId(int $productId): self;
+    public function setProductId(int $productId);
 
     /**
      * Get the product ID.
@@ -102,7 +102,7 @@ interface MessageInterface
      *
      * @param int $attempts The number of attempts.
      */
-    public function setAttempts(int $attempts): self;
+    public function setAttempts(int $attempts);
 
     /**
      * Get the message.
@@ -116,7 +116,7 @@ interface MessageInterface
      *
      * @param string $message The message.
      */
-    public function setMessage(string $message): self;
+    public function setMessage(string $message);
 
     /**
      * Get the creation date and time.
@@ -130,7 +130,7 @@ interface MessageInterface
      *
      * @param string $createdAt The creation date and time.
      */
-    public function setCreatedAt(string $createdAt): self;
+    public function setCreatedAt(string $createdAt);
 
     /**
      * Get the last update date and time.
@@ -144,5 +144,5 @@ interface MessageInterface
      *
      * @param string $updatedAt The last update date and time.
      */
-    public function setUpdatedAt(string $updatedAt): self;
+    public function setUpdatedAt(string $updatedAt);
 }

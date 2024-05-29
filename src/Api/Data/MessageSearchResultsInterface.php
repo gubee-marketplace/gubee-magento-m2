@@ -21,5 +21,5 @@ interface MessageSearchResultsInterface extends SearchResultsInterface
      *
      * @param array<MessageInterface> $items
      */
-    public function setItems(array $items): self;
+    public function setItems(array $items);
 }

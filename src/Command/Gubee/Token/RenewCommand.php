@@ -17,8 +17,8 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class RenewCommand extends AbstractCommand
 {
-    protected Client $client;
-    protected Config $config;
+    protected $client;
+    protected $config;
 
     public function __construct(
         ManagerInterface $eventDispatcher,

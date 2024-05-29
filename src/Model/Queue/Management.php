@@ -24,13 +24,13 @@ use function sprintf;
 
 class Management implements ManagementInterface
 {
-    protected LoggerInterface $logger;
-    protected MessageCollectionFactory $messageCollectionFactory; /* @phpstan-ignore-line */
-    protected MessageInterfaceFactory $messageFactory; /* @phpstan-ignore-line */
-    protected MessageRepositoryInterface $messageRepository;
-    protected ProductRepositoryInterface $productRepository;
-    protected Attribute $attribute;
-    protected ObjectManagerInterface $objectManager;
+    protected $logger;
+    protected $messageCollectionFactory; /* @phpstan-ignore-line */
+    protected $messageFactory; /* @phpstan-ignore-line */
+    protected $messageRepository;
+    protected $productRepository;
+    protected $attribute;
+    protected $objectManager;
     public function __construct(
         LoggerInterface $logger,
         MessageCollectionFactory $messageCollectionFactory, /* @phpstan-ignore-line */
@@ -54,7 +54,7 @@ class Management implements ManagementInterface
      *
      * @param array<int|string, mixed> $params
      */
-    public function append(string $command, array $params = [], ?int $productId = null): self
+    public function append(string $command, array $params = [], ?int $productId = null)
     {
         try {
             if ($command !== SendCommand::class) {

@@ -15,7 +15,7 @@ class Action extends Column
 {
     public const URL_PATH_EXECUTE = 'gubee/message/execute';
 
-    protected UrlInterface $urlBuilder;
+    protected $urlBuilder;
 
     /**
      * @param array<int|string, mixed> $components
