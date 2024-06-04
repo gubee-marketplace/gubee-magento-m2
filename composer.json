@@ -22,7 +22,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Gubee\\Integration\\": "src/"
+            "Gubee\\Integration\\": "src/",
+            "Laminas\\Diactoros\\": "lib/Laminas/Diactoros"
         },
         "files": [
             "src/registration.php"
