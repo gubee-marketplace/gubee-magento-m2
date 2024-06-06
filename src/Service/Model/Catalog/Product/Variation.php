@@ -282,10 +282,12 @@ class Variation
 
     protected function buildDescription()
     {
-        return $this->product->getDescription() ?: $this->attribute->getRawAttributeValue(
+        $description = $this->product->getDescription() ?: $this->attribute->getRawAttributeValue(
             'description',
             $this->product
         );
+
+        return is_array($description) ? implode("\n", $description) : $description; 
     }
 
     protected function buildEan()
@@ -378,18 +380,35 @@ class Variation
     {
         $specs = [];
         $attributes = $this->attributeCollection->getItems();
+        
         $attributeCodes = array_map(
             function ($attribute) {
                 return $attribute->getAttributeCode();
             },
             $attributes
         );
+        /**
+         * @var \Gubee\SDK\Model\Catalog\Product\Variation $variations[]
+         */
+        $sAttributeCodes = [];
+        if (!is_null($this->parent)) {
+            $configurableAttributes = $this->parent->getTypeInstance()->getConfigurableOptions($this->parent);
+            foreach ($configurableAttributes as $a) {
+                foreach ($a as $p) {
+                    $sAttributeCodes[] = $p['attribute_code'];
+                }
+            }
+            $sAttributeCodes = array_unique($sAttributeCodes);
+        }
+        /**
+         * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
+         */
         foreach ($this->product->getAttributes() as $attribute) {
             if (!$attribute->getIsUserDefined()) {
                 continue;
             }
 
-            if (!in_array($attribute->getAttributeCode(), $attributeCodes)) {
+            if (!in_array($attribute->getAttributeCode(), $attributeCodes) || !in_array($attribute->getAttributeCode(), $sAttributeCodes)) {
                 continue;
             }
 
