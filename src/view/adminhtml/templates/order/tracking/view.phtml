@@ -151,4 +151,4 @@ window.saveTrackingInfo = saveTrackingInfo;
 
 script;
 ?>
-<?=/* @noEscape */$secureRenderer->renderTag('script', [], $scriptString, false)?>
+<?=/* @noEscape */"<script>$scriptString</script>"?>
