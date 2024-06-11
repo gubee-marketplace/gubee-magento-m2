@@ -34,20 +34,18 @@ class After extends AbstractObserver
          */
         try {
             $mageOrder = $this->getObserver()->getEvent()->getOrder();
-            if ($mageOrder->getPayment()->getMethod() != "gubee") { //if order is not gubee
-                /**
-                * @var \Magento\Sales\Model\Order\Item $item
-                */
-                foreach ($mageOrder->getAllVisibleItems() as $item) //update product stock in gubee
-                {
-                    $this->queueManagement->append(
-                        StockSendCommand::class,
-                        [
-                            "sku" => $item->getSku()
-                        ],
-                        (int) $item->getProductId()
-                    );
-                }
+            /**
+            * @var \Magento\Sales\Model\Order\Item $item
+            */
+            foreach ($mageOrder->getAllVisibleItems() as $item) //update product stock in gubee
+            {
+                $this->queueManagement->append(
+                    StockSendCommand::class,
+                    [
+                        "sku" => $item->getSku()
+                    ],
+                    (int) $item->getProductId()
+                );
             }
         }
         catch(\Exception $err) {
