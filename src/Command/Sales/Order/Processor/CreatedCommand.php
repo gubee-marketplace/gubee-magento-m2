@@ -394,6 +394,7 @@ class CreatedCommand extends AbstractProcessorCommand
             $customer->setTaxvat(
                 $gubeeOrder['customer']['documents'][0]['number']
             );
+            $customer->setDob(new \DateTime());
             $customer->setFirstname($firstname);
             $customer->setLastname($lastname);
             $customer->setTaxvat($gubeeOrder['customer']['documents'][0]['number']);
