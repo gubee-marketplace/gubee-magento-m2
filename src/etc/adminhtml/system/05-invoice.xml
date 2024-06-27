@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+    <group id="invoice" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label><![CDATA[Gubee \ Integration \ Invoices]]></label>
+        <depends>
+            <field id="gubee/integration/active">1</field>
+        </depends>
+        <field id="active" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Detect invoice information in order commentary</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+        <field id="regex_invoice_number" type="textarea" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Invoice Number Regex</label>
+            <depends>
+                <field id="gubee/invoice/active">1</field>
+            </depends>
+        </field>
+        <field id="regex_invoice_series" type="textarea" sortOrder="25" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Invoice Series Regex</label>
+            <depends>
+                <field id="gubee/invoice/active">1</field>
+            </depends>
+        </field>
+        <field id="regex_invoice_key" type="textarea" sortOrder="30" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Invoice Key Regex</label>
+            <depends>
+                <field id="gubee/invoice/active">1</field>
+            </depends>
+        </field>
+
+        <field id="regex_invoice_date" type="textarea" sortOrder="35" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Invoice Date Regex</label>
+            <depends>
+                <field id="gubee/invoice/active">1</field>
+            </depends>
+        </field>
+
+        <field id="regex_invoice_link" type="textarea" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Invoice Link Regex</label>
+            <depends>
+                <field id="gubee/invoice/active">1</field>
+            </depends>
+        </field>
+
+        <field id="regex_invoice_content" type="textarea" sortOrder="45" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Invoice XML Regex</label>
+            <depends>
+                <field id="gubee/invoice/active">1</field>
+            </depends>
+        </field>
+
+        <field id="cleanup_xml" type="select" sortOrder="11" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Cleanup XML from history after processing</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            <depends>
+                <field id="gubee/invoice/active">1</field>
+            </depends>
+        </field>
+    </group>
+</include>

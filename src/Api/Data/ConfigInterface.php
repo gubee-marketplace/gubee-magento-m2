@@ -179,9 +179,45 @@ interface ConfigInterface
     public const CONFIG_PATH_QUEUE_PAGE_SIZE = 'gubee/general/queue_page_size';
 
     public const CONFIG_PATH_DEFAULT_DELIVERY_TIME = 'carriers/gubee/default_delivery_time';
+
     public const CONFIG_PATH_FULFILMENT_ENABLE     = 'gubee/general/fulfilment_enable';
+
     public const CONFIG_PATH_FULFILMENT_RULES      = 'gubee/general/fulfilment_rules';
 
+    /**
+     * Path to 'invoice_active' system config 
+     */
+    public const CONFIG_PATH_INVOICE_ACTIVE = 'gubee/invoice/active';
+    /**
+     * Path to 'invoice_regex_invoice_number' system config 
+     */
+    public const CONFIG_PATH_INVOICE_REGEX_NUMBER = 'gubee/invoice/regex_invoice_number';
+    /**
+     * Path to 'invoice_regex_invoice_series' system config 
+     */
+    public const CONFIG_PATH_INVOICE_REGEX_SERIES = 'gubee/invoice/regex_invoice_series';
+    /**
+     * Path to 'invoice_regex_invoice_key' system config 
+     */
+    public const CONFIG_PATH_INVOICE_REGEX_KEY = 'gubee/invoice/regex_invoice_key';
+    /**
+     * Path to 'invoice_regex_invoice_date' system config 
+     */
+    public const CONFIG_PATH_INVOICE_REGEX_DATE = 'gubee/invoice/regex_invoice_date';
+    /**
+     * Path to 'invoice_regex_invoice_link' system config 
+     */
+    public const CONFIG_PATH_INVOICE_REGEX_LINK = 'gubee/invoice/regex_invoice_link';
+
+     /**
+     * Path to 'invoice_regex_invoice_content' system config 
+     */
+    public const CONFIG_PATH_INVOICE_REGEX_CONTENT = 'gubee/invoice/regex_invoice_content';
+
+    /**
+     * Path to 'invoice_regex_invoice_content' system config 
+     */
+    public const CONFIG_PATH_INVOICE_CLEANUP_XML = 'gubee/invoice/cleanup_xml';
     /**
      * Set the 'active' system config.
      */
@@ -472,4 +508,104 @@ interface ConfigInterface
      * Get the 'fulfilment_rules' system config.
      */
     public function getFulfilmentRules(): array;
+
+    /**
+     * Get the 'invoice_active' system config.
+     * @return bool
+     */
+    public function getInvoiceActive(): bool;
+   
+    /**
+     * Set the 'invoice_active' system config.
+     * @param bool $invoiceActive
+     * @return ConfigInterface
+     */
+    public function setInvoiceActive(bool $invoiceActive);
+
+    /**
+     * Get the 'invoice_regex_invoice_number' system config
+     * @return string
+     */
+    public function getInvoiceNumberRegex() : string;
+
+    /**
+     * Set the 'invoice_regex_invoice_number' system config
+     * @param string $invoiceNumberRegex
+     * @return ConfigInterface
+     */
+    public function setInvoiceNumberRegex(string $invoiceNumberRegex);
+    /**
+     * Get the 'invoice_regex_invoice_series' system config
+     * @return string
+     */
+    public function getInvoiceSeriesRegex() : string;
+
+    /**
+     * Set the 'invoice_regex_invoice_series' system config
+     * @param string $invoiceSeriesRegex
+     * @return ConfigInterface
+     */
+    public function setInvoiceSeriesRegex(string $invoiceSeriesRegex);
+    /**
+     * Get the 'invoice_regex_invoice_key' system config
+     * @return string
+     */
+    public function getInvoiceKeyRegex() : string;
+
+    /**
+     * Set the 'invoice_regex_invoice_key' system config
+     * @param string $invoiceKeyRegex
+     * @return ConfigInterface
+     */
+    public function setInvoiceKeyRegex(string $invoiceKeyRegex);
+    /**
+     * Get the 'invoice_regex_invoice_date' system config
+     * @return string
+     */
+    public function getInvoiceDateRegex() : string;
+
+    /**
+     * Set the 'invoice_regex_invoice_date' system config
+     * @param string $invoiceDateRegex
+     * @return ConfigInterface
+     */
+    public function setInvoiceDateRegex(string $invoiceDateRegex);
+    /**
+     * Get the 'invoice_regex_invoice_link' system config
+     * @return string
+     */
+    public function getInvoiceLinkRegex() : string;
+
+    /**
+     * Set the 'invoice_regex_invoice_link' system config
+     * @param string $invoiceLinkRegex
+     * @return ConfigInterface
+     */
+    public function setInvoiceLinkRegex(string $invoiceLinkRegex);
+
+    /**
+     * Get the 'invoice_regex_invoice_content' system config
+     * @return string
+     */
+    public function getInvoiceContentRegex() : string;
+
+    /**
+     * Set the 'invoice_regex_invoice_content' system config
+     * @param string $invoiceContentRegex
+     * @return ConfigInterface
+     */
+    public function setInvoiceContentRegex(string $invoiceContentRegex);
+
+    /**
+     * Get the 'invoice_cleanup_xml' system config
+     * @return string
+     */
+    public function getInvoiceCleanupXml() : bool;
+
+    /**
+     * Set the 'invoice_cleanup_xml' system config
+     * @param bool $cleanupXml
+     * @return ConfigInterface
+     */
+    public function setInvoiceCleanupXml(bool $cleanupXml);
 }

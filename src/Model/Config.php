@@ -575,4 +575,174 @@ class Config extends AbstractHelper implements ConfigInterface
         ) ?: '';
         return explode(',', $content) ?: [];
     }
+    /**
+     * Get the 'invoice_active' system config.
+     * @return bool
+     */
+    public function getInvoiceActive(): bool
+    {
+        return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVOICE_ACTIVE);
+    }
+   
+    /**
+     * Set the 'invoice_active' system config.
+     * @param bool $invoiceActive
+     * @return ConfigInterface
+     */
+    public function setInvoiceActive(bool $invoiceActive)
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_INVOICE_ACTIVE,
+            $invoiceActive
+        );
+    }
+
+    /**
+     * Get the 'invoice_regex_invoice_number' system config
+     * @return string
+     */
+    public function getInvoiceNumberRegex() : string
+    {
+        return $this->scopeConfig->getValue(self::CONFIG_PATH_INVOICE_REGEX_NUMBER);
+    }
+
+    /**
+     * Set the 'invoice_regex_invoice_number' system config
+     * @param string $invoiceNumberRegex
+     * @return ConfigInterface
+     */
+    public function setInvoiceNumberRegex(string $invoiceNumberRegex)
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_INVOICE_REGEX_NUMBER,
+            $invoiceNumberRegex
+        );
+    }
+    /**
+     * Get the 'invoice_regex_invoice_series' system config
+     * @return string
+     */
+    public function getInvoiceSeriesRegex() : string
+    {
+        return $this->scopeConfig->getValue(self::CONFIG_PATH_INVOICE_REGEX_SERIES);
+    }
+
+    /**
+     * Set the 'invoice_regex_invoice_series' system config
+     * @param string $invoiceSeriesRegex
+     * @return ConfigInterface
+     */
+    public function setInvoiceSeriesRegex(string $invoiceSeriesRegex)
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_INVOICE_REGEX_SERIES,
+            $invoiceSeriesRegex
+        );
+    }
+    /**
+     * Get the 'invoice_regex_invoice_key' system config
+     * @return string
+     */
+    public function getInvoiceKeyRegex() : string
+    {
+        return $this->scopeConfig->getValue(self::CONFIG_PATH_INVOICE_REGEX_KEY);
+    }
+
+    /**
+     * Set the 'invoice_regex_invoice_key' system config
+     * @param string $invoiceKeyRegex
+     * @return ConfigInterface
+     */
+    public function setInvoiceKeyRegex(string $invoiceKeyRegex)
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_INVOICE_REGEX_KEY,
+            $invoiceKeyRegex
+        );
+    }
+    /**
+     * Get the 'invoice_regex_invoice_date' system config
+     * @return string
+     */
+    public function getInvoiceDateRegex() : string
+    {
+        return $this->scopeConfig->getValue(self::CONFIG_PATH_INVOICE_REGEX_DATE);
+    }
+
+    /**
+     * Set the 'invoice_regex_invoice_date' system config
+     * @param string $invoiceDateRegex
+     * @return ConfigInterface
+     */
+    public function setInvoiceDateRegex(string $invoiceDateRegex)
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_INVOICE_REGEX_DATE,
+            $invoiceDateRegex
+        );
+    }
+    /**
+     * Get the 'invoice_regex_invoice_link' system config
+     * @return string
+     */
+    public function getInvoiceLinkRegex() : string
+    {
+        return $this->scopeConfig->getValue(self::CONFIG_PATH_INVOICE_REGEX_LINK);
+    }
+
+    /**
+     * Set the 'invoice_regex_invoice_link' system config
+     * @param string $invoiceLinkRegex
+     * @return ConfigInterface
+     */
+    public function setInvoiceLinkRegex(string $invoiceLinkRegex)
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_INVOICE_REGEX_LINK,
+            $invoiceLinkRegex
+        );
+    }
+
+    /**
+     * Get the 'invoice_regex_invoice_content' system config
+     * @return string
+     */
+    public function getInvoiceContentRegex() : string
+    {
+        return $this->scopeConfig->getValue(self::CONFIG_PATH_INVOICE_REGEX_CONTENT);
+    }
+
+    /**
+     * Set the 'invoice_regex_invoice_content' system config
+     * @param string $invoiceContentRegex
+     * @return ConfigInterface
+     */
+    public function setInvoiceContentRegex(string $invoiceContentRegex)
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_INVOICE_REGEX_CONTENT,
+            $invoiceContentRegex
+        );
+    }
+    /**
+     * Get the 'invoice_cleanup_xml' system config
+     * @return string
+     */
+    public function getInvoiceCleanupXml() : bool
+    {
+        return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVOICE_CLEANUP_XML);
+    }
+
+    /**
+     * Set the 'invoice_cleanup_xml' system config
+     * @param bool $cleanupXml
+     * @return ConfigInterface
+     */
+    public function setInvoiceCleanupXml(bool $cleanupXml)
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_INVOICE_CLEANUP_XML,
+            $cleanupXml
+        );
+    }
 }
