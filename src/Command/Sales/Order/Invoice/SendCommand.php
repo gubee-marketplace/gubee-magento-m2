@@ -4,15 +4,21 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Sales\Order\Invoice;
 
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Api\Data\InvoiceInterface;
 use Gubee\Integration\Api\InvoiceRepositoryInterface;
 use Gubee\Integration\Api\OrderRepositoryInterface as GubeeOrderRepositoryInterface;
 use Gubee\Integration\Command\Sales\Order\AbstractProcessorCommand;
+use Gubee\Integration\Model\Invoice;
+use Gubee\Integration\Model\Invoice\Parser;
 use Gubee\SDK\Resource\Sales\OrderResource;
 use InvalidArgumentException;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Api\OrderStatusHistoryRepositoryInterface;
 use Magento\Sales\Model\Order\Status\HistoryFactory;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Psr\Log\LoggerInterface;
@@ -24,6 +30,12 @@ use function __;
 class SendCommand extends AbstractProcessorCommand
 {
     protected InvoiceRepositoryInterface $invoiceRepository;
+
+    protected Parser $invoiceParser;
+
+    protected OrderStatusHistoryRepositoryInterface $orderStatusHistoryRepository;
+
+    protected ConfigInterface $config;
 
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()
@@ -38,9 +50,16 @@ class SendCommand extends AbstractProcessorCommand
         GubeeOrderRepositoryInterface $gubeeOrderRepository,
         HistoryFactory $historyFactory,
         OrderManagementInterface $orderManagement,
-        InvoiceRepositoryInterface $invoiceRepository
+        InvoiceRepositoryInterface $invoiceRepository,
+        Parser $invoiceParser,
+        OrderStatusHistoryRepositoryInterface $orderStatusHistoryRepository,
+        ConfigInterface $config
     ) {
         $this->invoiceRepository = $invoiceRepository;
+        $this->invoiceParser = $invoiceParser;
+        $this->orderStatusHistoryRepository = $orderStatusHistoryRepository;
+        $this->config = $config;
+
         parent::__construct(
             $eventDispatcher,
             $logger,
@@ -56,7 +75,11 @@ class SendCommand extends AbstractProcessorCommand
 
     protected function configure()
     {
-        $this->addArgument('invoice_id', InputArgument::REQUIRED, 'Invoice ID');
+    
+        $this->addArgument('invoice_id', InputArgument::OPTIONAL, 'Invoice ID');
+
+        $this->addArgument('order_id', InputArgument::OPTIONAL, 'Order ID');
+        $this->addArgument('history_id', InputArgument::OPTIONAL, 'History ID');
     }
 
     protected function beforeExecute($input, $output)
@@ -74,29 +97,67 @@ class SendCommand extends AbstractProcessorCommand
     protected function doExecute(): int
     {
         $invoice = $this->getInvoice();
-        if ($invoice->getOrigin() === InvoiceInterface::ORIGIN_GUBEE) {
-            throw new InvalidArgumentException(
-                __(
-                    "The invoice '%1' is already on Gubee",
-                    $invoice->getInvoiceId()
-                )
+        if (!is_null($invoice)) {
+            if ($invoice->getOrigin() === InvoiceInterface::ORIGIN_GUBEE) {
+                throw new InvalidArgumentException(
+                    __(
+                        "The invoice '%1' is already on Gubee",
+                        $invoice->getInvoiceId()
+                    )
+                );
+            }
+            $gubeeOrder = $this->gubeeOrderRepository->getByOrderId(
+                $invoice->getOrderId()
+            );
+            $this->orderResource->updateInvoiced(
+                $gubeeOrder->getGubeeOrderId(),
+                $invoice->jsonSerialize()
             );
         }
-        $gubeeOrder = $this->gubeeOrderRepository->getByOrderId(
-            $invoice->getOrderId()
-        );
-        $this->orderResource->updateInvoiced(
-            $gubeeOrder->getGubeeOrderId(),
-            $invoice->jsonSerialize()
-        );
+        else if ($orderHistory = $this->getOrderStatusHistory()){
+            $gubeeOrder = $this->gubeeOrderRepository->getByOrderId(
+                $this->input->getArgument('order_id')
+            );
+            $invoiceData = $this->invoiceParser->findMatch($orderHistory->getComment());
+
+            /**
+             * @var Invoice $invoice
+             */
+            $invoice = $this->invoiceRepository->getByOrderId($this->input->getArgument('order_id'));
+            $invoice->setData($invoiceData);
+            $invoice->setOrderId($this->input->getArgument('order_id'));
+            $invoice->setOrigin(Invoice::ORIGIN_MAGENTO);
+            $this->invoiceRepository->save($invoice);
+
+            if ($this->config->getInvoiceCleanupXml()) // cleanup xml from history if enabled
+            {
+                $orderHistory->setData('origin', 'gubee');
+                $orderHistory->setComment($this->invoiceParser->cleanupXml($orderHistory->getComment()));
+                $this->orderStatusHistoryRepository->save($orderHistory);
+            }
+        
+        }
         return 0;
     }
 
-    private function getInvoice(): InvoiceInterface
+    private function getInvoice(): ?InvoiceInterface
     {
         $invoiceId = $this->input->getArgument('invoice_id');
+        if (is_null($invoiceId)) {
+            return null;
+        }
         return $this->invoiceRepository->get($invoiceId);
     }
+
+    private function getOrderStatusHistory(): ?OrderStatusHistoryInterface
+    {
+        $historyId = $this->input->getArgument('history_id');
+        if (is_null($historyId)) {
+            return null;
+        }
+
+        return $this->orderStatusHistoryRepository->get($historyId);
+    } 
 
     public function getPriority(): int
     {

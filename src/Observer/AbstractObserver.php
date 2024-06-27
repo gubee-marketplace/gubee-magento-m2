@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Observer;
 
-use Gubee\Integration\Model\Config;
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Model\Queue\Management;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
@@ -14,11 +14,14 @@ abstract class AbstractObserver implements ObserverInterface
 {
     protected Observer $observer;
     protected LoggerInterface $logger;
-    protected Config $config;
+    /**
+     * @var ConfigInterface
+     */
+    protected ConfigInterface $config;
     protected Management $queueManagement;
 
     public function __construct(
-        Config $config,
+        ConfigInterface $config,
         LoggerInterface $logger,
         Management $queueManagement
     ) {
@@ -73,7 +76,7 @@ abstract class AbstractObserver implements ObserverInterface
         return $this->logger;
     }
 
-    public function getConfig(): Config
+    public function getConfig(): ConfigInterface
     {
         return $this->config;
     }
