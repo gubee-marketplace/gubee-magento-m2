@@ -10,6 +10,7 @@
             <include path="Gubee_Integration::system/02-attributes.xml"/>
             <include path="Gubee_Integration::system/03-payment.xml"/>
             <include path="Gubee_Integration::system/04-shipping.xml"/>
+            <include path="Gubee_Integration::system/05-invoice.xml"/>
         </section>
     </system>
 </config>
