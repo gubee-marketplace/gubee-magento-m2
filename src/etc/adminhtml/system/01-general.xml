@@ -103,5 +103,9 @@
                 <field id="active">1</field>
             </depends>
         </field>
+        <field id="prevent_email_send" type="select" sortOrder="60" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label><![CDATA[Prevent e-mail sending]]></label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
     </group>
 </include>
