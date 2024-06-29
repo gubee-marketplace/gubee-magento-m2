@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Preferences Group-->
     <preference for="Gubee\Integration\Api\Data\ConfigInterface" type="Gubee\Integration\Model\Config"/>
     <preference for="Gubee\Integration\Api\MessageRepositoryInterface" type="Gubee\Integration\Model\MessageRepository"/>
     <preference for="Gubee\Integration\Api\Data\MessageInterface" type="Gubee\Integration\Model\Message"/>
@@ -19,12 +20,41 @@
     <preference for="Gubee\Integration\Api\OrderRepositoryInterface" type="Gubee\Integration\Model\OrderRepository"/>
     <preference for="Gubee\Integration\Api\Data\OrderInterface" type="Gubee\Integration\Model\Order"/>
     <preference for="Gubee\Integration\Api\Data\OrderSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
-
+    <!-- /Preferences Group-->
+     <!--Plugins-->
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <plugin name="Gubee\Integration\Plugin\Sales\Order\Grid\Marketplace\Column" type="Gubee\Integration\Plugin\Sales\Order\Grid\Marketplace\Column" sortOrder="100" disabled="false" />
     </type>
 
+    <type name="Magento\Sales\Model\Order\Email\Sender\InvoiceSender">
+        <plugin name="Gubee\Integration\Plugin\Sales\Order\Email\Sender\InvoiceSender" 
+                type="Gubee\Integration\Plugin\Sales\Order\Email\Sender\InvoiceSender" 
+                sortOrder="100" 
+                disabled="false" />
+    </type>
+    <type name="Magento\Sales\Model\Order\Email\Sender\ShipmentSender">
+        <plugin name="Gubee\Integration\Plugin\Sales\Order\Email\Sender\ShipmentSender" 
+                type="Gubee\Integration\Plugin\Sales\Order\Email\Sender\ShipmentSender" 
+                sortOrder="100" 
+                disabled="false" />
+    </type>
+    <type name="Magento\Sales\Model\Order\Shipment\Sender\EmailSender">
+        <plugin name="Gubee\Integration\Plugin\Sales\Order\Shipment\Sender\EmailSender" 
+                type="Gubee\Integration\Plugin\Sales\Order\Shipment\Sender\EmailSender" 
+                sortOrder="100" 
+                disabled="false" />
+    </type>
 
+    <type name="Magento\Sales\Model\Order\Email\Sender\OrderCommentSender">
+        <plugin name="Gubee\Integration\Plugin\Sales\Order\Email\Sender\OrderCommentSender" 
+                type="Gubee\Integration\Plugin\Sales\Order\Email\Sender\OrderCommentSender" 
+                sortOrder="100" 
+                disabled="false" />
+    </type>
+
+    <!--/Plugins-->
+
+    <!-- Dependence Injection-->
     <type name="Gubee\Integration\Service\Gubee\Client">
         <arguments>
             <argument name="logger" xsi:type="object">Gubee\Integration\Model\Message\Detail\Logger</argument>
@@ -98,4 +128,5 @@
             <argument name="logger" xsi:type="object">Gubee\Integration\Model\Message\Detail\Logger</argument>
         </arguments>
     </type>
+    <!--/Dependence Injection-->
 </config>
