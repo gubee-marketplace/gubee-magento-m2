@@ -745,4 +745,17 @@ class Config extends AbstractHelper implements ConfigInterface
             $cleanupXml
         );
     }
+
+    public function getPreventEmailSend() : bool
+    {
+        return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_PREVENT_EMAIL_SEND);
+    }
+
+    public function setPreventEmailSend(bool $preventEmailSend) : self
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_PREVENT_EMAIL_SEND,
+            $preventEmailSend
+        );
+    }
 }
