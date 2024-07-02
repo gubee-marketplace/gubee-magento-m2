@@ -177,6 +177,12 @@ interface ConfigInterface
      * @var string
      */
     public const CONFIG_PATH_QUEUE_PAGE_SIZE = 'gubee/general/queue_page_size';
+    /**
+     * Path to 'prevent_email_send' system config.
+     *
+     * @var string
+     */
+    public const CONFIG_PATH_PREVENT_EMAIL_SEND = 'gubee/general/prevent_email_send';
 
     public const CONFIG_PATH_DEFAULT_DELIVERY_TIME = 'carriers/gubee/default_delivery_time';
 
@@ -608,4 +614,8 @@ interface ConfigInterface
      * @return ConfigInterface
      */
     public function setInvoiceCleanupXml(bool $cleanupXml): self;
+
+    public function getPreventEmailSend() : bool;
+
+    public function setPreventEmailSend(bool $preventEmailSend) : self;
 }
