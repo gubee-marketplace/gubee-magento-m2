@@ -10,6 +10,7 @@ use Gubee\Integration\Api\OrderRepositoryInterface;
 use Gubee\Integration\Command\Sales\Order\AbstractProcessorCommand;
 use Gubee\Integration\Command\Sales\Order\Invoice\SendCommand;
 use Gubee\Integration\Model\Config;
+use Gubee\Integration\Model\Invoice;
 use Gubee\Integration\Model\Queue\Management;
 use Gubee\Integration\Observer\AbstractObserver;
 use Gubee\SDK\Resource\Sales\OrderResource;
@@ -64,21 +65,31 @@ class Before extends AbstractObserver
         if (
             $message->getCommand() == SendCommand::class
         ) {
-            $invoice = ObjectManager::getInstance()
-                ->get(
-                    InvoiceRepositoryInterface::class
-                );
-            $invoice = $invoice->get($message->getPayload()['invoice_id']);
-            if (! $invoice) {
-                throw new Exception(
-                    __("Invoice not found")->__toString()
-                );
+            $payload = $message->getPayload();
+            if (isset($payload['invoice_id'])) {
+                /**
+                 * @var InvoiceRepositoryInterface $invoice
+                 */
+                $invoice = ObjectManager::getInstance()
+                    ->get(
+                        InvoiceRepositoryInterface::class
+                    );
+                $invoice = $invoice->get($payload['invoice_id']);
+                if (! $invoice) {
+                    throw new Exception(
+                        __("Invoice not found")->__toString()
+                    );
+                }
+                $orderId = $invoice->getOrderId();
+            }
+            else if (isset($payload['order_id'])) {
+                $orderId = $payload['order_id'];
             }
 
             $order = ObjectManager::getInstance()
                 ->get(OrderRepositoryInterface::class);
             $order = $order->getByOrderId(
-                $invoice->getOrderId()
+                $orderId
             );
             $order = $orderResource->loadByOrderId(
                 $order->getGubeeOrderId()
