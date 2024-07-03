@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Model\Invoice;
 
+use Exception;
+
 class Parser 
 {
     const INVOICE_KEY = 'key';
@@ -16,6 +18,8 @@ class Parser
     const INVOICE_DATE = 'issueDate';
 
     const INVOICE_CONTENT = 'danfeXml';
+
+    const DEFAULT_DATETIME_FORMAT = "Y-m-d\TH:i:s.000\Z";
     
     /**
      * @var \Gubee\Integration\Api\Data\ConfigInterface
@@ -81,10 +85,17 @@ class Parser
             }
         }
         if (!isset($invoiceData[self::INVOICE_DATE]) || empty($invoiceData[self::INVOICE_DATE])) {
-            $invoiceData[self::INVOICE_DATE] = $this->date->date()->format("Y-m-d\TH:i:s.000\Z");
+            $invoiceData[self::INVOICE_DATE] = $this->date->date()->format(self::DEFAULT_DATETIME_FORMAT);
         }
         else {
-            $invoiceData[self::INVOICE_DATE] = $this->date->date($invoiceData[self::INVOICE_DATE])->format("Y-m-d\TH:i:s.000\Z");
+            try {
+                $invoiceData[self::INVOICE_DATE] = $this->date->date($invoiceData[self::INVOICE_DATE])->format(self::DEFAULT_DATETIME_FORMAT);
+            }
+            catch (Exception $err)
+            {
+                $this->logger->critical("Failed to parse date from invoice history.", ['exception' => $err]);
+                $invoiceData[self::INVOICE_DATE] = $this->date->date()->format(self::DEFAULT_DATETIME_FORMAT);
+            }
         }
         if (isset($invoiceData[self::INVOICE_LINK]) && (!isset($invoiceData[self::INVOICE_CONTENT]) || empty($invoiceData[self::INVOICE_CONTENT]) ))
             $invoiceData[self::INVOICE_CONTENT] = $this->fetchXML($invoiceData[self::INVOICE_LINK]);
