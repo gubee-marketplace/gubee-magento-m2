@@ -348,14 +348,15 @@ class Variation
         } else {
             $type = UnitTimeTypeEnum::fromValue($type);
         }
-
+        $rawCrossDockingTime = $this->attribute->getRawAttributeValue(
+            'gubee_cross_docking_time',
+            $this->product
+        );
+        
         $crossDockingTime = $this->objectManager->create(
             UnitTime::class,
             [
-                'value' => (int) $this->attribute->getRawAttributeValue(
-                    'gubee_cross_docking_time',
-                    $this->product
-                ) ?: -1,
+                'value' => (int) $rawCrossDockingTime,
                 'type' => $type,
             ]
         );
