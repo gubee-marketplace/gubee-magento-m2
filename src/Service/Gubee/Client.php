@@ -7,6 +7,7 @@ namespace Gubee\Integration\Service\Gubee;
 use Gubee\Integration\Model\Config;
 use Gubee\SDK\Api\ServiceProviderInterface;
 use Gubee\SDK\Library\HttpClient\Builder;
+use LogicException;
 use Magento\Framework\App\ObjectManager;
 use Psr\Log\LoggerInterface;
 
@@ -20,7 +21,13 @@ class Client extends \Gubee\SDK\Client
         int $retryCount = 3
     ) {
         parent::__construct($serviceProvider, $logger, $httpClientBuilder, $retryCount);
-        $this->authenticate($config->getApiToken());
+        try {
+            $this->authenticate($config->getApiToken());
+        }
+        catch (LogicException $err)
+        {
+            $this->logger->error($err->getMessage(), ['exception' => $err]);
+        }
     }
 
     public function buildServiceProvider(): ServiceProviderInterface
