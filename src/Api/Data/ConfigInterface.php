@@ -224,6 +224,18 @@ interface ConfigInterface
      * Path to 'invoice_regex_invoice_content' system config 
      */
     public const CONFIG_PATH_INVOICE_CLEANUP_XML = 'gubee/invoice/cleanup_xml';
+
+    public const CONFIG_PATH_INVENTORY_PLUGIN_RESERVATIONS = 'gubee/inventory/plugin_inventory_reservations';
+
+    public const CONFIG_PATH_INVENTORY_PLUGIN_INVENTORY = 'gubee/inventory/plugin_inventory';
+    
+    public const CONFIG_PATH_INVENTORY_CATALOG_PLUGIN_INVENTORY_DELETE = 'gubee/inventory/plugin_inventory_delete';
+
+    public const CONFIG_PATH_INVENTORY_CATALOG_PLUGIN_INVENTORY_UPDATE = 'gubee/inventory/plugin_inventory_update';
+
+    public const CONFIG_PATH_INVENTORY_EVENT_SHIPMENT = 'gubee/inventory/event_shipment';
+    
+    public const CONFIG_PATH_INVENTORY_EVENT_ORDER = 'gubee/inventory/event_order';
     /**
      * Set the 'active' system config.
      */
@@ -614,8 +626,42 @@ interface ConfigInterface
      * @return ConfigInterface
      */
     public function setInvoiceCleanupXml(bool $cleanupXml): self;
-
     public function getPreventEmailSend() : bool;
-
+    /**
+     * @param bool $preventEmailSend
+     */
     public function setPreventEmailSend(bool $preventEmailSend) : self;
+
+    public function getPluginInventoryReservations() : bool;
+    /**
+     * @param bool $pluginInventoryReservations
+     */
+    public function setPluginInventoryReservations(bool $pluginInventoryReservations) : self;
+
+    public function getPluginInventory() : bool;
+    /**
+     * @param bool $pluginInventory
+     */
+    public function setPluginInventoryCatalogDelete(bool $pluginInventory) : self;
+    public function getPluginInventoryCatalogDelete() : bool;
+    /**
+     * @param bool $pluginInventory
+     */
+    public function setPluginInventoryCatalogUpdate(bool $pluginInventory) : self;
+    public function getPluginInventoryCatalogUpdate() : bool;
+    /**
+     * @param bool $pluginInventory
+     */
+    public function setPluginInventory(bool $pluginInventory) : self;
+    public function getEventShipment() : bool;
+    /**
+     * @param bool $eventShipment
+     */
+    public function setEventShipment(bool $eventShipment) : self;
+    public function getEventOrder() : bool;
+    /**
+     * @param bool $eventOrder
+     */
+    public function setEventOrder(bool $eventOrder) : self;
+    
 }
