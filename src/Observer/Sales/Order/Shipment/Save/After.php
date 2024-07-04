@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Observer\Sales\Order\Shipment\Save;
 
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Command\Sales\Order\Shipment\SendCommand;
+use Gubee\Integration\Command\Catalog\Product\Stock\SendCommand as StockSendCommand;
 use Gubee\Integration\Observer\AbstractObserver;
 use Gubee\Integration\Model\Config;
 use Gubee\Integration\Model\Queue\Management;
@@ -20,7 +22,7 @@ class After extends AbstractObserver
     protected $orderRepository;
 
     public function __construct(
-        Config $config,
+        ConfigInterface $config,
         LoggerInterface $logger,
         Management $queueManagement,
         OrderRepositoryInterface $orderRepository
@@ -43,10 +45,27 @@ class After extends AbstractObserver
                     'order_id' => $order->getGubeeOrderId(),
                 ]
             );
+            
         }
         catch (NoSuchEntityException $exception)
         {
             $this->logger->info("Order {$mageOrder->getId()} is not integrated with gubee");
+        }
+
+        if ($this->config->getEventShipment()) {
+            foreach ($mageOrder->getItems() as $item)
+            {
+                try {
+                    $this->queueManagement->append(
+                        StockSendCommand::class,
+                        [
+                            'sku' => $item->getSku(),
+                        ]
+                    );
+                } catch (\Exception $err) {
+                    $this->logger->info("Could not update product {$item->getSku()}", ['exception' => $err]);
+                }
+            }
         }
     
     }

@@ -758,4 +758,89 @@ class Config extends AbstractHelper implements ConfigInterface
             $preventEmailSend
         );
     }
+    public function getPluginInventoryReservations() : bool 
+    {
+        return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_PLUGIN_RESERVATIONS);
+    }
+    /**
+     * @param bool $pluginInventoryReservations
+     */
+    public function setPluginInventoryReservations(bool $pluginInventoryReservations) : self
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_INVENTORY_PLUGIN_RESERVATIONS,
+            $pluginInventoryReservations
+        );
+    }
+
+    public function getPluginInventory() : bool
+    {
+        return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_PLUGIN_INVENTORY);
+    }
+    /**
+     * @param bool $pluginInventory
+     */
+    public function setPluginInventory(bool $pluginInventory) : self
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_INVENTORY_PLUGIN_INVENTORY,
+            $pluginInventory
+        );
+    }
+     /**
+     * @param bool $pluginInventory
+     */
+    public function setPluginInventoryCatalogDelete(bool $pluginInventory) : self
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_INVENTORY_CATALOG_PLUGIN_INVENTORY_DELETE,
+            $pluginInventory
+        );
+    }
+    public function getPluginInventoryCatalogDelete() : bool
+    {
+        return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_CATALOG_PLUGIN_INVENTORY_DELETE);
+    }
+    /**
+     * @param bool $pluginInventory
+     */
+    public function setPluginInventoryCatalogUpdate(bool $pluginInventory) : self
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_INVENTORY_CATALOG_PLUGIN_INVENTORY_UPDATE,
+            $pluginInventory
+        );
+    }
+    public function getPluginInventoryCatalogUpdate() : bool
+    {
+        return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_CATALOG_PLUGIN_INVENTORY_UPDATE);
+    }
+    public function getEventShipment() : bool
+    {
+        return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_EVENT_SHIPMENT);
+    }
+    /**
+     * @param bool $eventShipment
+     */
+    public function setEventShipment(bool $eventShipment) : self
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_INVENTORY_EVENT_SHIPMENT,
+            $eventShipment
+        );
+    }
+    public function getEventOrder() : bool 
+    {
+        return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_EVENT_ORDER);
+    }
+    /**
+     * @param bool $eventOrder
+     */
+    public function setEventOrder(bool $eventOrder) : self
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_INVENTORY_EVENT_ORDER,
+            $eventOrder
+        );
+    }
 }
