@@ -31,6 +31,10 @@
                 <regex_invoice_link><![CDATA[/(link)+(\s|de|da)*(acesso)*\s*\:/]]></regex_invoice_link>
                 <regex_invoice_content><![CDATA[/(xml)\:\s?/]]></regex_invoice_content>
             </invoice>
+            <inventory>
+                <event_shipment>1</event_shipment>
+                <event_order>1</event_order>
+            </inventory>
         </gubee>
         <payment>
             <gubee>

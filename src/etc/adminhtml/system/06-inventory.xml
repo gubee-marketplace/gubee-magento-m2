@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+    <group id="inventory" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label><![CDATA[Gubee \ Integration \ Monitor Inventory Changes]]></label>
+        <depends>
+            <field id="gubee/integration/active">1</field>
+        </depends>
+        <field id="plugin_inventory_reservations" type="select" sortOrder="10" showInWebsite="0" showInStore="0" showInDefault="1" translate="label">
+            <label>Enable Plugin on Inventory Reservations Save Multiple</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            <comment>Will trigger inventory changes to be submited to Gubee whenever reservations are created</comment>
+        </field>
+        <field id="plugin_inventory" type="select" sortOrder="12" showInWebsite="0" showInStore="0" showInDefault="1" translate="label">
+            <label>Enable Plugin on Inventory Save Multiple</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            <comment>Will trigger inventory changes to be submited to Gubee whenever a product is saved</comment>
+        </field>
+        <field id="plugin_inventory_delete" type="select" sortOrder="13" showInWebsite="0" showInStore="0" showInDefault="1" translate="label">
+            <label>Enable Plugin on Inventory Catalog Delete</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            <comment>Will trigger inventory changes to be submited to Gubee whenever a inventory item is deleted</comment>
+        </field>
+        <field id="plugin_inventory_update" type="select" sortOrder="14" showInWebsite="0" showInStore="0" showInDefault="1" translate="label">
+            <label>Enable Plugin on Inventory Catalog Update</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            <comment>Will trigger inventory changes to be submitted to Gubee whenever a inventory item is updated</comment>
+        </field>
+        <field id="event_shipment" type="select" sortOrder="20" showInWebsite="0" showInStore="0" showInDefault="1" translate="label">
+            <label>Enable Event observer on Shipment Save</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            <comment>Will trigger inventory changes to be submitted to Gubee whenever orders have their shipment created</comment>
+        </field>
+        <field id="event_order" type="select" sortOrder="25" showInWebsite="0" showInStore="0" showInDefault="1" translate="label">
+            <label>Enable Event observer on Order Place</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            <comment>Will trigger inventory changes to be submitted to Gubee whenever orders are placed</comment>
+        </field>
+    </group>
+</include>

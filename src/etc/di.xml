@@ -51,7 +51,33 @@
                 sortOrder="100" 
                 disabled="false" />
     </type>
-
+    <type name="Magento\Inventory\Model\ResourceModel\SourceItem\SaveMultiple">
+        <plugin name="Gubee\Integration\Plugin\Inventory\Model\ResourceModel\SourceItem\SaveMultiple" 
+                type="Gubee\Integration\Plugin\Inventory\Model\ResourceModel\SourceItem\SaveMultiple" 
+                sortOrder="100" 
+                disabled="false" />
+    </type>
+    <!-- Magento\InventoryReservations\Model\ResourceModel\SaveMultiple -->
+    <type name="Magento\InventoryReservations\Model\ResourceModel\SaveMultiple">
+        <plugin name="Gubee\Integration\Plugin\InventoryReservations\Model\ResourceModel\SaveMultiple" 
+                type="Gubee\Integration\Plugin\InventoryReservations\Model\ResourceModel\SaveMultiple" 
+                sortOrder="100" 
+                disabled="false" />
+    </type>
+    <!-- Magento\InventoryCatalog\Model\UpdateInventory -->
+    <type name="Magento\InventoryCatalog\Model\UpdateInventory">
+        <plugin name="Gubee\Integration\Plugin\InventoryCatalog\Model\UpdateInventory" 
+                type="Gubee\Integration\Plugin\InventoryCatalog\Model\UpdateInventory" 
+                sortOrder="100" 
+                disabled="false" />
+    </type>
+    <!-- DeleteSourceItemsBySku -->
+    <type name="Magento\InventoryCatalog\Model\DeleteSourceItemsBySku">
+        <plugin name="Gubee\Integration\Plugin\InventoryCatalog\Model\DeleteSourceItemsBySku" 
+                type="Gubee\Integration\Plugin\InventoryCatalog\Model\DeleteSourceItemsBySku" 
+                sortOrder="100" 
+                disabled="false" />
+    </type>
     <!--/Plugins-->
 
     <!-- Dependence Injection-->
