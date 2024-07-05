@@ -27,7 +27,7 @@
                 <regex_invoice_number><![CDATA[/(número|numero])+(\s|de|da)*(nota)\s*\:/]]></regex_invoice_number>
                 <regex_invoice_series><![CDATA[/(serie|série)+(\s|de|da)*(nota)\s*\:/]]></regex_invoice_series>
                 <regex_invoice_key><![CDATA[/(chave|série)+(\s|de|da)*(acesso)\s*\:/]]></regex_invoice_key>
-                <regex_invoice_date><![CDATA[/(data)*(\s|de)*(emissao||emissão)\s*\:/]]></regex_invoice_date>
+                <regex_invoice_date><![CDATA[/(data|Data)*(\s|de)*(emissao|Emissao|emissão|Emissão)\s*\:/]]></regex_invoice_date>
                 <regex_invoice_link><![CDATA[/(link)+(\s|de|da)*(acesso)*\s*\:/]]></regex_invoice_link>
                 <regex_invoice_content><![CDATA[/(xml)\:\s?/]]></regex_invoice_content>
             </invoice>
