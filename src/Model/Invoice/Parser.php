@@ -77,13 +77,17 @@ class Parser
                     }
                     
                 }
-                $invoiceData[$field] = trim(str_replace($matches[0], "", $lineToCleanup));
+                if (count($matches) > 0) {
+                    $invoiceData[$field] = trim(str_replace($matches[0], "", $lineToCleanup));
+                }
             }
             catch (\Exception $err)
             {
                 $this->logger->critical($err->getMessage(), ['exception' => $err]);
             }
         }
+        
+        
         if (!isset($invoiceData[self::INVOICE_DATE]) || empty($invoiceData[self::INVOICE_DATE])) {
             $invoiceData[self::INVOICE_DATE] = $this->date->date()->format(self::DEFAULT_DATETIME_FORMAT);
         }
