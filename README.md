@@ -20,7 +20,7 @@ Para instalar o [Gubee Integration](https://github.com/maco-studios/gubee-integr
 Dentro do projeto Magento 2:
 
 ```shell
-composer require gubee/integration:^1
+composer require gubee-marketplace/integration-module:^1
 ```
 ## 🚀 Desinstalando modulo no Magento 2
 Rodar comando: DELETE FROM `patch_list`WHERE ((`patch_name` = 'Gubee\Integration\Setup\Patch\Data\GubeeCatalogProductAttribute'));
