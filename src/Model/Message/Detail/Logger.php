@@ -180,7 +180,7 @@ class Logger implements LoggerInterface
             [
                 'uri'        => $_SERVER['REQUEST_URI'] ?? (isset($_SERVER['argv']) ? implode(' ', $_SERVER['argv']) : ''),
                 'ip'         => $_SERVER['REMOTE_ADDR'] ?? (isset($_SERVER['argv']) ? 'cli' : ''),
-                'user_agent' => php_sapi_name() == 'cli' ? 'cli' : $_SERVER['HTTP_USER_AGENT'],
+                'user_agent' => php_sapi_name() == 'cli' ? 'cli' : $_SERVER['HTTP_USER_AGENT'] ?? 'not defined',
                 'referer'    => $_SERVER['HTTP_REFERER'] ?? 'cli',
                 'method'     => $_SERVER['REQUEST_METHOD'] ?? (isset($_SERVER['argv']) ? 'cli' : ''),
             ],
