@@ -108,10 +108,13 @@ class Parser
 
     /**
      * Checks if any regex matches in a certain string
-     * @param string $content
+     * @param string|\Magento\Framework\Phrase $content
      */
     public function isItInvoice($content)
     {
+        if ($content instanceof \Magento\Framework\Phrase) {
+            $content = $content->render();
+        }
         foreach ($this->regexToArray() as $field => $regex){
             if (preg_match($regex."i", $content, $matches) === 1) {
                 return true;
