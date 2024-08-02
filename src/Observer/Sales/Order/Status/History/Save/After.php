@@ -7,6 +7,7 @@ use Gubee\Integration\Command\Sales\Order\Invoice\SendCommand;
 use Gubee\Integration\Model\Invoice\Parser;
 use Gubee\Integration\Model\Queue\Management;
 use Gubee\Integration\Observer\AbstractObserver;
+use Magento\Sales\Model\Order;
 use Psr\Log\LoggerInterface;
 
 class After extends AbstractObserver
@@ -29,7 +30,7 @@ class After extends AbstractObserver
     protected function process(): void
     {
         /**
-         * @var \Magento\Order\Model\Order\Status\History $statusHistory
+         * @var \Magento\Sales\Model\Order\Status\History $statusHistory
          */
         $statusHistory = $this->getObserver()->getEvent()->getStatusHistory();
         
@@ -56,7 +57,19 @@ class After extends AbstractObserver
 
     public function isAllowed() : bool
     {
-        return parent::isAllowed() && $this->config->getInvoiceActive();
+        
+        $history = $this->getObserver()->getEvent()->getStatusHistory();
+        $isGubee = false;
+        /**
+         * @var Order $order
+         */
+        if ($order = $history->getOrder()) {
+            if ($payment = $order->getPayment()) {
+                $isGubee = $payment->getMethod() == 'gubee';
+            }
+        }
+
+        return parent::isAllowed() && $this->config->getInvoiceActive() && $isGubee;
     }
 
 

@@ -116,7 +116,7 @@ class Parser
             $content = $content->render();
         }
         foreach ($this->regexToArray() as $field => $regex){
-            if (preg_match($regex."i", $content, $matches) === 1) {
+            if (preg_match($regex."i", (string) $content, $matches) === 1) {
                 return true;
             }
         }
