@@ -617,7 +617,7 @@ interface ConfigInterface
      * @param string $invoiceContentRegex
      * @return ConfigInterface
      */
-    public function setInvoiceDateFormat(string $invoiceDateFormat): self;
+    public function setInvoiceDateFormat(string $invoiceDateFormat);
 
     /**
      * Get the 'invoice_date_format' system config

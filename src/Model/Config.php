@@ -729,7 +729,7 @@ class Config extends AbstractHelper implements ConfigInterface
      * @param string $invoiceContentRegex
      * @return ConfigInterface
      */
-    public function setInvoiceDateFormat(string $invoiceDateFormat): self
+    public function setInvoiceDateFormat(string $invoiceDateFormat)
     {
         return $this->saveConfig(
             self::CONFIG_PATH_INVOICE_DATE_FORMAT,
