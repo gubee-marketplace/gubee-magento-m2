@@ -724,6 +724,27 @@ class Config extends AbstractHelper implements ConfigInterface
             $invoiceContentRegex
         );
     }
+     /**
+     * Set the 'invoice_date_format' system config
+     * @param string $invoiceContentRegex
+     * @return ConfigInterface
+     */
+    public function setInvoiceDateFormat(string $invoiceDateFormat): self
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_INVOICE_DATE_FORMAT,
+            $invoiceDateFormat
+        );
+    }
+
+    /**
+     * Get the 'invoice_date_format' system config
+     * @return string
+     */
+    public function getInvoiceDateFormat() : string
+    {
+        return (string) $this->scopeConfig->getValue(self::CONFIG_PATH_INVOICE_DATE_FORMAT);
+    }
     /**
      * Get the 'invoice_cleanup_xml' system config
      * @return string

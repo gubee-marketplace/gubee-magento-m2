@@ -30,6 +30,7 @@
                 <regex_invoice_date><![CDATA[/(data|Data)*(\s|de)*(emissao|Emissao|emissão|Emissão)\s*\:/]]></regex_invoice_date>
                 <regex_invoice_link><![CDATA[/(link)+(\s|de|da)*(acesso)*\s*\:/]]></regex_invoice_link>
                 <regex_invoice_content><![CDATA[/(xml)\:\s?/]]></regex_invoice_content>
+                <date_format><![CDATA[d/m/Y]]></date_format>
             </invoice>
             <inventory>
                 <event_shipment>1</event_shipment>

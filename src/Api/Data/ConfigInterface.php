@@ -220,6 +220,11 @@ interface ConfigInterface
      */
     public const CONFIG_PATH_INVOICE_REGEX_CONTENT = 'gubee/invoice/regex_invoice_content';
 
+     /**
+     * Path to 'invoice_regex_invoice_content' system config 
+     */
+    public const CONFIG_PATH_INVOICE_DATE_FORMAT = 'gubee/invoice/date_format';
+
     /**
      * Path to 'invoice_regex_invoice_content' system config 
      */
@@ -606,6 +611,19 @@ interface ConfigInterface
      * @return string
      */
     public function getInvoiceContentRegex() : string;
+
+    /**
+     * Set the 'invoice_date_format' system config
+     * @param string $invoiceContentRegex
+     * @return ConfigInterface
+     */
+    public function setInvoiceDateFormat(string $invoiceDateFormat): self;
+
+    /**
+     * Get the 'invoice_date_format' system config
+     * @return string
+     */
+    public function getInvoiceDateFormat() : string;
 
     /**
      * Set the 'invoice_regex_invoice_content' system config
