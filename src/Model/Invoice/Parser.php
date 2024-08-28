@@ -93,7 +93,7 @@ class Parser
         }
         else {
             try {
-                $invoiceData[self::INVOICE_DATE] = $this->date->date($invoiceData[self::INVOICE_DATE])->format(self::DEFAULT_DATETIME_FORMAT);
+                $invoiceData[self::INVOICE_DATE] = $this->date->date(\DateTime::createFromFormat($this->config->getInvoiceDateFormat(), $invoiceData[self::INVOICE_DATE]))->format(self::DEFAULT_DATETIME_FORMAT);
             }
             catch (Exception $err)
             {
@@ -103,7 +103,9 @@ class Parser
         }
         if (isset($invoiceData[self::INVOICE_LINK]) && (!isset($invoiceData[self::INVOICE_CONTENT]) || empty($invoiceData[self::INVOICE_CONTENT]) ))
             $invoiceData[self::INVOICE_CONTENT] = $this->fetchXML($invoiceData[self::INVOICE_LINK]);
+        
         return $invoiceData;
+
     }
 
     /**

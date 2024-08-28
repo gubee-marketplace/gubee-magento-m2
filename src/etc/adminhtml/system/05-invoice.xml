@@ -49,6 +49,14 @@
             </depends>
         </field>
 
+        <field id="date_format" type="text" sortOrder="45" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Date Format</label>
+            <comment><![CDATA[Define the date pattern to be parsed, examples: <strong>d-m-Y</strong> or <strong>d/m/Y</strong>]]></comment>
+            <depends>
+                <field id="gubee/invoice/active">1</field>
+            </depends>
+        </field>
+
         <field id="cleanup_xml" type="select" sortOrder="11" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Cleanup XML from history after processing</label>
             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
