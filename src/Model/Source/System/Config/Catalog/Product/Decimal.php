@@ -12,7 +12,7 @@ class Decimal extends Attribute
     {
         return parent::getCollection()->addFieldToFilter(
             'backend_type',
-            ['in' => ['decimal', 'varchar']]
+            ['in' => ['decimal', 'varchar', 'int']]
         );
     }
 }
