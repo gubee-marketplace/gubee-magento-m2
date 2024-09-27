@@ -866,7 +866,7 @@ class Config extends AbstractHelper implements ConfigInterface
         );
     }
     /**
-     * @param bool $autoAssocCustomerGroup
+     * @return bool 
      */
     public function getAutoAssocCustomerGroup() : bool
     {
