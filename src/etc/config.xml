@@ -36,6 +36,11 @@
                 <event_shipment>1</event_shipment>
                 <event_order>1</event_order>
             </inventory>
+            <customer>
+                <auto_associate_customers>0</auto_associate_customers>
+                <customer_group_id_cpf>1</customer_group_id_cpf>
+                <customer_group_id_cpnpj>1</customer_group_id_cpnpj>
+            </customer>
         </gubee>
         <payment>
             <gubee>

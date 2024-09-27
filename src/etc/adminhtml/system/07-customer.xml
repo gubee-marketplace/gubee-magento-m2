@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+    <group id="customer" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label><![CDATA[Gubee \ Integration \ Customer]]></label>
+        <depends>
+            <field id="gubee/integration/active">1</field>
+        </depends>
+        <field id="customer_attributes" type="label" sortOrder="1" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Customer Attributes</label>
+            <comment>
+                <![CDATA[ <hr/>]]>
+            </comment>
+            <depends>
+                <field id="gubee/integration/active">1</field>
+            </depends>
+        </field>
+
+        <field id="auto_associate_customers" type="select" sortOrder="10" showInWebsite="0" showInStore="0" showInDefault="1" translate="label">
+            <label>Automatically associate customer to groups</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            <comment>Depending if the customer's taxvat is a CPF or a CNPJ associate customer to a certain group</comment>
+        </field>
+
+        <field id="customer_group_id_cpf" type="select" sortOrder="10" showInWebsite="0" showInStore="0" showInDefault="1" translate="label">
+            <label>Customer Group for CPF</label>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Customer\Group</source_model>
+            <comment>If customer has a CPF associate to this group</comment>
+            <depends>
+                <field id="gubee/customer/auto_associate_customers">1</field>
+            </depends>
+        </field>
+
+        <field id="customer_group_id_cnpj" type="select" sortOrder="10" showInWebsite="0" showInStore="0" showInDefault="1" translate="label">
+            <label>Customer Group for CNPJ</label>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Customer\Group</source_model>
+            <comment>If customer has a CNPJ associate to this group</comment>
+            <depends>
+                <field id="gubee/customer/auto_associate_customers">1</field>
+            </depends>
+        </field>
+    </group>
+</include>

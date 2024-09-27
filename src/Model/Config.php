@@ -840,6 +840,7 @@ class Config extends AbstractHelper implements ConfigInterface
     {
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_EVENT_SHIPMENT);
     }
+    
     /**
      * @param bool $eventShipment
      */
@@ -862,6 +863,67 @@ class Config extends AbstractHelper implements ConfigInterface
         return $this->saveConfig(
             self::CONFIG_PATH_INVENTORY_EVENT_ORDER,
             $eventOrder
+        );
+    }
+    /**
+     * @return bool 
+     */
+    public function getAutoAssocCustomerGroup() : bool
+    {
+        return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_CUSTOMER_GROUP_AUTO_ASSOC);
+    }
+    /**
+     * @param bool $autoAssocCustomerGroup
+     */
+    public function setAutoAssocCustomerGroup(bool $autoAssocCustomerGroup) : self
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_CUSTOMER_GROUP_AUTO_ASSOC,
+            $autoAssocCustomerGroup
+        );
+    }
+
+    /**
+     * Get the 'customer_group_id_cpf' system config
+     * @return string
+     */
+    public function getCustomerGroupCpf() : string
+    {
+        return (string) $this->scopeConfig->getValue(self::CONFIG_PATH_CUSTOMER_GROUP_CPF);
+    }
+
+    /**
+     * Set the 'invoice_regex_invoice_date' system config
+     * @param string $customerGroup
+     * @return ConfigInterface
+     */
+    public function setCustomerGroupCpf(string $customerGroup): self
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_CUSTOMER_GROUP_CPF,
+            $customerGroup
+        );
+    }
+
+    /**
+     * Get the 'customer_group_id_cnpj' system config
+     * @return string
+     */
+    public function getCustomerGroupCnpj() : string
+    {
+        return (string) $this->scopeConfig->getValue(self::CONFIG_PATH_CUSTOMER_GROUP_CNPJ);
+    }
+
+    /**
+     * Set the 'customer_group_id_cnpj' system config
+     * @param string $customerGroup
+     * @return ConfigInterface
+     */
+    public function setCustomerGroupCnpj(string $customerGroup): self
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_CUSTOMER_GROUP_CNPJ,
+            $customerGroup
         );
     }
 }
