@@ -241,6 +241,12 @@ interface ConfigInterface
     public const CONFIG_PATH_INVENTORY_EVENT_SHIPMENT = 'gubee/inventory/event_shipment';
     
     public const CONFIG_PATH_INVENTORY_EVENT_ORDER = 'gubee/inventory/event_order';
+
+    public const CONFIG_PATH_CUSTOMER_GROUP_AUTO_ASSOC = 'gubee/customer/auto_associate_customers';
+
+    public const CONFIG_PATH_CUSTOMER_GROUP_CPF = 'gubee/customer/customer_group_id_cpf';
+    
+    public const CONFIG_PATH_CUSTOMER_GROUP_CNPJ = 'gubee/customer/customer_group_id_cnpj';
     /**
      * Set the 'active' system config.
      */
@@ -681,5 +687,37 @@ interface ConfigInterface
      * @param bool $eventOrder
      */
     public function setEventOrder(bool $eventOrder) : self;
+
+    public function getAutoAssocCustomerGroup() : bool;
+    /**
+     * @param bool $autoAssocCustomerGroup
+     */
+    public function setAutoAssocCustomerGroup(bool $autoAssocCustomerGroup) : self;
+
+    /**
+     * Get the 'customer_group_id_cpf' system config
+     * @return string
+     */
+    public function getCustomerGroupCpf() : string;
+
+    /**
+     * Set the 'invoice_regex_invoice_date' system config
+     * @param string $customerGroup
+     * @return ConfigInterface
+     */
+    public function setCustomerGroupCpf(string $customerGroup): self;
+
+    /**
+     * Get the 'customer_group_id_cnpj' system config
+     * @return string
+     */
+    public function getCustomerGroupCnpj() : string;
+
+    /**
+     * Set the 'customer_group_id_cnpj' system config
+     * @param string $customerGroup
+     * @return ConfigInterface
+     */
+    public function setCustomerGroupCnpj(string $customerGroup): self;
     
 }

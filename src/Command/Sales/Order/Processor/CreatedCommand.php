@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gubee\Integration\Command\Sales\Order\Processor;
 
 use Exception;
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Api\OrderRepositoryInterface as GubeeOrderRepositoryInterface;
 use Gubee\Integration\Command\Sales\Order\AbstractProcessorCommand;
 use Gubee\Integration\Model\InvoiceFactory;
@@ -56,6 +57,7 @@ class CreatedCommand extends AbstractProcessorCommand
     protected OrderService $orderService;
     protected InvoiceFactory $invoiceFactory;
     protected ConvertOrder $convertOrder;
+    protected ConfigInterface $config;
 
     public function __construct(
         ManagerInterface $eventDispatcher,
@@ -78,7 +80,8 @@ class CreatedCommand extends AbstractProcessorCommand
         GubeeOrderRepositoryInterface $gubeeOrderRepository,
         HistoryFactory $historyFactory,
         OrderManagementInterface $orderManagement,
-        ConvertOrder $convertOrder
+        ConvertOrder $convertOrder,
+        ConfigInterface $config
     )
     {
         parent::__construct(
@@ -106,6 +109,7 @@ class CreatedCommand extends AbstractProcessorCommand
         $this->productRepository = $productRepository;
         $this->quoteManagement = $quoteManagement;
         $this->cartManagement = $cartManagement;
+        $this->config = $config;
     }
 
     protected function doExecute(): int
@@ -401,6 +405,18 @@ class CreatedCommand extends AbstractProcessorCommand
             $customer->setPassword(
                 hash('sha256', $gubeeOrder['customer']['email'] . microtime())
             );
+            if ($this->config->getAutoAssocCustomerGroup()) {
+                if ($gubeeOrder['customer']['documents'][0]['type'] == "CPF") {
+                    if ($groupCPF = $this->config->getCustomerGroupCpf()) {
+                        $customer->setGroupId($groupCPF);
+                    }
+                }
+                else {
+                    if ($groupCNPJ = $this->config->getCustomerGroupCnpj()) {
+                        $customer->setGroupId($groupCNPJ);
+                    }
+                }
+            }
             $customer->save();
             $customer = $this->customerRepository->get(
                 $gubeeOrder['customer']['email'],
