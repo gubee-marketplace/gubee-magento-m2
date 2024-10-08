@@ -75,8 +75,9 @@ class Before extends AbstractObserver
      */
     protected function isAllowed(): bool
     {
-        $order = $this->registry->registry('current_shipment')
-            ->getOrder();
+        // $shipment = $this->registry->registry('current_shipment');
+        $eventShipment = $this->getObserver()->getShipment();
+        $order = $eventShipment->getOrder();
         if ($order->getPayment()->getMethod() !== 'gubee') {
             return false;
         }
