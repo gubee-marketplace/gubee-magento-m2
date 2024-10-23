@@ -417,6 +417,7 @@ class CreatedCommand extends AbstractProcessorCommand
                     }
                 }
             }
+            $customer->setStoreId($this->storeManager->getDefaultStoreView()->getId());
             $customer->save();
             $customer = $this->customerRepository->get(
                 $gubeeOrder['customer']['email'],
@@ -435,6 +436,7 @@ class CreatedCommand extends AbstractProcessorCommand
         $quote = $this->quoteFactory->create();
         $quote->assignCustomer($customer)
             ->setCurrency();
+        $quote->setStoreId($this->storeManager->getDefaultStoreView()->getId());
         $this->addItemsToQuote($gubeeOrder, $quote);
         return $quote;
     }
