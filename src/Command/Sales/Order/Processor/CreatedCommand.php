@@ -160,8 +160,12 @@ class CreatedCommand extends AbstractProcessorCommand
     public function create(string $incrementId): bool
     {
         $gubeeOrder = $this->orderResource->loadByOrderId($incrementId);
+        $isFulfillment = false;
         foreach ($gubeeOrder['items'] as $item)
         {
+            if ($item[ 'fulfillment']) {
+                $isFulfillment = true;
+            }
             $this->orderWarehouseId = $item['warehouseId'];
             break;
         }
@@ -336,15 +340,21 @@ class CreatedCommand extends AbstractProcessorCommand
         }
         try {
             $order->save();
+            /**
+             * @var Order
+             */
             $gubeeOrderItem = ObjectManager::getInstance()->create(
                 Order::class
             );
+
             $gubeeOrderItem
                 ->setOrderId($order->getId())
                 ->setGubeeOrderId($gubeeOrder['id'])
                 ->setGubeeMarketplace(
                     $gubeeOrder['plataform']
-                );
+                )->setGubeeChannel($gubeeOrder['channel'])
+                ->setGubeeAccountId($gubeeOrder['account_id'])
+                ->setFulfillment($isFullFillement);
 
             $this->gubeeOrderRepository->save($gubeeOrderItem);
             $this->logger->debug(
