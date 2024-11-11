@@ -926,4 +926,31 @@ class Config extends AbstractHelper implements ConfigInterface
             $customerGroup
         );
     }
+
+    public function setMultistockEnabled(bool $flag) : self
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_MULTISTOCK_ENABLE,
+            $flag
+        );
+    }
+
+    public function getMultistockEnabled() : bool
+    {
+        return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_MULTISTOCK_ENABLE);
+    }
+
+    
+    public function setMultistockRelation(array $flag) : self
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_MULTISTOCK_RELATION,
+            $flag
+        );
+    }
+
+    public function getMultistockRelation() : ?array
+    {
+        return json_decode($this->scopeConfig->getValue(self::CONFIG_PATH_MULTISTOCK_RELATION), true);
+    }
 }

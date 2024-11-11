@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\Sales\Api\Data\OrderInterface">
+        <attribute code="gubee_sales_channel" type="string"/>
+        <attribute code="gubee_marketplace_code" type="string"/>
+        <attribute code="gubee_account" type="string"/>
+        <attribute code="gubee_is_fullfilement" type="string"/>
+    </extension_attributes>
+</config>

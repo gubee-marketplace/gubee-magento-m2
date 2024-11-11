@@ -77,6 +77,10 @@
         <column name="order_id" nullable="true" xsi:type="int" padding="10" unsigned="true" comment="order_id"/>
         <column name="gubee_order_id" nullable="true" xsi:type="varchar" comment="gubee_order_id" length="255"/>
         <column name="gubee_marketplace" nullable="true" xsi:type="varchar" comment="gubee_marketplace" length="255"/>
+        <column name="gubee_channel" nullable="true" xsi:type="varchar" comment="gubee_channel" length="255"/>
+        <column name="gubee_account_id" nullable="true" xsi:type="varchar" comment="gubee_account_id" length="255"/>
+        <column name="gubee_fulfillment" nullable="true" xsi:type="int"  comment="gubee_fulfillment" padding="10"/>
+
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>

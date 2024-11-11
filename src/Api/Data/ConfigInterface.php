@@ -247,6 +247,14 @@ interface ConfigInterface
     public const CONFIG_PATH_CUSTOMER_GROUP_CPF = 'gubee/customer/customer_group_id_cpf';
     
     public const CONFIG_PATH_CUSTOMER_GROUP_CNPJ = 'gubee/customer/customer_group_id_cnpj';
+
+    /**
+     * Multi Stock Area
+     */
+
+    public const CONFIG_PATH_MULTISTOCK_ENABLE = 'gubee/multiple_inventory/enable_multi_inventory';
+
+    public const CONFIG_PATH_MULTISTOCK_RELATION = 'gubee/multiple_inventory/stock_relation';
     /**
      * Set the 'active' system config.
      */
@@ -720,4 +728,13 @@ interface ConfigInterface
      */
     public function setCustomerGroupCnpj(string $customerGroup): self;
     
+
+    public function setMultistockEnabled(bool $flag) : self;
+
+    public function getMultistockEnabled() : bool;
+
+    
+    public function setMultistockRelation(array $flag) : self;
+
+    public function getMultistockRelation() : ?array;
 }
