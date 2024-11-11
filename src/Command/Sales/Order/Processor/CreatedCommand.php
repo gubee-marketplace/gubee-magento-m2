@@ -62,6 +62,7 @@ class CreatedCommand extends AbstractProcessorCommand
     protected GetAssignedSalesChannelsDataForStock $getAssignedSalesChannelsDataForStock;
     protected $storeId = null;
     protected $orderWarehouseId = null;
+    protected $isFulfillment;
 
     public function __construct(
         ManagerInterface $eventDispatcher,
@@ -160,11 +161,11 @@ class CreatedCommand extends AbstractProcessorCommand
     public function create(string $incrementId): bool
     {
         $gubeeOrder = $this->orderResource->loadByOrderId($incrementId);
-        $isFulfillment = false;
+        $this->isFulfillment = false;
         foreach ($gubeeOrder['items'] as $item)
         {
             if ($item[ 'fulfillment']) {
-                $isFulfillment = true;
+                $this->isFulfillment = true;
             }
             $this->orderWarehouseId = $item['warehouseId'];
             break;
@@ -354,7 +355,7 @@ class CreatedCommand extends AbstractProcessorCommand
                     $gubeeOrder['plataform']
                 )->setGubeeChannel($gubeeOrder['channel'])
                 ->setGubeeAccountId($gubeeOrder['account_id'])
-                ->setFulfillment($isFullFillement);
+                ->setFulfillment($this->isFulfillment);
 
             $this->gubeeOrderRepository->save($gubeeOrderItem);
             $this->logger->debug(
