@@ -41,6 +41,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Throwable;
+use Magento\InventorySales\Model\ResourceModel\GetAssignedSalesChannelsDataForStock;
 
 class CreatedCommand extends AbstractProcessorCommand
 {
@@ -58,6 +59,9 @@ class CreatedCommand extends AbstractProcessorCommand
     protected InvoiceFactory $invoiceFactory;
     protected ConvertOrder $convertOrder;
     protected ConfigInterface $config;
+    protected GetAssignedSalesChannelsDataForStock $getAssignedSalesChannelsDataForStock;
+    protected $storeId = null;
+    protected $orderWarehouseId = null;
 
     public function __construct(
         ManagerInterface $eventDispatcher,
@@ -81,7 +85,8 @@ class CreatedCommand extends AbstractProcessorCommand
         HistoryFactory $historyFactory,
         OrderManagementInterface $orderManagement,
         ConvertOrder $convertOrder,
-        ConfigInterface $config
+        ConfigInterface $config,
+        GetAssignedSalesChannelsDataForStock $getAssignedSalesChannelsDataForStock
     )
     {
         parent::__construct(
@@ -110,6 +115,7 @@ class CreatedCommand extends AbstractProcessorCommand
         $this->quoteManagement = $quoteManagement;
         $this->cartManagement = $cartManagement;
         $this->config = $config;
+        $this->getAssignedSalesChannelsDataForStock = $getAssignedSalesChannelsDataForStock;
     }
 
     protected function doExecute(): int
@@ -154,6 +160,11 @@ class CreatedCommand extends AbstractProcessorCommand
     public function create(string $incrementId): bool
     {
         $gubeeOrder = $this->orderResource->loadByOrderId($incrementId);
+        foreach ($gubeeOrder['items'] as $item)
+        {
+            $this->orderWarehouseId = $item['warehouseId'];
+            break;
+        }
         $customer = $this->prepareCustomer($gubeeOrder);
         $quote = $this->prepareQuote($gubeeOrder, $customer);
         $order = $this->persistOrder($quote, $customer, $gubeeOrder);
@@ -261,7 +272,7 @@ class CreatedCommand extends AbstractProcessorCommand
         $quote->setCustomerFirstname($customer->getFirstname());
         $quote->setCustomerLastname($customer->getLastname());
         $quote->setCustomerGroupId($customer->getGroupId());
-        $quote->setStoreId($this->storeManager->getDefaultStoreView()->getId());
+        $quote->setStoreId($this->getStoreId());
         $quote->setIsActive(true);
         $quote->getBillingAddress()->addData($billingAddress);
         $quote->getShippingAddress()->addData($shippingAddress);
@@ -436,7 +447,7 @@ class CreatedCommand extends AbstractProcessorCommand
         $quote = $this->quoteFactory->create();
         $quote->assignCustomer($customer)
             ->setCurrency();
-        $quote->setStoreId($this->storeManager->getDefaultStoreView()->getId());
+        $quote->setStoreId($this->getStoreId());
         $this->addItemsToQuote($gubeeOrder, $quote);
         return $quote;
     }
@@ -686,7 +697,25 @@ class CreatedCommand extends AbstractProcessorCommand
         );
         return $address;
     }
-
+    public function getStoreId() {
+        if ($this->storeId)
+        {
+            return  $this->storeId;
+        }
+        if (($relation = $this->config->getMultistockRelation()) && $this->config->getMultistockEnabled()) {
+            foreach ($relation as $rStock) {
+                if ($rStock['gubee_code'] == $this->orderWarehouseId) {
+                    $salesChannelData = $this->getAssignedSalesChannelsDataForStock->execute($rStock['stock_id']);
+                    if ($salesChannelData) {
+                        $this->storeId = $salesChannelData['store_id'];
+                        return $this->storeId;
+                    }
+                }
+            }
+        }
+        $this->storeId = $this->storeManager->getDefaultStoreView()->getId();
+        return $this->storeId;
+    }
     public function getPriority(): int
     {
         return 999;

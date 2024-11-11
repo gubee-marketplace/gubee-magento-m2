@@ -13,6 +13,7 @@
             <include path="Gubee_Integration::system/05-invoice.xml"/>
             <include path="Gubee_Integration::system/06-inventory.xml"/>
             <include path="Gubee_Integration::system/07-customer.xml"/>
+            <include path="Gubee_Integration::system/08-multiple-inventory.xml"/>
         </section>
     </system>
 </config>
