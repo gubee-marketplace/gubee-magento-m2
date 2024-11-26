@@ -77,6 +77,17 @@ class CanceledCommand extends AbstractProcessorCommand
             return 0;
         }
 
+        // Check if order can be canceled
+        if(!$order->canCancel()){
+            $this->logger->error(
+                sprintf(
+                    "Order with ID %s can't be canceled",
+                    $order->getId()
+                )
+            );
+            return 0;
+        }
+
         $this->cancelOrder($order);
 
         return 0;
