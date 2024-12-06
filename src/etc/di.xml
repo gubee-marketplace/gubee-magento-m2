@@ -157,5 +157,9 @@
             <argument name="logger" xsi:type="object">Gubee\Integration\Model\Message\Detail\Logger</argument>
         </arguments>
     </type>
+
+    <type name="Magento\Sales\Block\Adminhtml\Order\Status\NewStatus\Form">
+        <plugin name="Gubee\Integration\Plugin\Sales\Order\Status\Gubee" type="Gubee\Integration\Plugin\Sales\Order\Status\Gubee" />
+    </type>
     <!--/Dependence Injection-->
 </config>
