@@ -70,9 +70,11 @@ class ShippedCommand extends AbstractProcessorCommand
 
         $shippedStatus = $this->getShippedStatus();
 
-        $order->setState($shippedStatus);
-        $order->setStatus($shippedStatus);
-        $order->save();
+        if($shippedStatus){
+            $order->setState($shippedStatus);
+            $order->setStatus($shippedStatus);
+            $order->save();
+        }
     }
 
     /**
@@ -83,9 +85,9 @@ class ShippedCommand extends AbstractProcessorCommand
      * in lowercase. If the shipped order status is not linked to Gubee, it returns
      * the default order state as complete.
      *
-     * @return string The shipped status in lowercase if linked to Gubee, otherwise the default order state.
+     * @return string|null The shipped status in lowercase if linked to Gubee, otherwise the default order state.
      */
-    private function getShippedStatus(): string
+    private function getShippedStatus(): ?string
     {
         $shippedOrderStatus = $this->orderStatusCollectionFactory->create()
             ->joinStates()
@@ -98,6 +100,6 @@ class ShippedCommand extends AbstractProcessorCommand
             );
         }
 
-        return 'ip_shipped';
+        return null;
     }
 }

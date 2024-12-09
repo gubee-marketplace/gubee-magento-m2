@@ -2,7 +2,7 @@
 
 namespace Gubee\Integration\Plugin\Sales\Order\NewStatus;
 
-use Gubee\Integration\Model\Source\System\Config\Order\Status as GubeeOrderStatus;
+use Gubee\Integration\Model\Source\System\Config\Gubee\Order\Status as GubeeOrderStatus;
 use Magento\Config\Model\Config\Source\YesnoFactory;
 
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
@@ -23,6 +23,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_coreRegistry;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
      * Constructor
      *
      * @param GubeeOrderStatus $gubeeOrderStatus
@@ -30,11 +35,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     public function __construct(
         GubeeOrderStatus $gubeeOrderStatus,
         YesnoFactory $yesnoFactory,
-        \Magento\Framework\Registry $registry
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->gubeeOrderStatus = $gubeeOrderStatus;
         $this->yesnoFactory = $yesnoFactory;
         $this->_coreRegistry = $registry;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -50,6 +57,15 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     ) {
         $fieldset = $subject->getForm()->getElement('base_fieldset');
         $model = $this->_coreRegistry->registry('current_status');
+        $orderStatusAllowedLinkToGubee = $this->scopeConfig->getValue(
+            'gubee/order_status/whitelist_linker_status_enabled',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        $orderStatusAllowedLinkToGubee = explode(',', $orderStatusAllowedLinkToGubee);
+
+        if (!in_array($model['status'], $orderStatusAllowedLinkToGubee)) {
+            return $form;
+        }
 
         if ($fieldset && $this->thereIsStatusOnGubee()) {
             $fieldset->addField(
@@ -72,7 +88,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'name' => 'gubee_status',
                     'label' => __('Gubee Status'),
                     'required' => true,
-                    'note' => __('Link with Gubee status.'),
                     'values' => $this->gubeeOrderStatus->toOptionArray(),
                     'disabled' => isset($model['linked_to_gubee']) && $model['linked_to_gubee'] ? false : true,
                     'value' => $model['gubee_status'] ?? ''

@@ -1,60 +1,44 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Gubee\Integration\Model\Source\System\Config\Order;
 
-use Gubee\SDK\Resource\PlatformResource;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory;
 
-class Status implements ArrayInterface
+class Status implements OptionSourceInterface
 {
-    protected PlatformResource $platformResource;
+    /**
+     * @var CollectionFactory
+     */
+    private $statusCollectionFactory;
 
+    /**
+     * Constructor
+     *
+     * @param CollectionFactory $statusCollectionFactory
+     */
+    public function __construct(CollectionFactory $statusCollectionFactory)
+    {
+        $this->statusCollectionFactory = $statusCollectionFactory;
+    }
+
+    /**
+     * Retrieve list of order statuses
+     *
+     * @return array
+     */
     public function toOptionArray()
     {
-        $options   = [];
+        $statuses = [];
+        $collection = $this->statusCollectionFactory->create();
 
-        try {
-            $this->platformResource = ObjectManager::getInstance()->get(PlatformResource::class);
-            $config = $this->platformResource->configuration();
-
-            $magentoConfigKey = array_search('MAGENTO', array_column($config, 'code'));
-
-            if (!isset($config[$magentoConfigKey])) {
-                throw new \Exception('Magento config not found');
-            }
-
-            $orderStatus = $config[$magentoConfigKey]['orderStatus'];
-
-            if (!is_array($orderStatus)) {
-                throw new \Exception('Order status not found');
-            }
-
-            $options = [
-                [
-                    'value' => '',
-                    'label' => __('-- Please Select --'),
-                ],
-            ];
-
-            foreach ($orderStatus as $statusName => $isEnabled) {
-                if (!$isEnabled) {
-                    continue;
-                }
-
-                $options[] = [
-                    'value' => $statusName,
-                    'label' => $statusName,
-                ];
-            }
-        } catch (\Exception $e) {
-            $options[] = [
-                'value' => '',
-                'label' => __('Error on load order status'),
+        foreach ($collection as $status) {
+            $statuses[] = [
+                'value' => $status->getStatus(),
+                'label' => $status->getLabel()
             ];
         }
-        return $options;
+
+        return $statuses;
     }
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+    <group id="order_status" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label><![CDATA[Gubee \ Integration \ Alignment of gubee order statuses]]></label>
+        <depends>
+            <field id="gubee/integration/active">1</field>
+        </depends>
+        <field id="whitelist_linker_status_enabled" type="multiselect" sortOrder="10" showInWebsite="0" showInStore="0" showInDefault="1" translate="label">
+            <label>Enabled order status linker with gubee</label>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Order\Status</source_model>
+        </field>
+    </group>
+</include>
