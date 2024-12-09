@@ -15,11 +15,14 @@ use Magento\Sales\Model\Order\Status\HistoryFactory;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Exception\LogicException;
+use \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory as OrderStatusCollectionFactory;
 
 use function __;
 
 class DeliveredCommand extends AbstractProcessorCommand
 {
+    private OrderStatusCollectionFactory $orderStatusCollectionFactory;
+
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()
      * @throws LogicException When the command name is empty.
@@ -33,8 +36,10 @@ class DeliveredCommand extends AbstractProcessorCommand
         GubeeOrderRepositoryInterface $gubeeOrderRepository,
         HistoryFactory $historyFactory,
         OrderManagementInterface $orderManagement,
+        OrderStatusCollectionFactory $orderStatusCollectionFactory,
         ?string $name = null
     ) {
+        $this->orderStatusCollectionFactory = $orderStatusCollectionFactory;
         parent::__construct(
             $eventDispatcher,
             $logger,
@@ -73,8 +78,36 @@ class DeliveredCommand extends AbstractProcessorCommand
             __("Order was delivered!")->__toString(),
             (int) $order->getId()
         );
-        $order->setState('complete');
-        $order->setStatus('complete');
+
+        $deliveredStatus = $this->getDeliveredStatus();
+
+        $order->setState($deliveredStatus);
+        $order->setStatus($deliveredStatus);
         $order->save();
+    }
+
+    /**
+     * Retrieve the Gubee delivered status.
+     *
+     * This method fetches the delivered order status from the order status collection,
+     * checks if it is linked to Gubee, and returns the corresponding Gubee status.
+     * If no linked status is found, it defaults to the complete order state.
+     *
+     * @return string The Gubee delivered status or the default complete order state.
+     */
+    private function getDeliveredStatus(): string
+    {
+        $deliveredOrderStatus = $this->orderStatusCollectionFactory->create()
+            ->joinStates()
+            ->addFieldToFilter('main_table.status', 'delivered')
+            ->getFirstItem();
+
+        if ($deliveredOrderStatus && $deliveredOrderStatus->getLinkedToGubee()) {
+            return strtolower(
+                $deliveredOrderStatus->getGubeeStatus()
+            );
+        }
+
+        return Order::STATE_COMPLETE;
     }
 }
