@@ -93,7 +93,7 @@ class ShippedCommand extends AbstractProcessorCommand
             ->getFirstItem();
 
         if ($shippedOrderStatus && $shippedOrderStatus->getLinkedToGubee()) {
-            return $shippedOrderStatus->getGubeeStatus();
+            return $shippedOrderStatus->getStatus();
         }
 
         return null;
