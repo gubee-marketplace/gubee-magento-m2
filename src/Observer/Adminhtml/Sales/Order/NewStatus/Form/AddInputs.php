@@ -1,11 +1,13 @@
 <?php
 
-namespace Gubee\Integration\Plugin\Sales\Order\NewStatus;
+namespace Gubee\Integration\Observer\Adminhtml\Sales\Order\NewStatus\Form;
 
+use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Event\Observer;
 use Gubee\Integration\Model\Source\System\Config\Gubee\Order\Status as GubeeOrderStatus;
 use Magento\Config\Model\Config\Source\YesnoFactory;
 
-class Form extends \Magento\Backend\Block\Widget\Form\Generic
+class AddInputs implements ObserverInterface
 {
     /**
      * @var GubeeOrderStatus
@@ -20,7 +22,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry;
+    protected $coreRegistry;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -31,32 +33,38 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Constructor
      *
      * @param GubeeOrderStatus $gubeeOrderStatus
+     * @param YesnoFactory $yesnoFactory
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         GubeeOrderStatus $gubeeOrderStatus,
         YesnoFactory $yesnoFactory,
-        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->gubeeOrderStatus = $gubeeOrderStatus;
         $this->yesnoFactory = $yesnoFactory;
-        $this->_coreRegistry = $registry;
+        $this->coreRegistry = $coreRegistry;
         $this->scopeConfig = $scopeConfig;
     }
 
     /**
-     * Add Gubee fields to the form
+     * Execute observer
      *
-     * @param \Magento\Sales\Block\Adminhtml\Order\Status\NewStatus\Form $subject
-     * @param \Magento\Framework\Data\Form $form
-     * @return \Magento\Framework\Data\Form
+     * @param Observer $observer
      */
-    public function afterSetForm(
-        \Magento\Sales\Block\Adminhtml\Order\Status\NewStatus\Form $subject,
-        $form
-    ) {
-        $fieldset = $subject->getForm()->getElement('base_fieldset');
-        $model = $this->_coreRegistry->registry('current_status');
+    public function execute(Observer $observer)
+    {
+        $block = $observer->getData('block');
+        if (!$block instanceof \Magento\Sales\Block\Adminhtml\Order\Status\NewStatus\Form) {
+            return;
+        }
+
+        $form = $block->getForm();
+        $fieldset = $form->getElement('base_fieldset');
+        $model = $this->coreRegistry->registry('current_status');
+
         $orderStatusAllowedLinkToGubee = $this->scopeConfig->getValue(
             'gubee/order_status/whitelist_linker_status_enabled',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -64,7 +72,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $orderStatusAllowedLinkToGubee = explode(',', $orderStatusAllowedLinkToGubee);
 
         if (!in_array($model['status'], $orderStatusAllowedLinkToGubee)) {
-            return $form;
+            return;
         }
 
         if ($fieldset && $this->thereIsStatusOnGubee()) {
@@ -94,12 +102,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ]
             );
         }
-
-        return $form;
     }
 
     /**
      * Check if there is status on Gubee
+     *
      * @return bool
      */
     private function thereIsStatusOnGubee()
