@@ -85,7 +85,8 @@ class CanceledCommand extends AbstractProcessorCommand
     private function cancelOrder($order): void
     {
         try {
-            if ($order->canCreditmemo() && $order->hasInvoice()) {
+            $invoices = $order->getInvoiceCollection();
+            if ($order->canCreditmemo() && $invoices->getSize() > 0) {
                 $itemIdsToRefund = [];
                 foreach ($order->getAllItems() as $orderItem) {
                     $creditMemoItem = $this->itemCreationFactory->create();
@@ -107,19 +108,27 @@ class CanceledCommand extends AbstractProcessorCommand
                 }
             }
 
-            $order->cancel();
-            
-            $order->save();
-            $this->addOrderHistory(
-                __('Order canceled!')->__toString(),
-                (int) $order->getId()
-            );
-            $this->logger->info(
-                sprintf(
-                    "Order with ID %s canceled",
-                    (string) $order->getId()
-                )
-            );
+            if ($order->canCancel()) {
+                $order->cancel();
+                $order->save();
+                $this->addOrderHistory(
+                    __('Order canceled!')->__toString(),
+                    (int) $order->getId()
+                );
+                $this->logger->info(
+                    sprintf(
+                        "Order with ID %s canceled",
+                        (string) $order->getId()
+                    )
+                );
+            } else {
+                $this->logger->info(
+                    sprintf(
+                        "Order with ID %s cannot be canceled but credit memo was created",
+                        (string) $order->getId()
+                    )
+                );
+            }
         } catch (Throwable $e) {
             $this->logger->error(
                 sprintf(
