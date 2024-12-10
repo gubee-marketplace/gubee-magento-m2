@@ -80,24 +80,20 @@ class ShippedCommand extends AbstractProcessorCommand
     /**
      * Retrieves the shipped status for an order.
      *
-     * This method fetches the shipped order status from the order status collection,
-     * checks if it is linked to Gubee, and returns the corresponding Gubee status
-     * in lowercase. If the shipped order status is not linked to Gubee, it returns
-     * the default order state as complete.
+     * This method fetches the shipped order status from the order status collection
+     * and returns the corresponding Gubee status if it is linked to Gubee.
      *
-     * @return string|null The shipped status in lowercase if linked to Gubee, otherwise the default order state.
+     * @return string|null The shipped status if linked to Gubee, otherwise null.
      */
     private function getShippedStatus(): ?string
     {
         $shippedOrderStatus = $this->orderStatusCollectionFactory->create()
             ->joinStates()
-            ->addFieldToFilter('main_table.status', 'ip_shipped')
+            ->addFieldToFilter('main_table.gubee_status', 'SHIPPED')
             ->getFirstItem();
 
         if ($shippedOrderStatus && $shippedOrderStatus->getLinkedToGubee()) {
-            return strtolower(
-                $shippedOrderStatus->getGubeeStatus()
-            );
+            return $shippedOrderStatus->getGubeeStatus();
         }
 
         return null;

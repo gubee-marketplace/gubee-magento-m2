@@ -87,25 +87,24 @@ class DeliveredCommand extends AbstractProcessorCommand
     }
 
     /**
-     * Retrieve the Gubee delivered status.
+     * Retrieve the Gubee delivered status if linked, otherwise return the default complete order state.
      *
-     * This method fetches the delivered order status from the order status collection,
-     * checks if it is linked to Gubee, and returns the corresponding Gubee status.
-     * If no linked status is found, it defaults to the complete order state.
+     * This method fetches the first order status from the order status collection
+     * that has the Gubee status 'DELIVERED'. If this status is linked to Gubee,
+     * it returns the corresponding status. If no such status is found, it defaults
+     * to the complete order state.
      *
-     * @return string The Gubee delivered status or the default complete order state.
+     * @return string The Gubee delivered status if linked, or the default complete order state.
      */
     private function getDeliveredStatus(): string
     {
         $deliveredOrderStatus = $this->orderStatusCollectionFactory->create()
             ->joinStates()
-            ->addFieldToFilter('main_table.status', 'delivered')
+            ->addFieldToFilter('main_table.gubee_status', 'DELIVERED')
             ->getFirstItem();
 
         if ($deliveredOrderStatus && $deliveredOrderStatus->getLinkedToGubee()) {
-            return strtolower(
-                $deliveredOrderStatus->getGubeeStatus()
-            );
+            return $deliveredOrderStatus->getStatus();
         }
 
         return Order::STATE_COMPLETE;
