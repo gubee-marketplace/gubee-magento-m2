@@ -42,7 +42,9 @@ class GubeeAttributes
         if ($extension === null) {
             $extension = $this->extensionFactory->create();
         }
-
+        if (!$entity->getPayment()) {
+            return $extension;
+        }
         if ($entity->getPayment()->getMethod() != "gubee") {
             return $extension;
         }
