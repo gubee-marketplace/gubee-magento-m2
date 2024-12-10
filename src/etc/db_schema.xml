@@ -110,6 +110,9 @@
     </table>
     <table name="sales_order_status" resource="default">
         <column xsi:type="int" name="linked_to_gubee" unsigned="false" nullable="true" comment="Linked to Gubee"/>
-        <column xsi:type="text" name="gubee_status" nullable="true" comment="Gubee status"/>
+        <column xsi:type="varchar" name="gubee_status" length="255" nullable="true" comment="Gubee status"/>
+        <constraint xsi:type="unique" referenceId="UNIQUE">
+            <column name="gubee_status"/>
+        </constraint>
     </table>
 </schema>
