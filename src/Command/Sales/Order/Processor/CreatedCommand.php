@@ -164,10 +164,12 @@ class CreatedCommand extends AbstractProcessorCommand
         $this->isFulfillment = false;
         foreach ($gubeeOrder['items'] as $item)
         {
-            if ($item[ 'fulfillment']) {
+            if ($item['fulfillment']) {
                 $this->isFulfillment = true;
             }
-            $this->orderWarehouseId = $item['warehouseId'];
+            if (isset($item['warehouseId'])) {
+                $this->orderWarehouseId = $item['warehouseId'];
+            }
             break;
         }
         $customer = $this->prepareCustomer($gubeeOrder);
@@ -354,8 +356,11 @@ class CreatedCommand extends AbstractProcessorCommand
                 ->setGubeeMarketplace(
                     $gubeeOrder['plataform']
                 )->setGubeeChannel($gubeeOrder['channel'])
-                ->setGubeeAccountId($gubeeOrder['account_id'])
                 ->setFulfillment($this->isFulfillment);
+
+            if (isset($gubeeOrder['account_id'])) {
+                $gubeeOrderItem->setGubeeAccountId($gubeeOrder['account_id']);
+            }
 
             $this->gubeeOrderRepository->save($gubeeOrderItem);
             $this->logger->debug(

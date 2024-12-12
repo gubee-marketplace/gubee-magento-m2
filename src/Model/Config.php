@@ -83,7 +83,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function getDefaultStockId()  : int
     {
-        
+
         return (int) $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_DEFAULT_STOCK_ID);
     }
 
@@ -583,7 +583,7 @@ class Config extends AbstractHelper implements ConfigInterface
     {
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVOICE_ACTIVE);
     }
-   
+
     /**
      * Set the 'invoice_active' system config.
      * @param bool $invoiceActive
@@ -618,6 +618,7 @@ class Config extends AbstractHelper implements ConfigInterface
             $invoiceNumberRegex
         );
     }
+
     /**
      * Get the 'invoice_regex_invoice_series' system config
      * @return string
@@ -660,6 +661,7 @@ class Config extends AbstractHelper implements ConfigInterface
             $invoiceKeyRegex
         );
     }
+
     /**
      * Get the 'invoice_regex_invoice_date' system config
      * @return string
@@ -681,6 +683,7 @@ class Config extends AbstractHelper implements ConfigInterface
             $invoiceDateRegex
         );
     }
+
     /**
      * Get the 'invoice_regex_invoice_link' system config
      * @return string
@@ -724,7 +727,8 @@ class Config extends AbstractHelper implements ConfigInterface
             $invoiceContentRegex
         );
     }
-     /**
+
+    /**
      * Set the 'invoice_date_format' system config
      * @param string $invoiceContentRegex
      * @return ConfigInterface
@@ -745,6 +749,7 @@ class Config extends AbstractHelper implements ConfigInterface
     {
         return (string) $this->scopeConfig->getValue(self::CONFIG_PATH_INVOICE_DATE_FORMAT);
     }
+
     /**
      * Get the 'invoice_cleanup_xml' system config
      * @return string
@@ -779,10 +784,12 @@ class Config extends AbstractHelper implements ConfigInterface
             $preventEmailSend
         );
     }
-    public function getPluginInventoryReservations() : bool 
+
+    public function getPluginInventoryReservations() : bool
     {
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_PLUGIN_RESERVATIONS);
     }
+
     /**
      * @param bool $pluginInventoryReservations
      */
@@ -798,6 +805,7 @@ class Config extends AbstractHelper implements ConfigInterface
     {
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_PLUGIN_INVENTORY);
     }
+
     /**
      * @param bool $pluginInventory
      */
@@ -808,7 +816,8 @@ class Config extends AbstractHelper implements ConfigInterface
             $pluginInventory
         );
     }
-     /**
+
+    /**
      * @param bool $pluginInventory
      */
     public function setPluginInventoryCatalogDelete(bool $pluginInventory) : self
@@ -818,10 +827,12 @@ class Config extends AbstractHelper implements ConfigInterface
             $pluginInventory
         );
     }
+
     public function getPluginInventoryCatalogDelete() : bool
     {
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_CATALOG_PLUGIN_INVENTORY_DELETE);
     }
+
     /**
      * @param bool $pluginInventory
      */
@@ -832,15 +843,17 @@ class Config extends AbstractHelper implements ConfigInterface
             $pluginInventory
         );
     }
+
     public function getPluginInventoryCatalogUpdate() : bool
     {
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_CATALOG_PLUGIN_INVENTORY_UPDATE);
     }
+
     public function getEventShipment() : bool
     {
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_EVENT_SHIPMENT);
     }
-    
+
     /**
      * @param bool $eventShipment
      */
@@ -851,10 +864,12 @@ class Config extends AbstractHelper implements ConfigInterface
             $eventShipment
         );
     }
-    public function getEventOrder() : bool 
+
+    public function getEventOrder() : bool
     {
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_EVENT_ORDER);
     }
+
     /**
      * @param bool $eventOrder
      */
@@ -865,13 +880,15 @@ class Config extends AbstractHelper implements ConfigInterface
             $eventOrder
         );
     }
+
     /**
-     * @return bool 
+     * @return bool
      */
     public function getAutoAssocCustomerGroup() : bool
     {
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_CUSTOMER_GROUP_AUTO_ASSOC);
     }
+
     /**
      * @param bool $autoAssocCustomerGroup
      */
@@ -940,7 +957,6 @@ class Config extends AbstractHelper implements ConfigInterface
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_MULTISTOCK_ENABLE);
     }
 
-    
     public function setMultistockRelation(array $flag) : self
     {
         return $this->saveConfig(
@@ -951,6 +967,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     public function getMultistockRelation() : ?array
     {
-        return json_decode($this->scopeConfig->getValue(self::CONFIG_PATH_MULTISTOCK_RELATION), true);
+        return json_decode($this->scopeConfig->getValue(self::CONFIG_PATH_MULTISTOCK_RELATION)?? '', true);
     }
 }

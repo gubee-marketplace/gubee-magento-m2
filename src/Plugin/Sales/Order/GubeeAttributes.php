@@ -6,7 +6,7 @@ use Magento\Sales\Api\Data\OrderExtensionFactory;
 use Magento\Sales\Api\Data\OrderExtensionInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 
-class GubeeAttributes 
+class GubeeAttributes
 {
     /**
      * @var OrderExtensionFactory
@@ -21,7 +21,7 @@ class GubeeAttributes
      * @param OrderExtensionFactory $extensionFactory
      */
     public function __construct(
-        OrderExtensionFactory $extensionFactory, 
+        OrderExtensionFactory $extensionFactory,
         \Gubee\Integration\Api\OrderRepositoryInterface $gubeeOrderRepository
     ) {
         $this->extensionFactory = $extensionFactory;
@@ -48,15 +48,21 @@ class GubeeAttributes
         if ($entity->getPayment()->getMethod() != "gubee") {
             return $extension;
         }
-        /**
-         * @var \Gubee\Integration\Model\Order
-         */
-        $gubeeOrder = $this->gubeeOrderRepository->getByOrderId($entity->getId());
 
-        $extension->setData('gubee_sales_channel', $gubeeOrder->getGubeeChannel());
-        $extension->setData('gubee_marketplace_code', $gubeeOrder->getGubeeMarketplace());
-        $extension->setData('gubee_account', $gubeeOrder->getGubeeAccountId());
-        $extension->setData('gubee_is_fullfilement', $gubeeOrder->getFulfillment());
+        try {
+            /**
+             * @var \Gubee\Integration\Model\Order
+             */
+            $gubeeOrder = $this->gubeeOrderRepository->getByOrderId($entity->getId());
+
+            $extension->setData('gubee_sales_channel', $gubeeOrder->getGubeeChannel());
+            $extension->setData('gubee_marketplace_code', $gubeeOrder->getGubeeMarketplace());
+            $extension->setData('gubee_account', $gubeeOrder->getGubeeAccountId());
+            $extension->setData('gubee_is_fullfilement', $gubeeOrder->getFulfillment());
+        } catch (\Exception $e) {
+            //throw $e;
+        }
+
         return $extension;
     }
 
