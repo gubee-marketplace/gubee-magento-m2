@@ -22,6 +22,9 @@
     <preference for="Gubee\Integration\Api\Data\OrderSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
     <!-- /Preferences Group-->
      <!--Plugins-->
+     <type name="Magento\Sales\Api\Data\OrderInterface">
+        <plugin name="Gubee\Integration\Plugin\Sales\Order\GubeeAttributes" type="Gubee\Integration\Plugin\Sales\Order\GubeeAttributes" sortOrder="100" disabled="false"></plugin>
+     </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <plugin name="Gubee\Integration\Plugin\Sales\Order\Grid\Marketplace\Column" type="Gubee\Integration\Plugin\Sales\Order\Grid\Marketplace\Column" sortOrder="100" disabled="false" />
     </type>

@@ -241,6 +241,20 @@ interface ConfigInterface
     public const CONFIG_PATH_INVENTORY_EVENT_SHIPMENT = 'gubee/inventory/event_shipment';
     
     public const CONFIG_PATH_INVENTORY_EVENT_ORDER = 'gubee/inventory/event_order';
+
+    public const CONFIG_PATH_CUSTOMER_GROUP_AUTO_ASSOC = 'gubee/customer/auto_associate_customers';
+
+    public const CONFIG_PATH_CUSTOMER_GROUP_CPF = 'gubee/customer/customer_group_id_cpf';
+    
+    public const CONFIG_PATH_CUSTOMER_GROUP_CNPJ = 'gubee/customer/customer_group_id_cnpj';
+
+    /**
+     * Multi Stock Area
+     */
+
+    public const CONFIG_PATH_MULTISTOCK_ENABLE = 'gubee/multiple_inventory/enable_multi_inventory';
+
+    public const CONFIG_PATH_MULTISTOCK_RELATION = 'gubee/multiple_inventory/stock_relation';
     /**
      * Set the 'active' system config.
      */
@@ -680,6 +694,47 @@ interface ConfigInterface
     /**
      * @param bool $eventOrder
      */
-    public function setEventOrder(bool $eventOrder);
+    public function setEventOrder(bool $eventOrder) ;
+
+    public function getAutoAssocCustomerGroup() : bool;
+    /**
+     * @param bool $autoAssocCustomerGroup
+     */
+    public function setAutoAssocCustomerGroup(bool $autoAssocCustomerGroup) ;
+
+    /**
+     * Get the 'customer_group_id_cpf' system config
+     * @return string
+     */
+    public function getCustomerGroupCpf() : string;
+
+    /**
+     * Set the 'invoice_regex_invoice_date' system config
+     * @param string $customerGroup
+     * @return ConfigInterface
+     */
+    public function setCustomerGroupCpf(string $customerGroup);
+
+    /**
+     * Get the 'customer_group_id_cnpj' system config
+     * @return string
+     */
+    public function getCustomerGroupCnpj() : string;
+
+    /**
+     * Set the 'customer_group_id_cnpj' system config
+     * @param string $customerGroup
+     * @return ConfigInterface
+     */
+    public function setCustomerGroupCnpj(string $customerGroup);
     
+
+    public function setMultistockEnabled(bool $flag) ;
+
+    public function getMultistockEnabled() : bool;
+
+    
+    public function setMultistockRelation(array $flag) ;
+
+    public function getMultistockRelation() : ?array;
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gubee\Integration\Command\Sales\Order\Processor;
 
 use Exception;
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Api\OrderRepositoryInterface as GubeeOrderRepositoryInterface;
 use Gubee\Integration\Command\Sales\Order\AbstractProcessorCommand;
 use Gubee\Integration\Model\InvoiceFactory;
@@ -40,6 +41,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Throwable;
+use Magento\InventorySales\Model\ResourceModel\GetAssignedSalesChannelsDataForStock;
 
 class CreatedCommand extends AbstractProcessorCommand
 {
@@ -56,6 +58,11 @@ class CreatedCommand extends AbstractProcessorCommand
     protected $orderService;
     protected $invoiceFactory;
     protected $convertOrder;
+    protected $config;
+    protected $getAssignedSalesChannelsDataForStock;
+    protected $storeId = null;
+    protected $orderWarehouseId = null;
+    protected $isFulfillment;
 
     public function __construct(
         ManagerInterface $eventDispatcher,
@@ -78,7 +85,9 @@ class CreatedCommand extends AbstractProcessorCommand
         GubeeOrderRepositoryInterface $gubeeOrderRepository,
         HistoryFactory $historyFactory,
         OrderManagementInterface $orderManagement,
-        ConvertOrder $convertOrder
+        ConvertOrder $convertOrder,
+        ConfigInterface $config,
+        GetAssignedSalesChannelsDataForStock $getAssignedSalesChannelsDataForStock
     )
     {
         parent::__construct(
@@ -106,6 +115,8 @@ class CreatedCommand extends AbstractProcessorCommand
         $this->productRepository = $productRepository;
         $this->quoteManagement = $quoteManagement;
         $this->cartManagement = $cartManagement;
+        $this->config = $config;
+        $this->getAssignedSalesChannelsDataForStock = $getAssignedSalesChannelsDataForStock;
     }
 
     protected function doExecute(): int
@@ -150,6 +161,17 @@ class CreatedCommand extends AbstractProcessorCommand
     public function create(string $incrementId): bool
     {
         $gubeeOrder = $this->orderResource->loadByOrderId($incrementId);
+        $this->isFulfillment = false;
+        foreach ($gubeeOrder['items'] as $item)
+        {
+            if ($item['fulfillment']) {
+                $this->isFulfillment = true;
+            }
+            if (isset($item['warehouseId'])) {
+                $this->orderWarehouseId = $item['warehouseId'];
+            }
+            break;
+        }
         $customer = $this->prepareCustomer($gubeeOrder);
         $quote = $this->prepareQuote($gubeeOrder, $customer);
         $order = $this->persistOrder($quote, $customer, $gubeeOrder);
@@ -257,7 +279,7 @@ class CreatedCommand extends AbstractProcessorCommand
         $quote->setCustomerFirstname($customer->getFirstname());
         $quote->setCustomerLastname($customer->getLastname());
         $quote->setCustomerGroupId($customer->getGroupId());
-        $quote->setStoreId($this->storeManager->getDefaultStoreView()->getId());
+        $quote->setStoreId($this->getStoreId());
         $quote->setIsActive(true);
         $quote->getBillingAddress()->addData($billingAddress);
         $quote->getShippingAddress()->addData($shippingAddress);
@@ -321,15 +343,24 @@ class CreatedCommand extends AbstractProcessorCommand
         }
         try {
             $order->save();
+            /**
+             * @var Order
+             */
             $gubeeOrderItem = ObjectManager::getInstance()->create(
                 Order::class
             );
+
             $gubeeOrderItem
                 ->setOrderId($order->getId())
                 ->setGubeeOrderId($gubeeOrder['id'])
                 ->setGubeeMarketplace(
                     $gubeeOrder['plataform']
-                );
+                )->setGubeeChannel($gubeeOrder['channel'])
+                ->setFulfillment($this->isFulfillment);
+
+            if (isset($gubeeOrder['account_id'])) {
+                $gubeeOrderItem->setGubeeAccountId($gubeeOrder['account_id']);
+            }
 
             $this->gubeeOrderRepository->save($gubeeOrderItem);
             $this->logger->debug(
@@ -401,6 +432,19 @@ class CreatedCommand extends AbstractProcessorCommand
             $customer->setPassword(
                 hash('sha256', $gubeeOrder['customer']['email'] . microtime())
             );
+            if ($this->config->getAutoAssocCustomerGroup()) {
+                if ($gubeeOrder['customer']['documents'][0]['type'] == "CPF") {
+                    if ($groupCPF = $this->config->getCustomerGroupCpf()) {
+                        $customer->setGroupId($groupCPF);
+                    }
+                }
+                else {
+                    if ($groupCNPJ = $this->config->getCustomerGroupCnpj()) {
+                        $customer->setGroupId($groupCNPJ);
+                    }
+                }
+            }
+            $customer->setStoreId($this->storeManager->getDefaultStoreView()->getId());
             $customer->save();
             $customer = $this->customerRepository->get(
                 $gubeeOrder['customer']['email'],
@@ -419,6 +463,7 @@ class CreatedCommand extends AbstractProcessorCommand
         $quote = $this->quoteFactory->create();
         $quote->assignCustomer($customer)
             ->setCurrency();
+        $quote->setStoreId($this->getStoreId());
         $this->addItemsToQuote($gubeeOrder, $quote);
         return $quote;
     }
@@ -668,7 +713,25 @@ class CreatedCommand extends AbstractProcessorCommand
         );
         return $address;
     }
-
+    public function getStoreId() {
+        if ($this->storeId)
+        {
+            return  $this->storeId;
+        }
+        if (($relation = $this->config->getMultistockRelation()) && $this->config->getMultistockEnabled()) {
+            foreach ($relation as $rStock) {
+                if ($rStock['gubee_code'] == $this->orderWarehouseId) {
+                    $salesChannelData = $this->getAssignedSalesChannelsDataForStock->execute($rStock['stock_id']);
+                    if ($salesChannelData) {
+                        $this->storeId = $salesChannelData['store_id'];
+                        return $this->storeId;
+                    }
+                }
+            }
+        }
+        $this->storeId = $this->storeManager->getDefaultStoreView()->getId();
+        return $this->storeId;
+    }
     public function getPriority(): int
     {
         return 999;

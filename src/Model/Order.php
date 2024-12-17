@@ -64,4 +64,61 @@ class Order extends AbstractModel implements OrderInterface
     {
         return $this->setData(self::GUBEE_MARKETPLACE, $gubeeMarketplace);
     }
+
+    /**
+     * Get gubee_channel
+     *
+     * @return string|null
+     */
+    public function getGubeeChannel(){
+        return $this->getData(self::GUBEE_CHANNEL);
+    }
+
+    /**
+     * Set gubee_channel
+     *
+     * @param string $gubeeChannel
+     * @return \Gubee\Integration\Order\Api\Data\OrderInterface
+     */
+    public function setGubeeChannel($gubeeChannel){
+        return $this->setData(self::GUBEE_CHANNEL, $gubeeChannel);
+    }
+
+     /**
+     * Get gubee_account_id
+     *
+     * @return string|null
+     */
+    public function getGubeeAccountId(){
+        return $this->getData(self::GUBEE_ACCOUNT_ID);
+    }
+
+    /**
+     * Set gubee_account_id
+     *
+     * @param string $accountId
+     * @return \Gubee\Integration\Order\Api\Data\OrderInterface
+     */
+    public function setGubeeAccountId($accountId){
+        return $this->setData(self::GUBEE_ACCOUNT_ID, $accountId);
+    }
+
+    /**
+     * Get gubee_is_fulfillment
+     *
+     * @return bool|null
+     */
+    public function getFulfillment(){
+        return $this->getData(self::GUBEE_FULFILLMENT);
+    }
+
+    /**
+     * Set gubee_is_fulfillment
+     *
+     * @param bool $isFullfillment
+     * @return \Gubee\Integration\Order\Api\Data\OrderInterface
+     */
+    public function setFulfillment($isFullfillment){
+        return $this->setData(self::GUBEE_FULFILLMENT, $isFullfillment);
+    }
 }

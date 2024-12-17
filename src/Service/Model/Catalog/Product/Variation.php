@@ -53,10 +53,9 @@ class Variation
     protected  $salableQtyGetter;
     protected  $isProductSalableGetter;
     /**
-     * @var float product stock qty
-     * default it to 0
+     * @var array product stock qty by stock_id
      */
-    protected $productQty = 0;
+    protected $productQty = [];
 
     public function __construct(
         ProductInterface $product,
@@ -331,15 +330,30 @@ class Variation
             return StatusEnum::INACTIVE();
         }
 
-        if ($this->productQty < 1) {
+        if (array_sum($this->productQty) < 1) {
             return StatusEnum::INACTIVE();
         }
 
         return $status;
     }
-
-    protected function buildStocks()
+    protected function buildStocks() 
     {
+        $stocks = [];
+        if (($relation = $this->config->getMultistockRelation()) && $this->config->getMultistockEnabled()) {
+            foreach ($relation as $stockInfo)
+            {
+                $stocks = array_merge($stocks, $this->buildStocksSingle($stockInfo['stock_id'], $stockInfo['gubee_code']));
+            }
+            return $stocks;
+        }
+        return array_merge($stocks, $this->buildStocksSingle());
+    }
+    protected function buildStocksSingle($stockId = null, $warehouseId = 'default-warehouse')
+    {
+        
+        if ($stockId == null) {
+            $stockId = $this->config->getDefaultStockId();
+        }
         $stocks = [];
         $type = $this->attribute->getRawAttributeValue(
             'gubee_cross_docking_time_unit',
@@ -362,16 +376,20 @@ class Variation
                 'type' => $type,
             ]
         );
-        if ($this->isProductSalableGetter->execute($this->product->getSku(), $this->config->getDefaultStockId())) // if product is salable
+        if ($this->isProductSalableGetter->execute($this->product->getSku(), (int)$stockId)) // if product is salable
         {
-            $this->productQty = $this->salableQtyGetter->execute($this->product->getSku(), $this->config->getDefaultStockId()); // fetch its salable qty
+            $this->productQty[$stockId] = $this->salableQtyGetter->execute($this->product->getSku(), (int) $stockId); // fetch its salable qty
         }
+
+        $stockData = [
+            'qty' => $this->productQty[$stockId],
+            'crossDockingTime' => $crossDockingTime,
+            'warehouseId' => $warehouseId
+        ];
+        
         $stock = $this->objectManager->create(
             Stock::class,
-            [
-                'qty' => $this->productQty,
-                'crossDockingTime' => $crossDockingTime,
-            ]
+            $stockData  
         );
 
         $stocks[] = $stock;

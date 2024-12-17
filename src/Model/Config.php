@@ -83,7 +83,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function getDefaultStockId()  : int
     {
-        
+
         return (int) $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_DEFAULT_STOCK_ID);
     }
 
@@ -583,7 +583,7 @@ class Config extends AbstractHelper implements ConfigInterface
     {
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVOICE_ACTIVE);
     }
-   
+
     /**
      * Set the 'invoice_active' system config.
      * @param bool $invoiceActive
@@ -618,6 +618,7 @@ class Config extends AbstractHelper implements ConfigInterface
             $invoiceNumberRegex
         );
     }
+
     /**
      * Get the 'invoice_regex_invoice_series' system config
      * @return string
@@ -660,6 +661,7 @@ class Config extends AbstractHelper implements ConfigInterface
             $invoiceKeyRegex
         );
     }
+
     /**
      * Get the 'invoice_regex_invoice_date' system config
      * @return string
@@ -681,6 +683,7 @@ class Config extends AbstractHelper implements ConfigInterface
             $invoiceDateRegex
         );
     }
+
     /**
      * Get the 'invoice_regex_invoice_link' system config
      * @return string
@@ -724,7 +727,8 @@ class Config extends AbstractHelper implements ConfigInterface
             $invoiceContentRegex
         );
     }
-     /**
+
+    /**
      * Set the 'invoice_date_format' system config
      * @param string $invoiceContentRegex
      * @return ConfigInterface
@@ -745,6 +749,7 @@ class Config extends AbstractHelper implements ConfigInterface
     {
         return (string) $this->scopeConfig->getValue(self::CONFIG_PATH_INVOICE_DATE_FORMAT);
     }
+
     /**
      * Get the 'invoice_cleanup_xml' system config
      * @return string
@@ -779,14 +784,16 @@ class Config extends AbstractHelper implements ConfigInterface
             $preventEmailSend
         );
     }
-    public function getPluginInventoryReservations() : bool 
+
+    public function getPluginInventoryReservations() : bool
     {
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_PLUGIN_RESERVATIONS);
     }
+
     /**
      * @param bool $pluginInventoryReservations
      */
-    public function setPluginInventoryReservations(bool $pluginInventoryReservations) : self
+    public function setPluginInventoryReservations(bool $pluginInventoryReservations) 
     {
         return $this->saveConfig(
             self::CONFIG_PATH_INVENTORY_PLUGIN_RESERVATIONS,
@@ -798,70 +805,168 @@ class Config extends AbstractHelper implements ConfigInterface
     {
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_PLUGIN_INVENTORY);
     }
+
     /**
      * @param bool $pluginInventory
      */
-    public function setPluginInventory(bool $pluginInventory) : self
+    public function setPluginInventory(bool $pluginInventory) 
     {
         return $this->saveConfig(
             self::CONFIG_PATH_INVENTORY_PLUGIN_INVENTORY,
             $pluginInventory
         );
     }
-     /**
+
+    /**
      * @param bool $pluginInventory
      */
-    public function setPluginInventoryCatalogDelete(bool $pluginInventory) : self
+    public function setPluginInventoryCatalogDelete(bool $pluginInventory) 
     {
         return $this->saveConfig(
             self::CONFIG_PATH_INVENTORY_CATALOG_PLUGIN_INVENTORY_DELETE,
             $pluginInventory
         );
     }
+
     public function getPluginInventoryCatalogDelete() : bool
     {
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_CATALOG_PLUGIN_INVENTORY_DELETE);
     }
+
     /**
      * @param bool $pluginInventory
      */
-    public function setPluginInventoryCatalogUpdate(bool $pluginInventory) : self
+    public function setPluginInventoryCatalogUpdate(bool $pluginInventory) 
     {
         return $this->saveConfig(
             self::CONFIG_PATH_INVENTORY_CATALOG_PLUGIN_INVENTORY_UPDATE,
             $pluginInventory
         );
     }
+
     public function getPluginInventoryCatalogUpdate() : bool
     {
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_CATALOG_PLUGIN_INVENTORY_UPDATE);
     }
+
     public function getEventShipment() : bool
     {
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_EVENT_SHIPMENT);
     }
+
     /**
      * @param bool $eventShipment
      */
-    public function setEventShipment(bool $eventShipment) : self
+    public function setEventShipment(bool $eventShipment) 
     {
         return $this->saveConfig(
             self::CONFIG_PATH_INVENTORY_EVENT_SHIPMENT,
             $eventShipment
         );
     }
-    public function getEventOrder() : bool 
+
+    public function getEventOrder() : bool
     {
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_EVENT_ORDER);
     }
+
     /**
      * @param bool $eventOrder
      */
-    public function setEventOrder(bool $eventOrder) : self
+    public function setEventOrder(bool $eventOrder) 
     {
         return $this->saveConfig(
             self::CONFIG_PATH_INVENTORY_EVENT_ORDER,
             $eventOrder
         );
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAutoAssocCustomerGroup() : bool
+    {
+        return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_CUSTOMER_GROUP_AUTO_ASSOC);
+    }
+
+    /**
+     * @param bool $autoAssocCustomerGroup
+     */
+    public function setAutoAssocCustomerGroup(bool $autoAssocCustomerGroup) 
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_CUSTOMER_GROUP_AUTO_ASSOC,
+            $autoAssocCustomerGroup
+        );
+    }
+
+    /**
+     * Get the 'customer_group_id_cpf' system config
+     * @return string
+     */
+    public function getCustomerGroupCpf() : string
+    {
+        return (string) $this->scopeConfig->getValue(self::CONFIG_PATH_CUSTOMER_GROUP_CPF);
+    }
+
+    /**
+     * Set the 'invoice_regex_invoice_date' system config
+     * @param string $customerGroup
+     * @return ConfigInterface
+     */
+    public function setCustomerGroupCpf(string $customerGroup)
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_CUSTOMER_GROUP_CPF,
+            $customerGroup
+        );
+    }
+
+    /**
+     * Get the 'customer_group_id_cnpj' system config
+     * @return string
+     */
+    public function getCustomerGroupCnpj() : string
+    {
+        return (string) $this->scopeConfig->getValue(self::CONFIG_PATH_CUSTOMER_GROUP_CNPJ);
+    }
+
+    /**
+     * Set the 'customer_group_id_cnpj' system config
+     * @param string $customerGroup
+     * @return ConfigInterface
+     */
+    public function setCustomerGroupCnpj(string $customerGroup)
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_CUSTOMER_GROUP_CNPJ,
+            $customerGroup
+        );
+    }
+
+    public function setMultistockEnabled(bool $flag) 
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_MULTISTOCK_ENABLE,
+            $flag
+        );
+    }
+
+    public function getMultistockEnabled() : bool
+    {
+        return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_MULTISTOCK_ENABLE);
+    }
+
+    public function setMultistockRelation(array $flag) 
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_MULTISTOCK_RELATION,
+            $flag
+        );
+    }
+
+    public function getMultistockRelation() : ?array
+    {
+        return json_decode($this->scopeConfig->getValue(self::CONFIG_PATH_MULTISTOCK_RELATION)?? '', true);
     }
 }

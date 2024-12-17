@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+    <group id="multiple_inventory" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label><![CDATA[Gubee \ Integration \ Multiple Inventory Support]]></label>
+        <depends>
+            <field id="gubee/integration/active">1</field>
+        </depends>
+        <field id="enable_multi_inventory" type="select" sortOrder="10" showInWebsite="0" showInStore="0" showInDefault="1" translate="label">
+            <label>Enable Multi Inventory</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            <comment>Enable this setting if store uses multiple distribution center for order fullfillment</comment>
+        </field>
+        <field id="stock_relation" translate="label" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>Stock x Distribution Center Relation</label>
+            <frontend_model>Gubee\Integration\Block\Adminhtml\System\Config\Form\Field\StockRelations</frontend_model>
+            <backend_model>Gubee\Integration\Config\Backend\StockRelations</backend_model>
+            <depends>
+                <field id="gubee/multiple_inventory/enable_multi_inventory">1</field>
+            </depends>
+        </field>
+    </group>
+</include>
