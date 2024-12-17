@@ -172,6 +172,7 @@ class CreatedCommand extends AbstractProcessorCommand
             }
             break;
         }
+        $this->storeManager->setCurrentStore($this->getStoreId());
         $customer = $this->prepareCustomer($gubeeOrder);
         $quote = $this->prepareQuote($gubeeOrder, $customer);
         $order = $this->persistOrder($quote, $customer, $gubeeOrder);
@@ -638,25 +639,12 @@ class CreatedCommand extends AbstractProcessorCommand
             __("Creating address for customer '%1'", $customer['email'])
         );
 
-        $regionCollection = ObjectManager::getInstance()->create(
+        $region = ObjectManager::getInstance()->create(
             Region::class
-        )->getCollection();
-
-        $regionCollection->addFieldToFilter(
-            'default_name',
-            $address->getRegion()
+        )->loadByCode(
+            $address->getRegion(),
+            'BR'
         );
-
-        if ($regionCollection->getSize() === 0) {
-            $region = ObjectManager::getInstance()->create(
-                Region::class
-            )->loadByCode(
-                    $address->getRegion(),
-                    'BR'
-                );
-        } else {
-            $region = $regionCollection->getFirstItem();
-        }
         $customer = new DataObject($customer);
 
         $country = ObjectManager::getInstance()->create(Country::class)
