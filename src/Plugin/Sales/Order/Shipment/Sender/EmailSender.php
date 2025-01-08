@@ -14,8 +14,8 @@ class EmailSender extends PluginAbstract
         SenderEmailSender $subject,
         OrderInterface $order,
         ShipmentInterface $shipment,
-        ShipmentCommentCreationInterface $comment = null,
-        $forceSyncMode = false,
+        ShipmentCommentCreationInterface $comment,
+        $forceSyncMode,
         callable $proceed
     ) {
         if ($this->shouldPreventExecution($order->getPayment()->getMethod()))

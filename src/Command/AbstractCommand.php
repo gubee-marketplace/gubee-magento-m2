@@ -52,7 +52,7 @@ abstract class AbstractCommand extends Command
      * @return int The command exit code.
      * @throws ExceptionInterface When input binding fails. Bypass this by calling {@link ignoreValidationErrors()}.
      */
-    public function run(InputInterface $input, OutputInterface $output)
+    public function run(InputInterface $input, OutputInterface $output) : int
     {
         $this->input  = $input;
         $this->output = $output;
@@ -182,7 +182,7 @@ abstract class AbstractCommand extends Command
      * @return $this
      * @throws InvalidArgumentException When the name is invalid.
      */
-    public function setName($name)
+    public function setName($name) : static
     {
         return parent::setName(
             sprintf(

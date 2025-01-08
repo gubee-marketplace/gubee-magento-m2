@@ -37,9 +37,9 @@ class Logger implements LoggerInterface
      * @param array<mixed, mixed> $context
      * @return void
      */
-    public function emergency($message, array $context = [])
+    public function emergency($message, array $context = []) : void
     {
-        return $this->log('emergency', $message, $context);
+        $this->log('emergency', $message, $context);
     }
 
     /**
@@ -52,9 +52,9 @@ class Logger implements LoggerInterface
      * @param array<mixed, mixed> $context
      * @return void
      */
-    public function alert($message, array $context = [])
+    public function alert($message, array $context = []) : void
     {
-        return $this->log('alert', $message, $context);
+        $this->log('alert', $message, $context);
     }
 
     /**
@@ -66,9 +66,9 @@ class Logger implements LoggerInterface
      * @param array<mixed, mixed> $context
      * @return void
      */
-    public function critical($message, array $context = [])
+    public function critical($message, array $context = []) : void
     {
-        return $this->log('critical', $message, $context);
+        $this->log('critical', $message, $context);
     }
 
     /**
@@ -79,9 +79,9 @@ class Logger implements LoggerInterface
      * @param array<mixed, mixed> $context
      * @return void
      */
-    public function error($message, array $context = [])
+    public function error($message, array $context = []) : void
     {
-        return $this->log('error', $message, $context);
+        $this->log('error', $message, $context);
     }
 
     /**
@@ -94,9 +94,9 @@ class Logger implements LoggerInterface
      * @param array<mixed, mixed> $context
      * @return void
      */
-    public function warning($message, array $context = [])
+    public function warning($message, array $context = []) : void
     {
-        return $this->log('warning', $message, $context);
+        $this->log('warning', $message, $context);
     }
 
     /**
@@ -106,9 +106,9 @@ class Logger implements LoggerInterface
      * @param array<mixed, mixed> $context
      * @return void
      */
-    public function notice($message, array $context = [])
+    public function notice($message, array $context = []) : void
     {
-        return $this->log('notice', $message, $context);
+        $this->log('notice', $message, $context);
     }
 
     /**
@@ -120,9 +120,9 @@ class Logger implements LoggerInterface
      * @param array<mixed, mixed> $context
      * @return void
      */
-    public function info($message, array $context = [])
+    public function info($message, array $context = []) : void
     {
-        return $this->log('info', $message, $context);
+        $this->log('info', $message, $context);
     }
 
     /**
@@ -132,9 +132,9 @@ class Logger implements LoggerInterface
      * @param array<mixed, mixed> $context
      * @return void
      */
-    public function debug($message, array $context = [])
+    public function debug($message, array $context = []) : void
     {
-        return $this->log('debug', $message, $context);
+        $this->log('debug', $message, $context);
     }
 
     /**
@@ -146,7 +146,7 @@ class Logger implements LoggerInterface
      * @return void
      * @throws InvalidArgumentException
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, $message, array $context = []) : void
     {
         switch ($level) {
             case 'emergency':
