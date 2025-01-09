@@ -180,6 +180,7 @@ class Invoice extends AbstractModel implements InvoiceInterface {
         return $this->setData(self::ORIGIN, $origin);
     }
 
+    #[\ReturnTypeWillChange]
     public function jsonSerialize() {
         return [
             'danfeLink' => $this->getDanfeLink(),
