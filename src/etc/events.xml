@@ -44,4 +44,12 @@
     <event name="sales_order_status_history_save_after">
         <observer name="Gubee\Integration\Observer\Sales\Order\Status\History\Save\After" instance="Gubee\Integration\Observer\Sales\Order\Status\History\Save\After" />
     </event>
+
+    <event name="adminhtml_block_html_before">
+        <observer name="gubee_add_fields_to_new_status_form" instance="Gubee\Integration\Observer\Adminhtml\Sales\Order\NewStatus\Form\AddInputs" />
+    </event>
+
+    <event name="model_save_before">
+        <observer name="validate_unique_gubee_status" instance="Gubee\Integration\Observer\Adminhtml\Sales\Order\NewStatus\CheckUnique"/>
+    </event>
 </config>

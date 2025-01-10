@@ -30,55 +30,55 @@
     </type>
 
     <type name="Magento\Sales\Model\Order\Email\Sender\InvoiceSender">
-        <plugin name="Gubee\Integration\Plugin\Sales\Order\Email\Sender\InvoiceSender" 
-                type="Gubee\Integration\Plugin\Sales\Order\Email\Sender\InvoiceSender" 
-                sortOrder="100" 
+        <plugin name="Gubee\Integration\Plugin\Sales\Order\Email\Sender\InvoiceSender"
+                type="Gubee\Integration\Plugin\Sales\Order\Email\Sender\InvoiceSender"
+                sortOrder="100"
                 disabled="false" />
     </type>
     <type name="Magento\Sales\Model\Order\Email\Sender\ShipmentSender">
-        <plugin name="Gubee\Integration\Plugin\Sales\Order\Email\Sender\ShipmentSender" 
-                type="Gubee\Integration\Plugin\Sales\Order\Email\Sender\ShipmentSender" 
-                sortOrder="100" 
+        <plugin name="Gubee\Integration\Plugin\Sales\Order\Email\Sender\ShipmentSender"
+                type="Gubee\Integration\Plugin\Sales\Order\Email\Sender\ShipmentSender"
+                sortOrder="100"
                 disabled="false" />
     </type>
     <type name="Magento\Sales\Model\Order\Shipment\Sender\EmailSender">
-        <plugin name="Gubee\Integration\Plugin\Sales\Order\Shipment\Sender\EmailSender" 
-                type="Gubee\Integration\Plugin\Sales\Order\Shipment\Sender\EmailSender" 
-                sortOrder="100" 
+        <plugin name="Gubee\Integration\Plugin\Sales\Order\Shipment\Sender\EmailSender"
+                type="Gubee\Integration\Plugin\Sales\Order\Shipment\Sender\EmailSender"
+                sortOrder="100"
                 disabled="false" />
     </type>
 
     <type name="Magento\Sales\Model\Order\Email\Sender\OrderCommentSender">
-        <plugin name="Gubee\Integration\Plugin\Sales\Order\Email\Sender\OrderCommentSender" 
-                type="Gubee\Integration\Plugin\Sales\Order\Email\Sender\OrderCommentSender" 
-                sortOrder="100" 
+        <plugin name="Gubee\Integration\Plugin\Sales\Order\Email\Sender\OrderCommentSender"
+                type="Gubee\Integration\Plugin\Sales\Order\Email\Sender\OrderCommentSender"
+                sortOrder="100"
                 disabled="false" />
     </type>
     <type name="Magento\Inventory\Model\ResourceModel\SourceItem\SaveMultiple">
-        <plugin name="Gubee\Integration\Plugin\Inventory\Model\ResourceModel\SourceItem\SaveMultiple" 
-                type="Gubee\Integration\Plugin\Inventory\Model\ResourceModel\SourceItem\SaveMultiple" 
-                sortOrder="100" 
+        <plugin name="Gubee\Integration\Plugin\Inventory\Model\ResourceModel\SourceItem\SaveMultiple"
+                type="Gubee\Integration\Plugin\Inventory\Model\ResourceModel\SourceItem\SaveMultiple"
+                sortOrder="100"
                 disabled="false" />
     </type>
     <!-- Magento\InventoryReservations\Model\ResourceModel\SaveMultiple -->
     <type name="Magento\InventoryReservations\Model\ResourceModel\SaveMultiple">
-        <plugin name="Gubee\Integration\Plugin\InventoryReservations\Model\ResourceModel\SaveMultiple" 
-                type="Gubee\Integration\Plugin\InventoryReservations\Model\ResourceModel\SaveMultiple" 
-                sortOrder="100" 
+        <plugin name="Gubee\Integration\Plugin\InventoryReservations\Model\ResourceModel\SaveMultiple"
+                type="Gubee\Integration\Plugin\InventoryReservations\Model\ResourceModel\SaveMultiple"
+                sortOrder="100"
                 disabled="false" />
     </type>
     <!-- Magento\InventoryCatalog\Model\UpdateInventory -->
     <type name="Magento\InventoryCatalog\Model\UpdateInventory">
-        <plugin name="Gubee\Integration\Plugin\InventoryCatalog\Model\UpdateInventory" 
-                type="Gubee\Integration\Plugin\InventoryCatalog\Model\UpdateInventory" 
-                sortOrder="100" 
+        <plugin name="Gubee\Integration\Plugin\InventoryCatalog\Model\UpdateInventory"
+                type="Gubee\Integration\Plugin\InventoryCatalog\Model\UpdateInventory"
+                sortOrder="100"
                 disabled="false" />
     </type>
     <!-- DeleteSourceItemsBySku -->
     <type name="Magento\InventoryCatalog\Model\DeleteSourceItemsBySku">
-        <plugin name="Gubee\Integration\Plugin\InventoryCatalog\Model\DeleteSourceItemsBySku" 
-                type="Gubee\Integration\Plugin\InventoryCatalog\Model\DeleteSourceItemsBySku" 
-                sortOrder="100" 
+        <plugin name="Gubee\Integration\Plugin\InventoryCatalog\Model\DeleteSourceItemsBySku"
+                type="Gubee\Integration\Plugin\InventoryCatalog\Model\DeleteSourceItemsBySku"
+                sortOrder="100"
                 disabled="false" />
     </type>
     <!--/Plugins-->

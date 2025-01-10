@@ -108,5 +108,11 @@
         <column xsi:type="decimal" name="gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Finance Cost Amount"/>
         <column xsi:type="decimal" name="base_gubee_marketplace_total_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Base Finance Cost Amount"/>
     </table>
-
+    <table name="sales_order_status" resource="default">
+        <column xsi:type="int" name="linked_to_gubee" unsigned="false" nullable="true" comment="Linked to Gubee"/>
+        <column xsi:type="varchar" name="gubee_status" length="255" nullable="true" comment="Gubee status"/>
+        <constraint xsi:type="unique" referenceId="UNIQUE">
+            <column name="gubee_status"/>
+        </constraint>
+    </table>
 </schema>

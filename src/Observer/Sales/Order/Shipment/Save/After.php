@@ -38,14 +38,14 @@ class After extends AbstractObserver
         $mageOrder    = $shipment->getOrder();
         try {
             $order = $this->orderRepository->getByOrderId($mageOrder->getId());
-                
+
             $this->queueManagement->append(
                 SendCommand::class,
                 [
                     'order_id' => $order->getGubeeOrderId(),
                 ]
             );
-            
+
         }
         catch (NoSuchEntityException $exception)
         {
@@ -67,6 +67,6 @@ class After extends AbstractObserver
                 }
             }
         }
-    
+
     }
 }
