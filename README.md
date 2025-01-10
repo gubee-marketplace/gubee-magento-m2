@@ -1,8 +1,8 @@
 # Magento Gubee Integration 
 
-![GitHub repo size](https://img.shields.io/github/repo-size/maco-studios/gubee-integration?style=for-the-badge)
-![GitHub language count](https://img.shields.io/github/languages/count/maco-studios/gubee-integration?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/maco-studios/gubee-integration?style=for-the-badge)
+![GitHub repo size](https://img.shields.io/github/repo-size/gubee-marketplace/gubee-magento-m2?style=for-the-badge)
+![GitHub language count](https://img.shields.io/github/languages/count/gubee-marketplace/gubee-magento-m2?style=for-the-badge)
+![GitHub forks](https://img.shields.io/github/forks/gubee-marketplace/gubee-magento-m2?style=for-the-badge)
 
 
 ## 💻 Pré-requisitos
