@@ -11,6 +11,7 @@ use function __;
 
 class Command implements ArrayInterface
 {
+    private CollectionFactory $collectionFactory;
     public function __construct(
         CollectionFactory $collectionFactory
     ) {

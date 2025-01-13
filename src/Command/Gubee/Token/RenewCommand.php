@@ -19,6 +19,7 @@ class RenewCommand extends AbstractCommand
 {
     protected Client $client;
     protected Config $config;
+    protected Registry $registry;
 
     public function __construct(
         ManagerInterface $eventDispatcher,
