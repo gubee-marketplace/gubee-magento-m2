@@ -41,11 +41,7 @@ class After extends AbstractObserver
 
     protected function isAllowed(): bool
     {
-        if ($this->getObserver()->getObject() instanceof EavAttributeInterface) {
-            return true;
-        }
-
-        return false;
+        return $this->getObserver()->getObject() instanceof EavAttributeInterface;
         // if (
         //     in_array(
         //         $this->getObserver()->getObject()->getAttributeCode() ?: [], /** @phpstan-ignore-line */

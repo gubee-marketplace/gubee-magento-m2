@@ -77,7 +77,7 @@ abstract class AbstractProcessorCommand extends AbstractCommand
         if (! $this instanceof CreatedCommand) {
             $orderId = $input->getArgument('order_id');
             $order   = $this->getOrder($orderId);
-            if (! $order) {
+            if (!$order instanceof \Magento\Sales\Api\Data\OrderInterface) {
                 $inputTmp  = ObjectManager::getInstance()->create(ArrayInput::class, [
                     'parameters' => [
                         'order_id' => $orderId,
@@ -107,7 +107,7 @@ abstract class AbstractProcessorCommand extends AbstractCommand
     {
         $orderId = $this->getInput()->getArgument('order_id');
         $order   = $this->getOrder($orderId);
-        if (! $order) {
+        if (!$order instanceof \Magento\Sales\Api\Data\OrderInterface) {
             $this->logger->error(sprintf("Order with increment ID %s not found", $orderId));
             return 1;
         }
@@ -126,6 +126,7 @@ abstract class AbstractProcessorCommand extends AbstractCommand
         $this->logger->debug(sprintf("Order with increment ID %s loaded from Gubee", $orderId));
         $this->orderRepository->save($order);
         $this->logger->debug(sprintf("Order with increment ID %s updated", $orderId));
+        return null;
     }
 
     public function getOrder(string $incrementId): ?OrderInterface
@@ -152,7 +153,7 @@ abstract class AbstractProcessorCommand extends AbstractCommand
     {
         $history = $this->historyFactory->create();
         $history->setComment(
-            sprintf("[Gubee Integration] %s", (string) $message)
+            sprintf("[Gubee Integration] %s", $message)
         );
         $history->setParentId($orderId);
         $history->setIsCustomerNotified(false);

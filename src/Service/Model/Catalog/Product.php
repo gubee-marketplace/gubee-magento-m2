@@ -35,9 +35,6 @@ use function is_array;
 
 class Product
 {
-    /**
-     * @var ProductInterface
-     */
     protected ProductInterface $product;
     protected \Gubee\SDK\Model\Catalog\Product $gubeeProduct;
     protected ProductResource $productResource;
@@ -155,7 +152,9 @@ class Product
 
     private function buildBrand()
     {
-        if ($this->lazyMode) return null;
+        if ($this->lazyMode) {
+            return null;
+        }
         $brand = $this->attribute->getAttributeValueLabel(
             $this->config->getBrandAttribute(),
             $this->product

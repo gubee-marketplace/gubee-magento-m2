@@ -13,6 +13,7 @@ use Psr\Log\LoggerInterface;
 
 class Before extends AbstractObserver
 {
+    public $productRepository;
     public function __construct(
         Config $config,
         LoggerInterface $logger,

@@ -48,16 +48,10 @@ class After extends AbstractProduct
      */
     protected function isAllowed(): bool
     {
-        $product = $this->getProduct();
-        if (
-            ! $this->getProduct()
-            ->dataHasChangedFor(
-                $this->config->getPriceAttribute()
-            )
-        ) {
-            return false;
-        }
-
-        return true;
+        $this->getProduct();
+        return (bool) $this->getProduct()
+        ->dataHasChangedFor(
+            $this->config->getPriceAttribute()
+        );
     }
 }

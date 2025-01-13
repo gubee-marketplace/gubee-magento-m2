@@ -14,6 +14,7 @@ use Psr\Log\LoggerInterface;
 
 class SyncCommand extends AbstractCommand
 {
+    public $attributeCollection;
     protected ObjectManagerInterface $objectManager;
     protected AttributeResource $attributeResource;
 

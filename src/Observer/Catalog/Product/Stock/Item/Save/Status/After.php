@@ -101,18 +101,8 @@ class After extends AbstractProduct
             ),
             true
         );
-        if (
-            isset($origJson['quantity_and_stock_status']) &&
-            isset($origJson['quantity_and_stock_status']['is_in_stock'])
-        ) {
-            if (
-                $origJson['quantity_and_stock_status']['is_in_stock']
-                ==
-                $productStock->getData('is_in_stock')
-            ) {
-                return false;
-            }
-        }
-        return true;
+        return !(isset($origJson['quantity_and_stock_status']) && isset($origJson['quantity_and_stock_status']['is_in_stock']) && $origJson['quantity_and_stock_status']['is_in_stock']
+        ==
+        $productStock->getData('is_in_stock'));
     }
 }

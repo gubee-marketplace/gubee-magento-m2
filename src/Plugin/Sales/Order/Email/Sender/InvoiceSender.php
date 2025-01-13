@@ -10,7 +10,7 @@ class InvoiceSender extends PluginAbstract
     public function aroundSend(SenderInvoiceSender $subject, callable $proceed, Invoice $invoice, $forceSyncMode = false)
     {
         if ($this->shouldPreventExecution($invoice->getOrder()->getPayment()->getMethod())) {
-            return;
+            return null;
         }
 
         return $proceed($invoice, $forceSyncMode);

@@ -524,8 +524,6 @@ interface ConfigInterface
 
     /**
      * Set the 'default_delivery_time' system config.
-     *
-     * @return ConfigInterface
      */
     public function setDefaultDeliveryTime(int $defaultDeliveryTime): self;
 
@@ -536,8 +534,6 @@ interface ConfigInterface
 
     /**
      * Set the 'fulfilment_enable' system config.
-     *
-     * @return ConfigInterface
      */
     public function setFulfilmentEnable(bool $fulfilmentEnable): self;
 
@@ -548,183 +544,127 @@ interface ConfigInterface
 
     /**
      * Get the 'invoice_active' system config.
-     * @return bool
      */
     public function getInvoiceActive(): bool;
    
     /**
      * Set the 'invoice_active' system config.
-     * @param bool $invoiceActive
-     * @return ConfigInterface
      */
     public function setInvoiceActive(bool $invoiceActive): self;
 
     /**
      * Get the 'invoice_regex_invoice_number' system config
-     * @return string
      */
     public function getInvoiceNumberRegex() : string;
 
     /**
      * Set the 'invoice_regex_invoice_number' system config
-     * @param string $invoiceNumberRegex
-     * @return ConfigInterface
      */
     public function setInvoiceNumberRegex(string $invoiceNumberRegex): self;
     /**
      * Get the 'invoice_regex_invoice_series' system config
-     * @return string
      */
     public function getInvoiceSeriesRegex() : string;
 
     /**
      * Set the 'invoice_regex_invoice_series' system config
-     * @param string $invoiceSeriesRegex
-     * @return ConfigInterface
      */
     public function setInvoiceSeriesRegex(string $invoiceSeriesRegex): self;
     /**
      * Get the 'invoice_regex_invoice_key' system config
-     * @return string
      */
     public function getInvoiceKeyRegex() : string;
 
     /**
      * Set the 'invoice_regex_invoice_key' system config
-     * @param string $invoiceKeyRegex
-     * @return ConfigInterface
      */
     public function setInvoiceKeyRegex(string $invoiceKeyRegex): self;
     /**
      * Get the 'invoice_regex_invoice_date' system config
-     * @return string
      */
     public function getInvoiceDateRegex() : string;
 
     /**
      * Set the 'invoice_regex_invoice_date' system config
-     * @param string $invoiceDateRegex
-     * @return ConfigInterface
      */
     public function setInvoiceDateRegex(string $invoiceDateRegex): self;
     /**
      * Get the 'invoice_regex_invoice_link' system config
-     * @return string
      */
     public function getInvoiceLinkRegex() : string;
 
     /**
      * Set the 'invoice_regex_invoice_link' system config
-     * @param string $invoiceLinkRegex
-     * @return ConfigInterface
      */
     public function setInvoiceLinkRegex(string $invoiceLinkRegex): self;
 
     /**
      * Get the 'invoice_regex_invoice_content' system config
-     * @return string
      */
     public function getInvoiceContentRegex() : string;
 
     /**
      * Set the 'invoice_date_format' system config
      * @param string $invoiceContentRegex
-     * @return ConfigInterface
      */
     public function setInvoiceDateFormat(string $invoiceDateFormat): self;
 
     /**
      * Get the 'invoice_date_format' system config
-     * @return string
      */
     public function getInvoiceDateFormat() : string;
 
     /**
      * Set the 'invoice_regex_invoice_content' system config
-     * @param string $invoiceContentRegex
-     * @return ConfigInterface
      */
     public function setInvoiceContentRegex(string $invoiceContentRegex): self;
 
     /**
      * Get the 'invoice_cleanup_xml' system config
-     * @return string
      */
     public function getInvoiceCleanupXml() : bool;
 
     /**
      * Set the 'invoice_cleanup_xml' system config
-     * @param bool $cleanupXml
-     * @return ConfigInterface
      */
     public function setInvoiceCleanupXml(bool $cleanupXml): self;
     public function getPreventEmailSend() : bool;
-    /**
-     * @param bool $preventEmailSend
-     */
     public function setPreventEmailSend(bool $preventEmailSend) : self;
 
     public function getPluginInventoryReservations() : bool;
-    /**
-     * @param bool $pluginInventoryReservations
-     */
     public function setPluginInventoryReservations(bool $pluginInventoryReservations) : self;
 
     public function getPluginInventory() : bool;
-    /**
-     * @param bool $pluginInventory
-     */
     public function setPluginInventoryCatalogDelete(bool $pluginInventory) : self;
     public function getPluginInventoryCatalogDelete() : bool;
-    /**
-     * @param bool $pluginInventory
-     */
     public function setPluginInventoryCatalogUpdate(bool $pluginInventory) : self;
     public function getPluginInventoryCatalogUpdate() : bool;
-    /**
-     * @param bool $pluginInventory
-     */
     public function setPluginInventory(bool $pluginInventory) : self;
     public function getEventShipment() : bool;
-    /**
-     * @param bool $eventShipment
-     */
     public function setEventShipment(bool $eventShipment) : self;
     public function getEventOrder() : bool;
-    /**
-     * @param bool $eventOrder
-     */
     public function setEventOrder(bool $eventOrder) : self;
 
     public function getAutoAssocCustomerGroup() : bool;
-    /**
-     * @param bool $autoAssocCustomerGroup
-     */
     public function setAutoAssocCustomerGroup(bool $autoAssocCustomerGroup) : self;
 
     /**
      * Get the 'customer_group_id_cpf' system config
-     * @return string
      */
     public function getCustomerGroupCpf() : string;
 
     /**
      * Set the 'invoice_regex_invoice_date' system config
-     * @param string $customerGroup
-     * @return ConfigInterface
      */
     public function setCustomerGroupCpf(string $customerGroup): self;
 
     /**
      * Get the 'customer_group_id_cnpj' system config
-     * @return string
      */
     public function getCustomerGroupCnpj() : string;
 
     /**
      * Set the 'customer_group_id_cnpj' system config
-     * @param string $customerGroup
-     * @return ConfigInterface
      */
     public function setCustomerGroupCnpj(string $customerGroup): self;
     

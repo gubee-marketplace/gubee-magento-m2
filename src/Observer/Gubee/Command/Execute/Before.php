@@ -40,7 +40,7 @@ class Before extends AbstractObserver
     protected function process(): void
     {
         $rules = $this->config->getFulfilmentRules();
-        if (empty($rules) || $rules == []) {
+        if ($rules === [] || $rules == []) {
             $this->logger->debug(
                 __("No rules found for the fulfilment grid. Skipping...")
             );
@@ -81,8 +81,7 @@ class Before extends AbstractObserver
                     );
                 }
                 $orderId = $invoice->getOrderId();
-            }
-            else if (isset($payload['order_id'])) {
+            } elseif (isset($payload['order_id'])) {
                 $orderId = $payload['order_id'];
             }
 

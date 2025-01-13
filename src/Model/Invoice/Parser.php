@@ -77,7 +77,7 @@ class Parser
                     }
                     
                 }
-                if (count($matches) > 0) {
+                if ($matches !== []) {
                     $invoiceData[$field] = trim(str_replace($matches[0], "", $lineToCleanup));
                 }
             }
@@ -101,8 +101,9 @@ class Parser
                 $invoiceData[self::INVOICE_DATE] = $this->date->date()->format(self::DEFAULT_DATETIME_FORMAT);
             }
         }
-        if (isset($invoiceData[self::INVOICE_LINK]) && (!isset($invoiceData[self::INVOICE_CONTENT]) || empty($invoiceData[self::INVOICE_CONTENT]) ))
+        if (isset($invoiceData[self::INVOICE_LINK]) && (!isset($invoiceData[self::INVOICE_CONTENT]) || empty($invoiceData[self::INVOICE_CONTENT]) )) {
             $invoiceData[self::INVOICE_CONTENT] = $this->fetchXML($invoiceData[self::INVOICE_LINK]);
+        }
         
         return $invoiceData;
 
@@ -117,7 +118,7 @@ class Parser
         if ($content instanceof \Magento\Framework\Phrase) {
             $content = $content->render();
         }
-        foreach ($this->regexToArray() as $field => $regex){
+        foreach ($this->regexToArray() as $regex){
             if (preg_match($regex."i", (string) $content, $matches) === 1) {
                 return true;
             }
@@ -161,7 +162,7 @@ class Parser
 
         }
 
-        if ($key)
+        if ($key !== 0)
         {
             unset($lines[$key]);
         }

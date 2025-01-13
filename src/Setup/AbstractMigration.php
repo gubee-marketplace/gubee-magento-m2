@@ -32,11 +32,8 @@ abstract class AbstractMigration implements DataPatchInterface, PatchRevertableI
         // optional, override to implement an undo feature in your migration
     }
     /** @phpcs:disable */
-
     /**
      * Your migration logic goes here
-     * 
-     * @return void
      */
     abstract protected function execute() : void;
 
@@ -137,9 +134,6 @@ abstract class AbstractMigration implements DataPatchInterface, PatchRevertableI
 
     /**
      * Get given table name in database including prefix
-     *
-     * @param string $rawName
-     * @return string
      */
     protected function getTableName(string $rawName): string
     {

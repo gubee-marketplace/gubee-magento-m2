@@ -35,7 +35,6 @@ abstract class AbstractInventoryPlugin
 
     /**
      * Use this method to check if execution is needed or configured
-     * @return bool
      */
     public abstract function shouldExecute() : bool;
 }

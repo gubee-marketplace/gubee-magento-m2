@@ -22,8 +22,6 @@ class DataProvider extends AbstractDataProvider
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param array $meta
-     * @param array $data
      */
     public function __construct(
         $name,
@@ -44,7 +42,7 @@ class DataProvider extends AbstractDataProvider
      */
     public function getData()
     {
-        if (isset($this->loadedData)) {
+        if ($this->loadedData !== null) {
             return $this->loadedData;
         }
         $items = $this->collection->getItems();

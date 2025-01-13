@@ -28,7 +28,6 @@ class Marketplace extends Column {
     /**
      * Prepare status column
      *
-     * @param array $dataSource
      * @return array
      */
     public function prepareDataSource(array $dataSource) {

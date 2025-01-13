@@ -25,10 +25,13 @@ use function sprintf;
 
 class CanceledCommand extends AbstractProcessorCommand
 {
+    /**
+     * @var \Magento\Sales\Api\InvoiceManagementInterface
+     */
+    public $invoiceManagement;
     protected RefundOrder $refundOrder;
     protected ItemCreationFactory $itemCreationFactory;
     /**
-     * @param string|null $name The name of the command; passing null means it must be set in configure()
      * @throws LogicException When the command name is empty.
      */
     public function __construct(
@@ -42,8 +45,7 @@ class CanceledCommand extends AbstractProcessorCommand
         OrderManagementInterface $orderManagement,
         InvoiceManagementInterface $invoiceManagement,
         RefundOrder $refundOrder,
-        ItemCreationFactory $itemCreationFactory,
-        ?string $name = null
+        ItemCreationFactory $itemCreationFactory
     ) {
         $this->refundOrder         = $refundOrder;
         $this->invoiceManagement   = $invoiceManagement;

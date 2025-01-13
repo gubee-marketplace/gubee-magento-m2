@@ -11,7 +11,7 @@ class OrderCommentSender extends PluginAbstract
     public function aroundSend(OrderCommentSenderSender $subject, callable $proceed, Order $order, $notify = true, $comment = '')
     {
         if ($this->shouldPreventExecution($order->getPayment()->getMethod())) {
-            return;
+            return null;
         }
 
         return $proceed($order, $notify, $comment);

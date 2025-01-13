@@ -67,7 +67,7 @@ class Variation
         ?ProductInterface $parent = null
     )
     {
-        if ($parent) {
+        if ($parent instanceof \Magento\Catalog\Api\Data\ProductInterface) {
             $this->parent = $parent;
         }
         $this->attributeCollection = $attributeCollectionFactory->create();
@@ -102,7 +102,7 @@ class Variation
 
     protected function buildSkuId()
     {
-        return $this->parent ? sprintf(
+        return $this->parent instanceof \Magento\Catalog\Api\Data\ProductInterface ? sprintf(
             "%s%s%s",
             $this->parent->getSku() ?: $this->product->getSku(),
             self::SEPARATOR,
@@ -111,11 +111,10 @@ class Variation
     }
     /**
      * Verifies if parent is defined and checks its media gallery information
-     * @return bool
      */
     private function parentHasMedia() : bool
     {
-        return !is_null($this->parent) ? count($this->parent->getMediaGalleryImages()) > 0 : false;
+        return !is_null($this->parent) && count($this->parent->getMediaGalleryImages()) > 0;
     }
 
     protected function buildImages()
@@ -299,7 +298,7 @@ class Variation
 
     protected function buildMain()
     {
-        return $this->parent ? false : true;
+        return !(bool) $this->parent;
     }
 
     protected function buildPrices()
@@ -406,9 +405,6 @@ class Variation
             },
             $attributes
         );
-        /**
-         * @var \Gubee\SDK\Model\Catalog\Product\Variation $variations[]
-         */
         $sAttributeCodes = [];
         if (!is_null($this->parent)) {
             $configurableAttributes = $this->parent->getTypeInstance()->getConfigurableOptions($this->parent);

@@ -245,10 +245,6 @@ HTML
             return false;
         }
         $order = $this->_coreRegistry->registry('current_order');
-        if ($order->getPayment()->getMethod() === 'gubee') {
-            return false;
-        }
-
-        return true;
+        return $order->getPayment()->getMethod() !== 'gubee';
     }
 }

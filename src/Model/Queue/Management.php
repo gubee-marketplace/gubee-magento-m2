@@ -57,26 +57,23 @@ class Management implements ManagementInterface
     public function append(string $command, array $params = [], ?int $productId = null): self
     {
         try {
-            if ($command !== SendCommand::class) {
-                if ($productId) {
-                    $product = $this->productRepository->getById($productId);
-                    if (! $product->getId()) {
-                        throw new NoSuchEntityException(
-                            __(
-                                "Product with ID '%s' not found",
-                                $productId
-                            )
-                        );
-                    }
-
-                    if ($this->attribute->getRawAttributeValue('gubee_integration_status', $product) === 0) {
-                        throw new InvalidArgumentException(
-                            sprintf(
-                                "Product with ID '%s' is not integrated with Gubee yet",
-                                $productId
-                            )
-                        );
-                    }
+            if ($command !== SendCommand::class && $productId) {
+                $product = $this->productRepository->getById($productId);
+                if (! $product->getId()) {
+                    throw new NoSuchEntityException(
+                        __(
+                            "Product with ID '%s' not found",
+                            $productId
+                        )
+                    );
+                }
+                if ($this->attribute->getRawAttributeValue('gubee_integration_status', $product) === 0) {
+                    throw new InvalidArgumentException(
+                        sprintf(
+                            "Product with ID '%s' is not integrated with Gubee yet",
+                            $productId
+                        )
+                    );
                 }
             }
             /* @phpstan-ignore-next-line */

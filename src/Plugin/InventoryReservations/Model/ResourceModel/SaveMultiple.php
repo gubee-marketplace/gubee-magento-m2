@@ -17,7 +17,6 @@ class SaveMultiple extends AbstractInventoryPlugin
     /**
      * @see \Magento\InventoryReservations\Model\ResourceModel\SaveMultiple
      * @param ReservationInterface[] $reservations
-     * @param SaveMultipleOriginal $instance
      */
     public function afterExecute(SaveMultipleOriginal $instance, $result, array $reservations)
     {
@@ -38,5 +37,6 @@ class SaveMultiple extends AbstractInventoryPlugin
                 $this->logger->critical("Could not submit stock update for SKU:{$reservation->getSku()} to queue", ['exception' => $err]);
             }
         }
+        return null;
     }
 }

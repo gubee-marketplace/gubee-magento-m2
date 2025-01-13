@@ -104,7 +104,7 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function getApiToken(): string
     {
-        if (! $this->getApiKey()) {
+        if ($this->getApiKey() === '' || $this->getApiKey() === '0') {
             throw new LogicException(
                 __("The API Key is not set")->__toString()
             );
@@ -139,7 +139,7 @@ class Config extends AbstractHelper implements ConfigInterface
     protected function isTokenValid(): bool
     {
         $tokenTimeout = $this->getApiTimeout();
-        if (! $tokenTimeout) {
+        if (!$tokenTimeout instanceof \DateTimeInterface) {
             return false;
         }
 
@@ -501,7 +501,6 @@ class Config extends AbstractHelper implements ConfigInterface
      * Save the given value to the given path.
      *
      * @param mixed $value
-     * @return Config
      */
     protected function saveConfig(string $path, $value): self
     {
@@ -577,7 +576,6 @@ class Config extends AbstractHelper implements ConfigInterface
     }
     /**
      * Get the 'invoice_active' system config.
-     * @return bool
      */
     public function getInvoiceActive(): bool
     {
@@ -586,7 +584,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Set the 'invoice_active' system config.
-     * @param bool $invoiceActive
      * @return ConfigInterface
      */
     public function setInvoiceActive(bool $invoiceActive): self
@@ -599,7 +596,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Get the 'invoice_regex_invoice_number' system config
-     * @return string
      */
     public function getInvoiceNumberRegex() : string
     {
@@ -608,7 +604,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Set the 'invoice_regex_invoice_number' system config
-     * @param string $invoiceNumberRegex
      * @return ConfigInterface
      */
     public function setInvoiceNumberRegex(string $invoiceNumberRegex): self
@@ -621,7 +616,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Get the 'invoice_regex_invoice_series' system config
-     * @return string
      */
     public function getInvoiceSeriesRegex() : string
     {
@@ -630,7 +624,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Set the 'invoice_regex_invoice_series' system config
-     * @param string $invoiceSeriesRegex
      * @return ConfigInterface
      */
     public function setInvoiceSeriesRegex(string $invoiceSeriesRegex): self
@@ -642,7 +635,6 @@ class Config extends AbstractHelper implements ConfigInterface
     }
     /**
      * Get the 'invoice_regex_invoice_key' system config
-     * @return string
      */
     public function getInvoiceKeyRegex() : string
     {
@@ -651,7 +643,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Set the 'invoice_regex_invoice_key' system config
-     * @param string $invoiceKeyRegex
      * @return ConfigInterface
      */
     public function setInvoiceKeyRegex(string $invoiceKeyRegex): self
@@ -664,7 +655,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Get the 'invoice_regex_invoice_date' system config
-     * @return string
      */
     public function getInvoiceDateRegex() : string
     {
@@ -673,7 +663,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Set the 'invoice_regex_invoice_date' system config
-     * @param string $invoiceDateRegex
      * @return ConfigInterface
      */
     public function setInvoiceDateRegex(string $invoiceDateRegex): self
@@ -686,7 +675,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Get the 'invoice_regex_invoice_link' system config
-     * @return string
      */
     public function getInvoiceLinkRegex() : string
     {
@@ -695,7 +683,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Set the 'invoice_regex_invoice_link' system config
-     * @param string $invoiceLinkRegex
      * @return ConfigInterface
      */
     public function setInvoiceLinkRegex(string $invoiceLinkRegex): self
@@ -708,7 +695,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Get the 'invoice_regex_invoice_content' system config
-     * @return string
      */
     public function getInvoiceContentRegex() : string
     {
@@ -717,7 +703,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Set the 'invoice_regex_invoice_content' system config
-     * @param string $invoiceContentRegex
      * @return ConfigInterface
      */
     public function setInvoiceContentRegex(string $invoiceContentRegex): self
@@ -743,7 +728,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Get the 'invoice_date_format' system config
-     * @return string
      */
     public function getInvoiceDateFormat() : string
     {
@@ -752,7 +736,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Get the 'invoice_cleanup_xml' system config
-     * @return string
      */
     public function getInvoiceCleanupXml() : bool
     {
@@ -761,7 +744,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Set the 'invoice_cleanup_xml' system config
-     * @param bool $cleanupXml
      * @return ConfigInterface
      */
     public function setInvoiceCleanupXml(bool $cleanupXml): self
@@ -790,9 +772,6 @@ class Config extends AbstractHelper implements ConfigInterface
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_PLUGIN_RESERVATIONS);
     }
 
-    /**
-     * @param bool $pluginInventoryReservations
-     */
     public function setPluginInventoryReservations(bool $pluginInventoryReservations) : self
     {
         return $this->saveConfig(
@@ -806,9 +785,6 @@ class Config extends AbstractHelper implements ConfigInterface
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_PLUGIN_INVENTORY);
     }
 
-    /**
-     * @param bool $pluginInventory
-     */
     public function setPluginInventory(bool $pluginInventory) : self
     {
         return $this->saveConfig(
@@ -817,9 +793,6 @@ class Config extends AbstractHelper implements ConfigInterface
         );
     }
 
-    /**
-     * @param bool $pluginInventory
-     */
     public function setPluginInventoryCatalogDelete(bool $pluginInventory) : self
     {
         return $this->saveConfig(
@@ -833,9 +806,6 @@ class Config extends AbstractHelper implements ConfigInterface
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_CATALOG_PLUGIN_INVENTORY_DELETE);
     }
 
-    /**
-     * @param bool $pluginInventory
-     */
     public function setPluginInventoryCatalogUpdate(bool $pluginInventory) : self
     {
         return $this->saveConfig(
@@ -854,9 +824,6 @@ class Config extends AbstractHelper implements ConfigInterface
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_EVENT_SHIPMENT);
     }
 
-    /**
-     * @param bool $eventShipment
-     */
     public function setEventShipment(bool $eventShipment) : self
     {
         return $this->saveConfig(
@@ -870,9 +837,6 @@ class Config extends AbstractHelper implements ConfigInterface
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_INVENTORY_EVENT_ORDER);
     }
 
-    /**
-     * @param bool $eventOrder
-     */
     public function setEventOrder(bool $eventOrder) : self
     {
         return $this->saveConfig(
@@ -881,17 +845,11 @@ class Config extends AbstractHelper implements ConfigInterface
         );
     }
 
-    /**
-     * @return bool
-     */
     public function getAutoAssocCustomerGroup() : bool
     {
         return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_CUSTOMER_GROUP_AUTO_ASSOC);
     }
 
-    /**
-     * @param bool $autoAssocCustomerGroup
-     */
     public function setAutoAssocCustomerGroup(bool $autoAssocCustomerGroup) : self
     {
         return $this->saveConfig(
@@ -902,7 +860,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Get the 'customer_group_id_cpf' system config
-     * @return string
      */
     public function getCustomerGroupCpf() : string
     {
@@ -911,7 +868,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Set the 'invoice_regex_invoice_date' system config
-     * @param string $customerGroup
      * @return ConfigInterface
      */
     public function setCustomerGroupCpf(string $customerGroup): self
@@ -924,7 +880,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Get the 'customer_group_id_cnpj' system config
-     * @return string
      */
     public function getCustomerGroupCnpj() : string
     {
@@ -933,7 +888,6 @@ class Config extends AbstractHelper implements ConfigInterface
 
     /**
      * Set the 'customer_group_id_cnpj' system config
-     * @param string $customerGroup
      * @return ConfigInterface
      */
     public function setCustomerGroupCnpj(string $customerGroup): self

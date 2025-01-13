@@ -60,8 +60,8 @@ class CreatedCommand extends AbstractProcessorCommand
     protected ConvertOrder $convertOrder;
     protected ConfigInterface $config;
     protected GetAssignedSalesChannelsDataForStock $getAssignedSalesChannelsDataForStock;
-    protected $storeId = null;
-    protected $orderWarehouseId = null;
+    protected $storeId;
+    protected $orderWarehouseId;
     protected $isFulfillment;
 
     public function __construct(
@@ -435,14 +435,12 @@ class CreatedCommand extends AbstractProcessorCommand
             );
             if ($this->config->getAutoAssocCustomerGroup()) {
                 if ($gubeeOrder['customer']['documents'][0]['type'] == "CPF") {
-                    if ($groupCPF = $this->config->getCustomerGroupCpf()) {
+                    $groupCPF = $this->config->getCustomerGroupCpf();
+                    if ($groupCPF !== '' && $groupCPF !== '0') {
                         $customer->setGroupId($groupCPF);
                     }
-                }
-                else {
-                    if ($groupCNPJ = $this->config->getCustomerGroupCnpj()) {
-                        $customer->setGroupId($groupCNPJ);
-                    }
+                } elseif ($groupCNPJ = $this->config->getCustomerGroupCnpj()) {
+                    $customer->setGroupId($groupCNPJ);
                 }
             }
             $customer->setStoreId($this->storeManager->getDefaultStoreView()->getId());
@@ -519,7 +517,7 @@ class CreatedCommand extends AbstractProcessorCommand
                             $quoteItem->setStoreId($quote->getStoreId());
                         } catch (Throwable $e) {
                             $message = __(
-                                "Error adding product with SKU '%1' to quote, error: " . (string) $e->getMessage(),
+                                "Error adding product with SKU '%1' to quote, error: " . $e->getMessage(),
                                 $toBeAdded['skuId'],
                             );
                             $this->logger->error($message);
@@ -550,7 +548,7 @@ class CreatedCommand extends AbstractProcessorCommand
                         $quoteItem->setStoreId($quote->getStoreId());
                     } catch (Throwable $e) {
                         $message = __(
-                            "Error adding product with SKU '%1' to quote, error: " . (string) $e->getMessage(),
+                            "Error adding product with SKU '%1' to quote, error: " . $e->getMessage(),
                             $item['skuId'],
                         );
                         $this->logger->error($message);
@@ -675,10 +673,10 @@ class CreatedCommand extends AbstractProcessorCommand
         }
 
         $street = [
-            is_string($address->getStreet()) && !empty(trim($address->getStreet())) ? trim($address->getStreet()) : __("Street not informed"),
-            is_string($address->getNumber()) && !empty(trim($address->getNumber())) ? trim($address->getNumber()) : __("Number not informed"),
-            is_string($address->getNeighborhood()) && !empty(trim($address->getNeighborhood())) ? trim($address->getNeighborhood()): __("Neighborhood not informed"),
-            is_string($address->getComplement()) && !empty(trim($address->getComplement())) ? trim($address->getComplement()) : __("Complement not informed"),
+            is_string($address->getStreet()) && !in_array(trim($address->getStreet()), ['', '0'], true) ? trim($address->getStreet()) : __("Street not informed"),
+            is_string($address->getNumber()) && !in_array(trim($address->getNumber()), ['', '0'], true) ? trim($address->getNumber()) : __("Number not informed"),
+            is_string($address->getNeighborhood()) && !in_array(trim($address->getNeighborhood()), ['', '0'], true) ? trim($address->getNeighborhood()): __("Neighborhood not informed"),
+            is_string($address->getComplement()) && !in_array(trim($address->getComplement()), ['', '0'], true) ? trim($address->getComplement()) : __("Complement not informed"),
         ];
 
         $address = [

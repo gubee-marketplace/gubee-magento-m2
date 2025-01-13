@@ -35,15 +35,13 @@ class Column
         if (!$this->config->getActive()) {
             return $result;
         }
-        if ($requestName == 'sales_order_grid_data_source') {
-            if ($result instanceof $this->collection) {
-                $select = $result->getSelect();
-                $select->joinLeft(
-                    ["gubee_order" => "gubee_integration_order"],
-                    'main_table.entity_id = gubee_order.order_id ',
-                    ['gubee_marketplace', 'gubee_order_id']
-                )->distinct();
-            }
+        if ($requestName == 'sales_order_grid_data_source' && $result instanceof $this->collection) {
+            $select = $result->getSelect();
+            $select->joinLeft(
+                ["gubee_order" => "gubee_integration_order"],
+                'main_table.entity_id = gubee_order.order_id ',
+                ['gubee_marketplace', 'gubee_order_id']
+            )->distinct();
         }
         return $result;
     }

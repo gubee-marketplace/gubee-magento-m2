@@ -23,25 +23,13 @@ use function sprintf;
 
 class SendCommand extends AbstractCommand
 {
-    /**
-     * @var ProductRepositoryInterface
-     */
     protected ProductRepositoryInterface $productRepository;
     protected ObjectManagerInterface $objectManager;
     protected Attribute $attribute;
-    /**
-     * @var Configurable
-     */
     protected Configurable $configurableType;
 
-    /**
-     * @var SearchCriteriaBuilder
-     */
     protected SearchCriteriaBuilder $searchCriteriaBuilder;
 
-    /**
-     * @var FilterBuilder 
-     */
     protected FilterBuilder $filterBuilder;
 
     public function __construct(
@@ -82,13 +70,10 @@ class SendCommand extends AbstractCommand
         $product = $this->productRepository->get($this->input->getArgument('sku'));
         if (! $product->getId()) {
             $this->logger->error(
-                sprintf(
-                    "%s",
-                    __(
-                        "The product with the SKU '%1' does not exist",
-                        $this->input->getArgument('sku')
-                    )->__toString()
-                )
+                __(
+                    "The product with the SKU '%1' does not exist",
+                    $this->input->getArgument('sku')
+                )->__toString()
             );
             return 1;
         }
@@ -165,7 +150,5 @@ class SendCommand extends AbstractCommand
             );
             return 1;
         }
-
-        return 1; // nothing has been done, asume error'd out
     }
 }

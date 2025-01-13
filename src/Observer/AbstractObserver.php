@@ -14,9 +14,6 @@ abstract class AbstractObserver implements ObserverInterface
 {
     protected Observer $observer;
     protected LoggerInterface $logger;
-    /**
-     * @var ConfigInterface
-     */
     protected ConfigInterface $config;
     protected Management $queueManagement;
 
@@ -53,11 +50,7 @@ abstract class AbstractObserver implements ObserverInterface
      */
     protected function isAllowed(): bool
     {
-        if (! $this->getConfig()->getActive()) {
-            return false;
-        }
-
-        return true;
+        return $this->getConfig()->getActive();
     }
 
     public function getObserver(): Observer

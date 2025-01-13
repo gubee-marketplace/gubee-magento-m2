@@ -35,13 +35,6 @@ class Desativate extends AbstractProduct
         ) {
             return false;
         }
-
-        if (
-            $product->getStatus() == Status::STATUS_ENABLED
-        ) {
-            return false;
-        }
-
-        return true;
+        return $product->getStatus() != Status::STATUS_ENABLED;
     }
 }

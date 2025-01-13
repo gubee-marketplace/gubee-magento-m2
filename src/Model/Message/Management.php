@@ -97,26 +97,23 @@ class Management implements ManagementInterface
 
         $status = StatusEnum::ERROR();
         try {
-            if ($message->getCommand() !== SendCommand::class) {
-                if ($message->getProductId()) {
-                    $product = $this->productRepository->getById($message->getProductId());
-                    if (! $product->getId()) {
-                        throw new NoSuchEntityException(
-                            __(
-                                "Product with ID '%s' not found",
-                                $message->getProductId()
-                            )
-                        );
-                    }
-
-                    if ($this->attribute->getRawAttributeValue('gubee_integration_status', $product) === 0) {
-                        throw new InvalidArgumentException(
-                            sprintf(
-                                "Product with ID '%s' is not integrated with Gubee yet",
-                                $message->getProductId()
-                            )
-                        );
-                    }
+            if ($message->getCommand() !== SendCommand::class && $message->getProductId()) {
+                $product = $this->productRepository->getById($message->getProductId());
+                if (! $product->getId()) {
+                    throw new NoSuchEntityException(
+                        __(
+                            "Product with ID '%s' not found",
+                            $message->getProductId()
+                        )
+                    );
+                }
+                if ($this->attribute->getRawAttributeValue('gubee_integration_status', $product) === 0) {
+                    throw new InvalidArgumentException(
+                        sprintf(
+                            "Product with ID '%s' is not integrated with Gubee yet",
+                            $message->getProductId()
+                        )
+                    );
                 }
             }
 
@@ -141,7 +138,7 @@ class Management implements ManagementInterface
                 $e->getMessage()
             );
             $message->setMessage(
-                (string) $e->getMessage()
+                $e->getMessage()
             );
             $this->updateMessageStatus($message, StatusEnum::DONE());
         } catch (ErrorException $e) {
@@ -189,7 +186,7 @@ class Management implements ManagementInterface
                 ]
             );
             $message->setMessage(
-                (string) $e->getMessage()
+                $e->getMessage()
             );
             $this->updateMessageStatus($message, StatusEnum::ERROR());
         }
@@ -223,7 +220,7 @@ class Management implements ManagementInterface
             );
         } catch (Throwable $e) {
             $message->setMessage(
-                (string) $e->getMessage()
+                $e->getMessage()
             );
             throw $e;
         }

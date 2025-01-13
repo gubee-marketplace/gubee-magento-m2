@@ -17,6 +17,7 @@ use function sprintf;
 
 class DesativateCommand extends AbstractCommand
 {
+    public $log;
     protected ProductRepositoryInterface $productRepository;
     protected ObjectManagerInterface $objectManager;
 
@@ -46,13 +47,10 @@ class DesativateCommand extends AbstractCommand
         $product = $this->productRepository->get($this->input->getArgument('sku'));
         if (! $product->getId()) {
             $this->log->error(
-                sprintf(
-                    "%s",
-                    __(
-                        "The product with the SKU '%1' does not exist",
-                        $this->input->getArgument('sku')
-                    )->__toString()
-                )
+                __(
+                    "The product with the SKU '%1' does not exist",
+                    $this->input->getArgument('sku')
+                )->__toString()
             );
             return 1;
         }

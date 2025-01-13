@@ -28,11 +28,6 @@ class Group implements OptionSourceInterface
      */
     protected $_objectConverter;
 
-    /**
-     * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder   $searchCriteriaBuilder
-     * @param \Magento\Framework\Convert\DataObject          $objectConverter
-     */
     public function __construct(
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,

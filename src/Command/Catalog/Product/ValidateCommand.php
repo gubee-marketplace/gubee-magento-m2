@@ -19,6 +19,7 @@ class ValidateCommand extends AbstractCommand
 {
     protected ProductRepositoryInterface $productRepository;
     protected ObjectManagerInterface $objectManager;
+    protected LoggerInterface $log;
 
     public function __construct(
         ManagerInterface $eventDispatcher,
@@ -47,13 +48,10 @@ class ValidateCommand extends AbstractCommand
         $product = $this->productRepository->get($this->input->getArgument('sku'));
         if (! $product->getId()) {
             $this->log->error(
-                sprintf(
-                    "%s",
-                    __(
-                        "The product with the SKU '%1' does not exist",
-                        $this->input->getArgument('sku')
-                    )->__toString()
-                )
+                __(
+                    "The product with the SKU '%1' does not exist",
+                    $this->input->getArgument('sku')
+                )->__toString()
             );
             return 1;
         }
@@ -71,7 +69,7 @@ class ValidateCommand extends AbstractCommand
                 'product' => $product,
             ]
         );
-        $result = $product->validate();
+        $product->validate();
         return 0;
     }
 }

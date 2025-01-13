@@ -67,6 +67,7 @@ abstract class AbstractProduct extends AbstractObserver
             $this->setProduct($parent);
             $this->process();
         }
+        return null;
     }
 
     /**

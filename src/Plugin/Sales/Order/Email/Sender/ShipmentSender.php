@@ -10,7 +10,7 @@ class ShipmentSender extends PluginAbstract
     public function aroundSend(SenderShipmentSender $subject, callable $proceed, Shipment $shipment, $forceSyncMode = false)
     {
         if ($this->shouldPreventExecution($shipment->getOrder()->getPayment()->getMethod())) {
-            return;
+            return null;
         }
 
         return $proceed($shipment, $forceSyncMode);

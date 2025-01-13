@@ -49,7 +49,7 @@ class SendCommand extends AbstractCommand
 
         $attribute = $this->input->getArgument("attribute");
         $attribute = $this->productAttributeRepository->get($attribute);
-        $attribute = $this->objectManager->create(
+        $this->objectManager->create(
             Attribute::class,
             [
                 'attribute' => $attribute,

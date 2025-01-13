@@ -15,17 +15,11 @@ class ItemList implements ArrayAccess
         $this->itens = $items;
     }
 
-    /**
-     * @return array
-     */
     public function getItens(): array
     {
         return $this->itens;
     }
 
-    /**
-     * @param array $itens
-     */
     public function setItens(array $itens): self
     {
         $this->itens = $itens;

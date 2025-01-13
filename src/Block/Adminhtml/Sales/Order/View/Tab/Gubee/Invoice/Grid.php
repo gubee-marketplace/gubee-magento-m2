@@ -169,12 +169,7 @@ class Grid extends Extended implements TabInterface
         ) {
             return false;
         }
-
-        if ($this->getOrder()->getPayment()->getMethod() === 'gubee') {
-            return false;
-        }
-
-        return true;
+        return $this->getOrder()->getPayment()->getMethod() !== 'gubee';
     }
 
     public function getTabLabel()

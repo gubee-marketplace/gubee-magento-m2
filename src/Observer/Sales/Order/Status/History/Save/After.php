@@ -63,10 +63,8 @@ class After extends AbstractObserver
         /**
          * @var Order $order
          */
-        if ($order = $history->getOrder()) {
-            if ($payment = $order->getPayment()) {
-                $isGubee = $payment->getMethod() == 'gubee';
-            }
+        if (($order = $history->getOrder()) && ($payment = $order->getPayment())) {
+            $isGubee = $payment->getMethod() == 'gubee';
         }
 
         return parent::isAllowed() && $this->config->getInvoiceActive() && $isGubee;

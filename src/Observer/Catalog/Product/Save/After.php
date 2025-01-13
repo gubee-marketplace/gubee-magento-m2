@@ -43,10 +43,8 @@ class After extends AbstractProduct
 
     protected function process(): void
     {
-        if ($message = $this->registry->registry('gubee_current_message')) {
-            if ($message->getCommand() == SendCommand::class) {
-                return;
-            }
+        if (($message = $this->registry->registry('gubee_current_message')) && $message->getCommand() == SendCommand::class) {
+            return;
         }
         if (
             $this->attribute->getRawAttributeValue('gubee', $this->getProduct()) &&
@@ -112,11 +110,6 @@ class After extends AbstractProduct
         if (!$product = $this->getProduct()) {
             return false;
         }
-
-        if (!$this->getConfig()->getActive()) {
-            return false;
-        }
-
-        return true;
+        return $this->getConfig()->getActive();
     }
 }

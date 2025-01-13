@@ -35,5 +35,6 @@ class DeleteSourceItemsBySku extends AbstractInventoryPlugin
                 $this->logger->critical("Could not submit stock update for SKU:{$sku} to queue", ['exception' => $err]);
             }
         }
+        return null;
     }
 }

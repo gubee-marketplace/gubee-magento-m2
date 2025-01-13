@@ -17,9 +17,6 @@ class Stock extends Select
     /** @var StockOptions */
     protected $stockOptions;
 
-    /**
-     * @param array $data
-     */
     public function __construct(
         Context $context,
         StockOptions $stockOptions,

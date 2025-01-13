@@ -39,7 +39,7 @@ class GubeeAttributes
         OrderInterface $entity,
         OrderExtensionInterface $extension = null
     ) {
-        if ($extension === null) {
+        if (!$extension instanceof \Magento\Sales\Api\Data\OrderExtensionInterface) {
             $extension = $this->extensionFactory->create();
         }
         if (!$entity->getPayment()) {

@@ -19,6 +19,7 @@ use function sprintf;
 
 class SendCommand extends AbstractCommand
 {
+    public $log;
     protected ProductRepositoryInterface $productRepository;
     protected ObjectManagerInterface $objectManager;
 
@@ -49,13 +50,10 @@ class SendCommand extends AbstractCommand
         $mageProduct = $this->productRepository->get($this->input->getArgument('sku'));
         if (!$mageProduct->getId()) {
             $this->log->error(
-                sprintf(
-                    "%s",
-                        __(
-                            "The product with the SKU '%1' does not exist",
-                        $this->input->getArgument('sku')
-                        )->__toString()
-                )
+                __(
+                    "The product with the SKU '%1' does not exist",
+                $this->input->getArgument('sku')
+                )->__toString()
             );
             return 1;
         }
@@ -67,16 +65,11 @@ class SendCommand extends AbstractCommand
                 ]
             );
         } catch (Exception $e) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "%s",
-                        __(
-                            "An error occurred while building the gubee product from "
-                            . "the SKU '%1' verify the product data and try again",
-                        $this->input->getArgument('sku')
-                        )->__toString()
-                )
-            );
+            throw new \InvalidArgumentException(__(
+                "An error occurred while building the gubee product from "
+                . "the SKU '%1' verify the product data and try again",
+            $this->input->getArgument('sku')
+            )->__toString(), $e->getCode(), $e);
         }
         try {
             $product->save();
@@ -87,13 +80,10 @@ class SendCommand extends AbstractCommand
             );
         } catch (Exception $e) {
             $this->logger->error(
-                sprintf(
-                    "%s",
-                        __(
-                            "An error occurred while sending the product with the SKU '%1'",
-                        $this->input->getArgument('sku')
-                        )->__toString()
-                )
+                __(
+                    "An error occurred while sending the product with the SKU '%1'",
+                $this->input->getArgument('sku')
+                )->__toString()
             );
             throw $e;
         }
@@ -102,10 +92,7 @@ class SendCommand extends AbstractCommand
 
     /**
      * Update a attribute value of a product
-     * @param string $attributeCode
      * @param mixed $value
-     * @param \Magento\Catalog\Model\Product $product
-     * @return int
      */
     protected function updateAttribute(string $attributeCode, $value, \Magento\Catalog\Model\Product $product): void
     {

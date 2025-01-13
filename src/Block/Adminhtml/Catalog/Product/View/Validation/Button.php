@@ -41,9 +41,6 @@ class Button extends Container
      */
     protected $_emulation;
     protected ObjectManagerInterface $objectManager;
-    /**
-     * @param array $data
-     */
     public function __construct(
         Context $context,
         Registry $registry,
@@ -136,45 +133,5 @@ class Button extends Container
     public function validate()
     {
         return [];
-        $product = $this->_coreRegistry->registry('current_product');
-        if (! $product) {
-            return $problems;
-        }
-        try {
-            $input           = $this->objectManager->create(
-                ArrayInput::class,
-                [
-                    'parameters' => [
-                        'sku' => $product->getSku(),
-                    ],
-                ]
-            );
-            $output          = $this->objectManager->create(
-                BufferedOutput::class
-            );
-            $validateCommand = $this->objectManager->create(
-                ValidateCommand::class
-            );
-            $validateCommand->run($input, $output);
-        } catch (ErrorException $e) {
-            $response = $e->getResponse();
-            $content  = json_decode((string) $response->getBody(), true);
-            if (isset($content['fieldErrors'])) {
-                foreach ($content['fieldErrors'] as $error) {
-                    $problems[] = sprintf(
-                        "%s.%s: %s",
-                        $error['objectName'],
-                        $error['field'],
-                        $error['message']
-                    );
-                }
-            } else {
-                $problems[] = $e->getMessage();
-            }
-        } catch (Throwable $e) {
-            throw $e;
-        }
-
-        return $problems ?: [];
     }
 }

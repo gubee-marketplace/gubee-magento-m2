@@ -113,13 +113,11 @@ class SendCommand extends AbstractProcessorCommand
                 $gubeeOrder->getGubeeOrderId(),
                 $invoice->jsonSerialize()
             );
-        }
-        else if ($orderHistory = $this->getOrderStatusHistory()){
+        } elseif ($orderHistory = $this->getOrderStatusHistory()) {
             $gubeeOrder = $this->gubeeOrderRepository->getByOrderId(
                 $this->input->getArgument('order_id')
             );
             $invoiceData = $this->invoiceParser->findMatch($orderHistory->getComment());
-
             /**
              * @var Invoice $invoice
              */
@@ -128,14 +126,12 @@ class SendCommand extends AbstractProcessorCommand
             $invoice->setOrderId($this->input->getArgument('order_id'));
             $invoice->setOrigin(Invoice::ORIGIN_MAGENTO);
             $this->invoiceRepository->save($invoice);
-
             if ($this->config->getInvoiceCleanupXml()) // cleanup xml from history if enabled
             {
                 $orderHistory->setData('origin', 'gubee');
                 $orderHistory->setComment($this->invoiceParser->cleanupXml($orderHistory->getComment()));
                 $this->orderStatusHistoryRepository->save($orderHistory);
             }
-        
         }
         return 0;
     }

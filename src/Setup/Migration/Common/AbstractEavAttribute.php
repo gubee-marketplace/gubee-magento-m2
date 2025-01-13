@@ -65,10 +65,8 @@ abstract class AbstractEavAttribute implements ScopedAttributeInterface
     {
         foreach ($data as $field => $value) {
             try {
-                switch ($field) {
-                    case 'source':
-                        $field = 'source_model';
-                        break;
+                if ($field === 'source') {
+                    $field = 'source_model';
                 }
                 $this->logger->debug(
                     sprintf(

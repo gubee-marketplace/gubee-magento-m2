@@ -51,13 +51,10 @@ class SendCommand extends AbstractCommand
         $product = $this->productRepository->get($this->input->getArgument('sku'));
         if (! $product->getId()) {
             $this->logger->error(
-                sprintf(
-                    "%s",
-                    __(
-                        "The product with the SKU '%1' does not exist",
-                        $this->input->getArgument('sku')
-                    )->__toString()
-                )
+                __(
+                    "The product with the SKU '%1' does not exist",
+                    $this->input->getArgument('sku')
+                )->__toString()
             );
             return 1;
         }
@@ -79,7 +76,6 @@ class SendCommand extends AbstractCommand
                     $this->input->getArgument('sku')
                 )->__toString()
             );
-            return 1;
         }
         /**
          * @var Product $product

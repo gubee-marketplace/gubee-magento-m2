@@ -20,7 +20,7 @@ class EmailSender extends PluginAbstract
     ) {
         if ($this->shouldPreventExecution($order->getPayment()->getMethod()))
         {
-            return;
+            return null;
         }
 
         return $proceed($order, $shipment, $comment, $forceSyncMode);

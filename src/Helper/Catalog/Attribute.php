@@ -101,7 +101,7 @@ class Attribute
 
         $value = explode(',', $value ?: '');
         $value = array_filter($value);
-        if (!$value) {
+        if ($value === []) {
             return null;
         }
 
@@ -111,7 +111,6 @@ class Attribute
     /**
      * Get the option labels for a given value array and frontend model.
      *
-     * @param array $value
      * @return array
      */
     private function getOptionLabels(array $value, AbstractFrontend $frontend)

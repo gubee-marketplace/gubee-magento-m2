@@ -16,9 +16,6 @@ class Flag extends Select
     /** @var Yesno */
     protected $yesNo;
 
-    /**
-     * @param array $data
-     */
     public function __construct(
         Context $context,
         Yesno $yesNo,

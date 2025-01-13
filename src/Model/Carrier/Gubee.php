@@ -35,8 +35,6 @@ class Gubee extends AbstractCarrier implements
 
     /**
      * Constructor
-     *
-     * @param array $data
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,

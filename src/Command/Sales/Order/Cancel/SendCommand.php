@@ -20,7 +20,6 @@ use Symfony\Component\Console\Exception\LogicException;
 class SendCommand extends AbstractProcessorCommand
 {
     /**
-     * @param string|null $name The name of the command; passing null means it must be set in configure()
      * @throws LogicException When the command name is empty.
      */
     public function __construct(
@@ -31,8 +30,7 @@ class SendCommand extends AbstractProcessorCommand
         OrderRepositoryInterface $orderRepository,
         GubeeOrderRepositoryInterface $gubeeOrderRepository,
         HistoryFactory $historyFactory,
-        OrderManagementInterface $orderManagement,
-        ?string $name = null
+        OrderManagementInterface $orderManagement
     ) {
         parent::__construct(
             $eventDispatcher,

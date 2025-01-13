@@ -21,7 +21,6 @@ use function __;
 class PaidCommand extends AbstractProcessorCommand
 {
     /**
-     * @param string|null $name The name of the command; passing null means it must be set in configure()
      * @throws LogicException When the command name is empty.
      */
     public function __construct(
@@ -32,8 +31,7 @@ class PaidCommand extends AbstractProcessorCommand
         OrderRepositoryInterface $orderRepository,
         GubeeOrderRepositoryInterface $gubeeOrderRepository,
         HistoryFactory $historyFactory,
-        OrderManagementInterface $orderManagement,
-        ?string $name = null
+        OrderManagementInterface $orderManagement
     ) {
         parent::__construct(
             $eventDispatcher,
@@ -50,7 +48,7 @@ class PaidCommand extends AbstractProcessorCommand
 
     protected function doExecute(): int
     {
-        $gubeeOrder = $this->orderResource->loadByOrderId(
+        $this->orderResource->loadByOrderId(
             $this->getInput()->getArgument('order_id')
         );
         $order      = $this->getOrder($this->getInput()->getArgument('order_id'));
