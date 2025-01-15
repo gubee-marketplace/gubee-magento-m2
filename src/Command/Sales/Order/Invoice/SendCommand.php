@@ -117,15 +117,17 @@ class SendCommand extends AbstractProcessorCommand
             $gubeeOrder = $this->gubeeOrderRepository->getByOrderId(
                 $this->input->getArgument('order_id')
             );
-            $invoiceData = $this->invoiceParser->findMatch($orderHistory->getComment());
-            /**
-             * @var Invoice $invoice
-             */
-            $invoice = $this->invoiceRepository->getByOrderId($this->input->getArgument('order_id'));
-            $invoice->setData($invoiceData);
-            $invoice->setOrderId($this->input->getArgument('order_id'));
-            $invoice->setOrigin(Invoice::ORIGIN_MAGENTO);
-            $this->invoiceRepository->save($invoice);
+            if ($orderHistory->getOrder()->getPayment()->getMethod() == 'gubee') {
+                $invoiceData = $this->invoiceParser->findMatch($orderHistory->getComment());
+                /**
+                 * @var Invoice $invoice
+                 */
+                $invoice = $this->invoiceRepository->getByOrderId($this->input->getArgument('order_id'));
+                $invoice->setData($invoiceData);
+                $invoice->setOrderId($this->input->getArgument('order_id'));
+                $invoice->setOrigin(Invoice::ORIGIN_MAGENTO);
+                $this->invoiceRepository->save($invoice);
+            }
             if ($this->config->getInvoiceCleanupXml()) // cleanup xml from history if enabled
             {
                 $orderHistory->setData('origin', 'gubee');
@@ -145,6 +147,9 @@ class SendCommand extends AbstractProcessorCommand
         return $this->invoiceRepository->get($invoiceId);
     }
 
+    /**
+     * @return \Magento\Sales\Model\Order\Status\History|null
+     */
     private function getOrderStatusHistory(): ?OrderStatusHistoryInterface
     {
         $historyId = $this->input->getArgument('history_id');

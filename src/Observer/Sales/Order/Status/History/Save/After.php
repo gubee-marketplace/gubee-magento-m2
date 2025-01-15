@@ -59,15 +59,15 @@ class After extends AbstractObserver
     {
         
         $history = $this->getObserver()->getEvent()->getStatusHistory();
-        $isGubee = false;
-        /**
-         * @var Order $order
-         */
-        if (($order = $history->getOrder()) && ($payment = $order->getPayment())) {
-            $isGubee = $payment->getMethod() == 'gubee';
-        }
+        // $isGubee = false;
+        // /**
+        //  * @var Order $order
+        //  */
+        // if (($order = $history->getOrder()) && ($payment = $order->getPayment())) {
+        //     $isGubee = $payment->getMethod() == 'gubee';
+        // }
 
-        return parent::isAllowed() && $this->config->getInvoiceActive() && $isGubee;
+        return parent::isAllowed() && $this->config->getInvoiceActive();
     }
 
 

@@ -104,6 +104,10 @@ class Parser
         if (isset($invoiceData[self::INVOICE_LINK]) && (!isset($invoiceData[self::INVOICE_CONTENT]) || empty($invoiceData[self::INVOICE_CONTENT]) )) {
             $invoiceData[self::INVOICE_CONTENT] = $this->fetchXML($invoiceData[self::INVOICE_LINK]);
         }
+
+        // if (isset($invoiceData[self::INVOICE_CONTENT]) && strpos($invoiceData[self::INVOICE_CONTENT], '&lt;') !== false) {
+        //     $invoiceData[self::INVOICE_CONTENT] = htmlspecialchars_decode($invoiceData[self::INVOICE_CONTENT]);
+        // }
         
         return $invoiceData;
 
