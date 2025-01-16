@@ -39,12 +39,12 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking\View
         $this->invoiceCollectionFactory = $invoiceCollectionFactory;
     }
 
-    protected function _construct()
+    protected function _prepareLayout()
     {
-        parent::_construct();
         if ($this->getOrder()->getPayment()->getMethod() == 'gubee') {
-            $this->_template = 'Gubee_Integration::order/tracking/view.phtml';
+            $this->setTemplate('Gubee_Integration::order/tracking/view.phtml');
         }
+        parent::_prepareLayout();
     }
 
     public function getOrder()

@@ -25,14 +25,13 @@ class Tracking extends OrderTracking
         parent::__construct($context, $shippingConfig, $registry, $data);
     }
 
-    protected function _construct()
+    public function _prepareLayout()
     {
-        parent::_construct();
         if ($this->getOrder()->getPayment()->getMethod() == 'gubee') {
-            $this->_template = 'Gubee_Integration::order/tracking.phtml';
+            $this->setTemplate('Gubee_Integration::order/tracking.phtml');
         }
+        parent::_prepareLayout();
     }
-
     public function getOrder()
     {
         return $this->_coreRegistry->registry('current_shipment')
