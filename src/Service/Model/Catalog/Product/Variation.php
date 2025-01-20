@@ -265,7 +265,7 @@ class Variation
             UnitTime::class,
             [
                 'value' => (float) $this->attribute->getRawAttributeValue(
-                    'gubee_warranty_time',
+                    $this->config->getWarrantyTimeAttribute() ?? 'gubee_warranty_time',
                     $this->product
                 ),
                 'type' => $type,
