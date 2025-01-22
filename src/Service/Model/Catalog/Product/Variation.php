@@ -379,7 +379,7 @@ class Variation
         }
 
         $stockData = [
-            'qty' => $this->productQty[$stockId],
+            'qty' => $this->productQty[$stockId] ?? 0,
             'crossDockingTime' => $crossDockingTime,
             'warehouseId' => $warehouseId
         ];
