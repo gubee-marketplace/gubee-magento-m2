@@ -643,6 +643,19 @@ class CreatedCommand extends AbstractProcessorCommand
             $address->getRegion(),
             'BR'
         );
+        if (!$region->getId()) {
+                $regionCollection = ObjectManager::getInstance()->create(
+                Region::class
+                 )->getCollection();
+
+                $regionCollection->addFieldToFilter(
+                'default_name',
+                $address->getRegion()
+                );
+                if ($regionCollection->getSize() > 0 ) {
+                        $region = $regionCollection->getFirstItem();
+                }
+        }
         $customer = new DataObject($customer);
 
         $country = ObjectManager::getInstance()->create(Country::class)
