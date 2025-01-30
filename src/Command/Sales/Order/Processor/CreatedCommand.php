@@ -355,8 +355,8 @@ class CreatedCommand extends AbstractProcessorCommand
                 ->setOrderId($order->getId())
                 ->setGubeeOrderId($gubeeOrder['id'])
                 ->setGubeeMarketplace(
-                    $gubeeOrder['plataform']
-                )->setGubeeChannel($gubeeOrder['channel'])
+                    $gubeeOrder['plataform'] ?? ''
+                )->setGubeeChannel($gubeeOrder['channel'] ?? '')
                 ->setFulfillment($this->isFulfillment);
 
             if (isset($gubeeOrder['account_id'])) {
