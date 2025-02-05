@@ -50,6 +50,14 @@ class Before extends AbstractObserver
         if (! $message) {
             return;
         }
+
+        if (
+            ! (
+                $message->getCommand() instanceof \Gubee\Integration\Command\Sales\Order\Invoice\SendCommand
+            )
+        ) {
+            return;
+        }
         if (
             ! is_subclass_of(
                 $message->getCommand(),
