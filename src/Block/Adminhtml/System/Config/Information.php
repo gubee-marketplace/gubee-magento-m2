@@ -16,7 +16,7 @@ class Information extends \Magento\Config\Block\System\Config\Form\Fieldset
     public function render(AbstractElement $element)
     {
         $html = $this->_getHeaderHtml($element);
-        $this->setContent(__("Gubee Integration version %s", $this->getVersion()));
+        $this->setContent(__("Gubee Integration, version: <strong>%1</strong>", $this->getVersion()));
         
         $html .= $this->getContent();
         $html .= $this->_getFooterHtml($element);
@@ -28,6 +28,11 @@ class Information extends \Magento\Config\Block\System\Config\Form\Fieldset
 
     protected function getVersion()
     {
-        return \Composer\InstalledVersions::getVersion('gubee/module-integration');
+        try {
+            return \Composer\InstalledVersions::getVersion('gubee-marketplace/integration-module');
+        }
+        catch (\Exception $e) {
+            return __('via app/code');    
+        }
     }
 }

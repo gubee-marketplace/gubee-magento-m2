@@ -6,11 +6,6 @@
             <label>Gubee</label>
             <tab>service</tab>
             <resource>Gubee_Integration::config_gubee_integration</resource>
-            <group id="module_information" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1"
-                   showInStore="1">
-                <label>Information</label>
-                <frontend_model>Gubee\Integration\Block\Adminhtml\System\Config\Information</frontend_model>
-            </group>
             <include path="Gubee_Integration::system/01-general.xml"/>
             <include path="Gubee_Integration::system/02-attributes.xml"/>
             <include path="Gubee_Integration::system/03-payment.xml"/>
@@ -19,6 +14,7 @@
             <include path="Gubee_Integration::system/06-inventory.xml"/>
             <include path="Gubee_Integration::system/07-customer.xml"/>
             <include path="Gubee_Integration::system/08-multiple-inventory.xml"/>
+            <include path="Gubee_Integration::system/09-module.xml"/>
         </section>
     </system>
 </config>
