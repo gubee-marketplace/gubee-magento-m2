@@ -428,7 +428,7 @@ class CreatedCommand extends AbstractProcessorCommand
             );
             $customer->setDob(new \DateTime());
             $customer->setFirstname($firstname);
-            $customer->setLastname($lastname);
+            $customer->setLastname($lastname ?? "-");
             $customer->setTaxvat($gubeeOrder['customer']['documents'][0]['number']);
             $customer->setPassword(
                 hash('sha256', $gubeeOrder['customer']['email'] . microtime())
