@@ -322,7 +322,7 @@ class CreatedCommand extends AbstractProcessorCommand
         $this->logger->debug(
             __("Importing payment data '%1' to quote", json_encode($paymentData))
         );
-        $shippingAmount = $gubeeOrder['totalFreight'];
+        $shippingAmount = $gubeeOrder['totalFreight'] ?? 0;
         $quote->setTotalsCollectedFlag(false);
         $quote->collectTotals()->save();
         $order = $this->cartManagement->submit($quote);
@@ -686,10 +686,10 @@ class CreatedCommand extends AbstractProcessorCommand
         }
 
         $street = [
-            is_string($address->getStreet()) && !in_array(trim($address->getStreet()), ['', '0'], true) ? trim($address->getStreet()) : __("Street not informed"),
-            is_string($address->getNumber()) && !in_array(trim($address->getNumber()), ['', '0'], true) ? trim($address->getNumber()) : __("Number not informed"),
-            is_string($address->getNeighborhood()) && !in_array(trim($address->getNeighborhood()), ['', '0'], true) ? trim($address->getNeighborhood()): __("Neighborhood not informed"),
-            is_string($address->getComplement()) && !in_array(trim($address->getComplement()), ['', '0'], true) ? trim($address->getComplement()) : __("Complement not informed"),
+            is_string($address->getStreet()) && !empty(trim($address->getStreet())) ? trim($address->getStreet()) : (string)__("Street not informed"),
+            is_string($address->getNumber()) && !empty(trim($address->getNumber())) ? trim($address->getNumber()) :(string) __("Number not informed"),
+            is_string($address->getNeighborhood()) && !empty(trim($address->getNeighborhood())) ? trim($address->getNeighborhood()):(string) __("Neighborhood not informed"),
+            is_string($address->getComplement()) && !empty(trim($address->getComplement())) ? trim($address->getComplement()) :(string) __("Complement not informed"),
         ];
 
         $address = [
