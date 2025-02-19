@@ -114,9 +114,9 @@ class SendCommand extends AbstractProcessorCommand
                 $invoice->jsonSerialize()
             );
         } elseif ($orderHistory = $this->getOrderStatusHistory()) {
-            $gubeeOrder = $this->gubeeOrderRepository->getByOrderId(
-                $this->input->getArgument('order_id')
-            );
+            // $gubeeOrder = $this->gubeeOrderRepository->getByOrderId(
+            //     $this->input->getArgument('order_id')
+            // );
             if ($orderHistory->getOrder()->getPayment()->getMethod() == 'gubee') {
                 $invoiceData = $this->invoiceParser->findMatch($orderHistory->getComment());
                 /**
