@@ -29,7 +29,12 @@ class Information extends \Magento\Config\Block\System\Config\Form\Fieldset
     protected function getVersion()
     {
         try {
-            return \Composer\InstalledVersions::getVersion('gubee-marketplace/integration-module');
+            if (class_exists(\Composer\InstalledVersions::class)) {
+                return \Composer\InstalledVersions::getVersion('gubee-marketplace/integration-module');
+            }
+            else {
+                return __('Legacy Composer');
+            }
         }
         catch (\Exception $e) {
             return __('via app/code');    
