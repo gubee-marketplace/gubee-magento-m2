@@ -117,9 +117,20 @@ class SendCommand extends AbstractProcessorCommand
             // $gubeeOrder = $this->gubeeOrderRepository->getByOrderId(
             //     $this->input->getArgument('order_id')
             // );
-            $order = $orderHistory->getOrder() ?? $this->orderRepository->get(
-                $orderHistory->getParentId()
-            );
+            try {
+                $order = $orderHistory->getOrder() ?? $this->orderRepository->get(
+                    $orderHistory->getParentId()
+                );
+            }
+            catch (\Throwable $e) {
+                $this->logger->error(
+                    __(
+                        "The order with ID '%1' does not exist",
+                        $orderHistory->getParentId()
+                    )
+                );
+                $order = null;
+            }
             if (!is_null($order) && $order->getPayment()->getMethod() == 'gubee') {
                 $invoiceData = $this->invoiceParser->findMatch($orderHistory->getComment());
                 /**

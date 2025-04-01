@@ -2,7 +2,7 @@
     "name": "gubee-marketplace/integration-module",
     "description": "Gubee Integration Module for Magento 2",
     "type": "magento2-module",
-    "version" : "1.0.42",
+    "version" : "1.0.43",
     "authors": [
         {
             "name": "Marcos Aurelio",
