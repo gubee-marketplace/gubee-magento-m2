@@ -652,6 +652,12 @@ class CreatedCommand extends AbstractProcessorCommand
                 'default_name',
                 $address->getRegion()
                 );
+
+                $regionCollection->addFieldToFilter(
+                'country_id',
+                'BR'
+                );
+                
                 if ($regionCollection->getSize() > 0 ) {
                         $region = $regionCollection->getFirstItem();
                 }
