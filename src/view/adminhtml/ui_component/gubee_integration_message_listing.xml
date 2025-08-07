@@ -106,6 +106,7 @@
             <settings>
                 <label translate="true">Details</label>
                 <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <sortable>false</sortable>
             </settings>
         </column>
         <actionsColumn name="actions" class="Gubee\Integration\Ui\Component\Message\Listing\Column\Action">
