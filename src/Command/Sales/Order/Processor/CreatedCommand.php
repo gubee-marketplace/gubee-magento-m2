@@ -210,7 +210,7 @@ class CreatedCommand extends AbstractProcessorCommand
             ArrayInput::class,
             [
                 'parameters' => [
-                    'order_id' => $order->getIncrementId(),
+                    'order_id' => $gubeeOrder['id'] ?? $gubeeOrder['orderId'],
                 ],
             ]
         );
@@ -230,7 +230,7 @@ class CreatedCommand extends AbstractProcessorCommand
             ArrayInput::class,
             [
                 'parameters' => [
-                    'order_id' => $order->getIncrementId(),
+                    'order_id' => $gubeeOrder['id'] ?? $gubeeOrder['orderId'],
                 ],
             ]
         );
