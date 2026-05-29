@@ -22,7 +22,7 @@
                 <param name="command">Gubee\Integration\Command\Sales\Order\Processor\CreatedCommand</param>
             </filterUrlParams>
         </settings>
-        <aclResource>Gubee_Integration::Message</aclResource>
+        <aclResource>Gubee_Integration::UnsuccessfulOrders</aclResource>
         <dataProvider name="gubee_message_order_unsuccessful_listing_data_source" class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
             <settings>
                 <requestFieldName>id</requestFieldName>

@@ -14,6 +14,8 @@ use function __;
 
 class Execute extends Action
 {
+    const ADMIN_RESOURCE = 'Gubee_Integration::Message';
+
     protected MessageRepositoryInterface $messageRepository;
     protected Management $management;
 

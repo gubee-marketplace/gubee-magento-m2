@@ -11,6 +11,8 @@ use Magento\Framework\Controller\Result\JsonFactory;
 
 class Index extends Action
 {
+    const ADMIN_RESOURCE = 'Gubee_Integration::Message';
+
     protected JsonFactory $resultPageFactory;
     protected CollectionFactory $detailCollectionFactory;
     /**
