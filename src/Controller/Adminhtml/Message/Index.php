@@ -13,6 +13,8 @@ use function __;
 
 class Index extends Action
 {
+    const ADMIN_RESOURCE = 'Gubee_Integration::Message';
+
     protected PageFactory $resultPageFactory;
 
     /**
