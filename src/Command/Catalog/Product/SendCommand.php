@@ -6,6 +6,7 @@ namespace Gubee\Integration\Command\Catalog\Product;
 
 use Exception;
 use Gubee\Integration\Command\AbstractCommand;
+use Gubee\Integration\Model\Catalog\Product\Identifier\Resolver;
 use Gubee\Integration\Service\Model\Catalog\Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
@@ -22,17 +23,20 @@ class SendCommand extends AbstractCommand
     public $log;
     protected ProductRepositoryInterface $productRepository;
     protected ObjectManagerInterface $objectManager;
+    protected Resolver $resolver;
 
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
         ProductRepositoryInterface $productRepository,
-        ObjectManagerInterface $objectManager
+        ObjectManagerInterface $objectManager,
+        Resolver $resolver
     )
     {
         parent::__construct($eventDispatcher, $logger, "catalog:product:send");
         $this->productRepository = $productRepository;
         $this->objectManager = $objectManager;
+        $this->resolver = $resolver;
     }
 
     protected function configure()
@@ -47,7 +51,7 @@ class SendCommand extends AbstractCommand
 
     protected function doExecute(): int
     {
-        $mageProduct = $this->productRepository->get($this->input->getArgument('sku'));
+        $mageProduct = $this->resolver->resolve($this->input->getArgument('sku'));
         if (!$mageProduct->getId()) {
             $this->log->error(
                 __(

@@ -923,4 +923,20 @@ class Config extends AbstractHelper implements ConfigInterface
     {
         return json_decode($this->scopeConfig->getValue(self::CONFIG_PATH_MULTISTOCK_RELATION)?? '', true);
     }
+
+    public function setIdentifierAttribute(string $identifierAttribute): self
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_IDENTIFIER_ATTRIBUTE,
+            $identifierAttribute
+        );
+    }
+
+    /**
+     * Get the 'identifier_attribute' system config
+     */
+    public function getIdentifierAttribute(): string
+    {
+        return (string) $this->scopeConfig->getValue(self::CONFIG_PATH_IDENTIFIER_ATTRIBUTE);
+    }
 }

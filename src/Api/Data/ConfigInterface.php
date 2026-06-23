@@ -170,6 +170,13 @@ interface ConfigInterface
      * @var string
      */
     public const CONFIG_PATH_BLACKLIST = "gubee/attributes/blacklist";
+   
+    /**
+     * Path to 'identifier_attribute' system config.
+     *
+     * @var string
+     */
+    public const CONFIG_PATH_IDENTIFIER_ATTRIBUTE = 'gubee/attributes/identifier_attribute';
 
     /**
      * Path to 'queue_page_size' system config.
@@ -255,6 +262,7 @@ interface ConfigInterface
     public const CONFIG_PATH_MULTISTOCK_ENABLE = 'gubee/multiple_inventory/enable_multi_inventory';
 
     public const CONFIG_PATH_MULTISTOCK_RELATION = 'gubee/multiple_inventory/stock_relation';
+
     /**
      * Set the 'active' system config.
      */
@@ -677,4 +685,11 @@ interface ConfigInterface
     public function setMultistockRelation(array $flag) : self;
 
     public function getMultistockRelation() : ?array;
+
+    public function setIdentifierAttribute(string $identifierAttribute): self;
+    
+    /**
+     * Get the 'identifier_attribute' system config
+     */
+    public function getIdentifierAttribute(): string;
 }

@@ -7,6 +7,7 @@ namespace Gubee\Integration\Command\Catalog\Product\Price;
 use Gubee\Integration\Api\Enum\Integration\StatusEnum;
 use Gubee\Integration\Command\AbstractCommand;
 use Gubee\Integration\Helper\Catalog\Attribute;
+use Gubee\Integration\Model\Catalog\Product\Identifier\Resolver;
 use Gubee\Integration\Service\Model\Catalog\Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Event\ManagerInterface;
@@ -23,17 +24,21 @@ class SendCommand extends AbstractCommand
     protected ObjectManagerInterface $objectManager;
     protected Attribute $attribute;
 
+    protected Resolver $resolver;
+
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
         ProductRepositoryInterface $productRepository,
         ObjectManagerInterface $objectManager,
-        Attribute $attribute
+        Attribute $attribute,
+        Resolver $resolver
     ) {
         parent::__construct($eventDispatcher, $logger, "catalog:product:price:send");
         $this->productRepository = $productRepository;
         $this->objectManager     = $objectManager;
         $this->attribute         = $attribute;
+        $this->resolver          = $resolver;
     }
 
     protected function configure()
@@ -48,7 +53,7 @@ class SendCommand extends AbstractCommand
 
     protected function doExecute(): int
     {
-        $product = $this->productRepository->get($this->input->getArgument('sku'));
+        $product = $this->resolver->resolve($this->input->getArgument('sku'));
         if (! $product->getId()) {
             $this->logger->error(
                 __(

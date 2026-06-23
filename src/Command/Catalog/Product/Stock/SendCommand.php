@@ -7,6 +7,7 @@ namespace Gubee\Integration\Command\Catalog\Product\Stock;
 use Gubee\Integration\Api\Enum\Integration\StatusEnum;
 use Gubee\Integration\Command\AbstractCommand;
 use Gubee\Integration\Helper\Catalog\Attribute;
+use Gubee\Integration\Model\Catalog\Product\Identifier\Resolver;
 use Gubee\Integration\Service\Model\Catalog\Product;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -32,6 +33,8 @@ class SendCommand extends AbstractCommand
 
     protected FilterBuilder $filterBuilder;
 
+    protected Resolver $resolver;
+
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
@@ -40,12 +43,14 @@ class SendCommand extends AbstractCommand
         Configurable $configurableType,
         Attribute $attribute,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        FilterBuilder $filterBuilder
+        FilterBuilder $filterBuilder,
+        Resolver $resolver
     ) {
         parent::__construct($eventDispatcher, $logger, "catalog:product:stock:send");
         $this->productRepository = $productRepository;
         $this->objectManager     = $objectManager;
         $this->attribute         = $attribute;
+        $this->resolver          = $resolver;
         $this->configurableType = $configurableType;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
@@ -67,7 +72,7 @@ class SendCommand extends AbstractCommand
          * @var \Magento\Catalog\Api\Data\ProductInterface[] $productsToUpdate
          */
         $productsToUpdate = [];
-        $product = $this->productRepository->get($this->input->getArgument('sku'));
+        $product = $this->resolver->resolve($this->input->getArgument('sku'));
         if (! $product->getId()) {
             $this->logger->error(
                 __(

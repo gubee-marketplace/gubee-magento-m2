@@ -8,6 +8,7 @@ use Exception;
 use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Api\OrderRepositoryInterface as GubeeOrderRepositoryInterface;
 use Gubee\Integration\Command\Sales\Order\AbstractProcessorCommand;
+use Gubee\Integration\Model\Catalog\Product\Identifier\Resolver;
 use Gubee\Integration\Model\InvoiceFactory;
 use Gubee\Integration\Model\Order;
 use Gubee\Integration\Service\Model\Catalog\Product\Variation;
@@ -63,6 +64,7 @@ class CreatedCommand extends AbstractProcessorCommand
     protected $storeId;
     protected $orderWarehouseId;
     protected $isFulfillment;
+    protected Resolver $resolver;
 
     public function __construct(
         ManagerInterface $eventDispatcher,
@@ -87,7 +89,8 @@ class CreatedCommand extends AbstractProcessorCommand
         OrderManagementInterface $orderManagement,
         ConvertOrder $convertOrder,
         ConfigInterface $config,
-        GetAssignedSalesChannelsDataForStock $getAssignedSalesChannelsDataForStock
+        GetAssignedSalesChannelsDataForStock $getAssignedSalesChannelsDataForStock,
+        Resolver $resolver
     )
     {
         parent::__construct(
@@ -117,6 +120,7 @@ class CreatedCommand extends AbstractProcessorCommand
         $this->cartManagement = $cartManagement;
         $this->config = $config;
         $this->getAssignedSalesChannelsDataForStock = $getAssignedSalesChannelsDataForStock;
+        $this->resolver = $resolver;
     }
 
     protected function doExecute(): int
@@ -615,7 +619,7 @@ class CreatedCommand extends AbstractProcessorCommand
             $this->logger->debug(
                 __("Loading product with SKU '%1'", $sku)
             );
-            $product = $this->productRepository->get($sku);
+            $product = $this->resolver->resolve($sku);
             if (!$product->getId()) {
                 throw new NoSuchEntityException(
                     __("Product with SKU '%1' not found on Magento", $sku)

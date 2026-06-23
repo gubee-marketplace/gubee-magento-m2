@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gubee\Integration\Command\Catalog\Product;
 
 use Gubee\Integration\Command\AbstractCommand;
+use Gubee\Integration\Model\Catalog\Product\Identifier\Resolver;
 use Gubee\Integration\Service\Model\Catalog\Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Event\ManagerInterface;
@@ -20,16 +21,19 @@ class ValidateCommand extends AbstractCommand
     protected ProductRepositoryInterface $productRepository;
     protected ObjectManagerInterface $objectManager;
     protected LoggerInterface $log;
+    protected Resolver $resolver;
 
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $log,
         ProductRepositoryInterface $productRepository,
-        ObjectManagerInterface $objectManager
+        ObjectManagerInterface $objectManager,
+        Resolver $resolver
     ) {
         parent::__construct($eventDispatcher, $log, "catalog:product:validate");
         $this->productRepository = $productRepository;
         $this->objectManager     = $objectManager;
+        $this->resolver          = $resolver;
     }
 
     protected function configure()
@@ -45,7 +49,7 @@ class ValidateCommand extends AbstractCommand
 
     protected function doExecute(): int
     {
-        $product = $this->productRepository->get($this->input->getArgument('sku'));
+        $product = $this->resolver->resolve($this->input->getArgument('sku'));
         if (! $product->getId()) {
             $this->log->error(
                 __(
