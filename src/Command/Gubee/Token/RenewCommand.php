@@ -6,8 +6,8 @@ namespace Gubee\Integration\Command\Gubee\Token;
 
 use DateTimeInterface;
 use Exception;
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Command\AbstractCommand;
-use Gubee\Integration\Model\Config;
 use Gubee\SDK\Api\ServiceProviderInterface;
 use Gubee\SDK\Client;
 use Magento\Framework\Event\ManagerInterface;
@@ -18,25 +18,26 @@ use Symfony\Component\Console\Input\InputArgument;
 class RenewCommand extends AbstractCommand
 {
     protected Client $client;
-    protected Config $config;
+    protected ConfigInterface $config;
     protected Registry $registry;
 
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
+        ConfigInterface $configManager,
         ServiceProviderInterface $serviceProvider,
-        Registry $registry,
-        Config $config
+        Registry $registry
     ) {
         $this->client   = new Client(
             $serviceProvider,
             $logger
         );
         $this->registry = $registry;
-        $this->config   = $config;
+        $this->config   = $configManager;
         parent::__construct(
             $eventDispatcher,
             $logger,
+            $configManager,
             "token:renew"
         );
     }

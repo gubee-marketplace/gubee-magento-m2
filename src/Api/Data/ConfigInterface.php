@@ -74,6 +74,13 @@ interface ConfigInterface
     public const CONFIG_PATH_PRODUCT_HEADING = "gubee/attributes/product_heading";
 
     /**
+     * Path to 'sync_entities' system config.
+     *
+     * @var string
+     */
+    public const CONFIG_PATH_SYNC_ENTITIES = "gubee/general/sync_entities";
+
+    /**
      * Path to 'brand' system config.
      *
      * @var string
@@ -692,4 +699,8 @@ interface ConfigInterface
      * Get the 'identifier_attribute' system config
      */
     public function getIdentifierAttribute(): string;
+
+    public function setSyncEntities(array $syncEntities): self;
+
+    public function getSyncEntities(): array;
 }

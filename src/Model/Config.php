@@ -939,4 +939,17 @@ class Config extends AbstractHelper implements ConfigInterface
     {
         return (string) $this->scopeConfig->getValue(self::CONFIG_PATH_IDENTIFIER_ATTRIBUTE);
     }
+
+    public function setSyncEntities(array $syncEntities): self
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_SYNC_ENTITIES,
+            implode(',', $syncEntities)
+        );
+    }
+
+    public function getSyncEntities(): array
+    {
+        return explode(',', $this->scopeConfig->getValue(self::CONFIG_PATH_SYNC_ENTITIES) ?? '');
+    }
 }

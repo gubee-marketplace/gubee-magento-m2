@@ -69,6 +69,7 @@ class CreatedCommand extends AbstractProcessorCommand
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
+        ConfigInterface $configManager,
         CollectionFactory $orderCollectionFactory,
         OrderResource $orderResource,
         QuoteManagement $quoteManagement,
@@ -96,6 +97,7 @@ class CreatedCommand extends AbstractProcessorCommand
         parent::__construct(
             $eventDispatcher,
             $logger,
+            $configManager,
             $orderResource,
             $orderCollectionFactory,
             $orderRepository,

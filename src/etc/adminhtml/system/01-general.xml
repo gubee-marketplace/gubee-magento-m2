@@ -107,5 +107,10 @@
             <label><![CDATA[Prevent e-mail sending]]></label>
             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
         </field>
+        <field id="sync_entities" type="multiselect" sortOrder="70" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label><![CDATA[Sync Entities]]></label>
+            <source_model>Gubee\Integration\Model\Source\System\Config\General\SyncEntities</source_model>
+            <comment><![CDATA[Select the entities to be synchronized with Gubee.]]></comment>
+        </field>
     </group>
 </include>

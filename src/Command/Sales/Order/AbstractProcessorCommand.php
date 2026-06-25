@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gubee\Integration\Command\Sales\Order;
 
 use Gubee\Integration\Api\OrderRepositoryInterface as GubeeOrderRepositoryInterface;
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Command\AbstractCommand;
 use Gubee\Integration\Command\Sales\Order\Processor\CreatedCommand;
 use Gubee\SDK\Resource\Sales\OrderResource;
@@ -42,6 +43,7 @@ abstract class AbstractProcessorCommand extends AbstractCommand
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
+        ConfigInterface $configManager,
         OrderResource $orderResource,
         CollectionFactory $orderCollectionFactory,
         OrderRepositoryInterface $orderRepository,
@@ -59,6 +61,7 @@ abstract class AbstractProcessorCommand extends AbstractCommand
         parent::__construct(
             $eventDispatcher,
             $logger,
+            $configManager,
             "sales:order:processor:" . $name
         );
     }

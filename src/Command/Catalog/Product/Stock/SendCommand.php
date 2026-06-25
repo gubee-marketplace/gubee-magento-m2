@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gubee\Integration\Command\Catalog\Product\Stock;
 
 use Gubee\Integration\Api\Enum\Integration\StatusEnum;
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Command\AbstractCommand;
 use Gubee\Integration\Helper\Catalog\Attribute;
 use Gubee\Integration\Model\Catalog\Product\Identifier\Resolver;
@@ -38,6 +39,7 @@ class SendCommand extends AbstractCommand
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
+        ConfigInterface $configManager,
         ProductRepositoryInterface $productRepository,
         ObjectManagerInterface $objectManager,
         Configurable $configurableType,
@@ -46,7 +48,7 @@ class SendCommand extends AbstractCommand
         FilterBuilder $filterBuilder,
         Resolver $resolver
     ) {
-        parent::__construct($eventDispatcher, $logger, "catalog:product:stock:send");
+        parent::__construct($eventDispatcher, $logger, $configManager, "catalog:product:stock:send");
         $this->productRepository = $productRepository;
         $this->objectManager     = $objectManager;
         $this->attribute         = $attribute;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Catalog\Product;
 
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Command\AbstractCommand;
 use Gubee\Integration\Model\Catalog\Product\Identifier\Resolver;
 use Gubee\Integration\Service\Model\Catalog\Product;
@@ -26,11 +27,12 @@ class DesativateCommand extends AbstractCommand
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
+        ConfigInterface $configManager,
         ProductRepositoryInterface $productRepository,
         ObjectManagerInterface $objectManager,
         Resolver $resolver
     ) {
-        parent::__construct($eventDispatcher, $logger, "catalog:product:desativate");
+        parent::__construct($eventDispatcher, $logger, $configManager, "catalog:product:desativate");
         $this->productRepository = $productRepository;
         $this->objectManager     = $objectManager;
         $this->resolver          = $resolver;

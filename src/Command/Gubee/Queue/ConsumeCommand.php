@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Gubee\Queue;
 
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Command\AbstractCommand;
 use Gubee\Integration\Model\Message\Management;
 use Magento\Framework\App\Area;
@@ -29,12 +30,13 @@ class ConsumeCommand extends AbstractCommand
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
+        ConfigInterface $configManager,
         Management $queueManagement,
         State $state
     ) {
         $this->state           = $state;
         $this->queueManagement = $queueManagement;
-        parent::__construct($eventDispatcher, $logger, 'queue:consume');
+        parent::__construct($eventDispatcher, $logger, $configManager, 'queue:consume');
     }
 
     protected function doExecute(): int

@@ -6,6 +6,7 @@ namespace Gubee\Integration\Command\Sales\Order\Processor;
 
 use Exception;
 use Gubee\Integration\Api\OrderRepositoryInterface as GubeeOrderRepositoryInterface;
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Command\Sales\Order\AbstractProcessorCommand;
 use Gubee\SDK\Resource\Sales\OrderResource;
 use Magento\Framework\Event\ManagerInterface;
@@ -26,6 +27,7 @@ class PaidCommand extends AbstractProcessorCommand
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
+        ConfigInterface $configManager,
         OrderResource $orderResource,
         CollectionFactory $orderCollectionFactory,
         OrderRepositoryInterface $orderRepository,
@@ -36,6 +38,7 @@ class PaidCommand extends AbstractProcessorCommand
         parent::__construct(
             $eventDispatcher,
             $logger,
+            $configManager,
             $orderResource,
             $orderCollectionFactory,
             $orderRepository,

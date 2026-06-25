@@ -44,6 +44,7 @@ class SendCommand extends AbstractProcessorCommand
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
+        ConfigInterface $configManager,
         OrderResource $orderResource,
         CollectionFactory $orderCollectionFactory,
         OrderRepositoryInterface $orderRepository,
@@ -63,6 +64,7 @@ class SendCommand extends AbstractProcessorCommand
         parent::__construct(
             $eventDispatcher,
             $logger,
+            $configManager,
             $orderResource,
             $orderCollectionFactory,
             $orderRepository,
