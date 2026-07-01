@@ -10,6 +10,7 @@ use Gubee\Integration\Command\AbstractCommand;
 use Gubee\Integration\Helper\Catalog\Attribute;
 use Gubee\Integration\Model\Catalog\Product\Identifier\Resolver;
 use Gubee\Integration\Service\Model\Catalog\Product;
+use Gubee\SDK\Resource\Catalog\ProductResource;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Event\ManagerInterface;
@@ -36,6 +37,8 @@ class SendCommand extends AbstractCommand
 
     protected Resolver $resolver;
 
+    protected ProductResource $productResource;
+
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
@@ -46,7 +49,8 @@ class SendCommand extends AbstractCommand
         Attribute $attribute,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
-        Resolver $resolver
+        Resolver $resolver,
+        ProductResource $productResource
     ) {
         parent::__construct($eventDispatcher, $logger, $configManager, "catalog:product:stock:send");
         $this->productRepository = $productRepository;
@@ -56,6 +60,7 @@ class SendCommand extends AbstractCommand
         $this->configurableType = $configurableType;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
+        $this->productResource = $productResource;
     }
 
     protected function configure()
@@ -70,6 +75,7 @@ class SendCommand extends AbstractCommand
 
     protected function doExecute(): int
     {
+
         /**
          * @var \Magento\Catalog\Api\Data\ProductInterface[] $productsToUpdate
          */
@@ -84,7 +90,7 @@ class SendCommand extends AbstractCommand
             );
             return 1;
         }
-        
+
         $parents = $this->configurableType->getParentIdsByChild($product->getId());
         if ( count($parents) == 0 ) { //  has any parents, lets update it
             $productsToUpdate[] = $product;
@@ -97,9 +103,8 @@ class SendCommand extends AbstractCommand
             );
             $productsToUpdate = array_merge($productsToUpdate, $result->getItems());// append parents to products to update
         }
-        
 
-        
+
         return $this->updateProducts($productsToUpdate);
     }
 
@@ -114,14 +119,9 @@ class SendCommand extends AbstractCommand
     {
         try {
 
-            foreach ($products as $productMage) 
+            foreach ($products as $productMage)
             {
-                if (
-                    $this->attribute->getRawAttributeValue(
-                        'gubee_integration_status',
-                        $productMage
-                    ) !== StatusEnum::INTEGRATED()->__toString()
-                ) {
+                if (!$this->shouldUpdate($productMage)) {
                     $this->logger->error(
                         __(
                             "The product with the SKU '%1' is not integrated with Gubee yet",
@@ -140,14 +140,14 @@ class SendCommand extends AbstractCommand
                         'lazyMode' => true
                     ]
                 );
-        
                 $product->saveStock();
-                
+
             }
             return 0;
         }
         catch (\Exception $err)
         {
+
             $this->logger->error(
                 __(
                     "The product with the SKU '%1' could not be saved, exception: %2",
@@ -157,5 +157,17 @@ class SendCommand extends AbstractCommand
             );
             return 1;
         }
+    }
+
+    protected function shouldUpdate($product) : bool
+    {
+        if (! $this->configManager->getValidateBySku()) {
+            return $this->attribute->getRawAttributeValue(
+                'gubee_integration_status',
+                $product
+            ) === StatusEnum::INTEGRATED()->__toString();
+        }
+
+        return $this->productResource->getBySku($product->getSku())->getId() !== null;
     }
 }

@@ -112,5 +112,15 @@
             <source_model>Gubee\Integration\Model\Source\System\Config\General\SyncEntities</source_model>
             <comment><![CDATA[Select the entities to be synchronized with Gubee.]]></comment>
         </field>
+        <field id="validate_by_sku" type="select" sortOrder="80" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label><![CDATA[Validate product by SKU before sending]]></label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            <comment>
+                <![CDATA[If enabled, before sending stock or price updates the module will check with the Gubee API whether the product exists there (by SKU) and skip it if it does not, at the cost of one extra API call per product. If disabled, only the local <b>Gubee Integration Status</b> attribute is used.]]>
+            </comment>
+            <depends>
+                <field id="active">1</field>
+            </depends>
+        </field>
     </group>
 </include>

@@ -10,6 +10,7 @@ use Gubee\Integration\Command\AbstractCommand;
 use Gubee\Integration\Helper\Catalog\Attribute;
 use Gubee\Integration\Model\Catalog\Product\Identifier\Resolver;
 use Gubee\Integration\Service\Model\Catalog\Product;
+use Gubee\SDK\Resource\Catalog\ProductResource;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -27,6 +28,8 @@ class SendCommand extends AbstractCommand
 
     protected Resolver $resolver;
 
+    protected ProductResource $productResource;
+
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
@@ -34,13 +37,15 @@ class SendCommand extends AbstractCommand
         ProductRepositoryInterface $productRepository,
         ObjectManagerInterface $objectManager,
         Attribute $attribute,
-        Resolver $resolver
+        Resolver $resolver,
+        ProductResource $productResource
     ) {
         parent::__construct($eventDispatcher, $logger, $configManager, "catalog:product:price:send");
         $this->productRepository = $productRepository;
         $this->objectManager     = $objectManager;
         $this->attribute         = $attribute;
         $this->resolver          = $resolver;
+        $this->productResource   = $productResource;
     }
 
     protected function configure()
@@ -65,12 +70,7 @@ class SendCommand extends AbstractCommand
             );
             return 1;
         }
-        if (
-            $this->attribute->getRawAttributeValue(
-                'gubee_integration_status',
-                $product
-            ) !== StatusEnum::INTEGRATED()->__toString()
-        ) {
+        if (! $this->shouldUpdate($product)) {
             $this->logger->error(
                 __(
                     "The product with the SKU '%1' is not integrated with Gubee yet",
@@ -102,5 +102,17 @@ class SendCommand extends AbstractCommand
     public function getPriority(): int
     {
         return 700;
+    }
+
+    protected function shouldUpdate($product): bool
+    {
+        if (! $this->configManager->getValidateBySku()) {
+            return $this->attribute->getRawAttributeValue(
+                'gubee_integration_status',
+                $product
+            ) === StatusEnum::INTEGRATED()->__toString();
+        }
+
+        return $this->productResource->getBySku($product->getSku())->getId() !== null;
     }
 }

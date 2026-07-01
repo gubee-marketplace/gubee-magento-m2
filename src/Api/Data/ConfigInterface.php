@@ -198,6 +198,13 @@ interface ConfigInterface
      */
     public const CONFIG_PATH_PREVENT_EMAIL_SEND = 'gubee/general/prevent_email_send';
 
+    /**
+     * Path to 'validate_by_sku' system config.
+     *
+     * @var string
+     */
+    public const CONFIG_PATH_VALIDATE_BY_SKU = 'gubee/general/validate_by_sku';
+
     public const CONFIG_PATH_DEFAULT_DELIVERY_TIME = 'carriers/gubee/default_delivery_time';
 
     public const CONFIG_PATH_FULFILMENT_ENABLE     = 'gubee/general/fulfilment_enable';
@@ -703,4 +710,14 @@ interface ConfigInterface
     public function setSyncEntities(array $syncEntities): self;
 
     public function getSyncEntities(): array;
+
+    /**
+     * Get the 'validate_by_sku' system config.
+     */
+    public function getValidateBySku(): bool;
+
+    /**
+     * Set the 'validate_by_sku' system config.
+     */
+    public function setValidateBySku(bool $validateBySku): self;
 }

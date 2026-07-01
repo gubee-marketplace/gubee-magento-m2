@@ -1,0 +1,110 @@
+{
+    "gubee_integration_queue_message": {
+        "column": {
+            "message_id": true,
+            "command": true,
+            "status": true,
+            "payload": true,
+            "priority": true,
+            "attempts": true,
+            "message": true,
+            "product_id": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "GUBEE_INTEGRATION_QUEUE_MESSAGE_COMMAND": true,
+            "GUBEE_INTEGRATION_QUEUE_MESSAGE_STATUS": true,
+            "GUBEE_INTEGRATION_QUEUE_MESSAGE_PRIORITY": true,
+            "GUBEE_INTEGRATION_QUEUE_MESSAGE_PRODUCT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "GUBEE_INTEGRATION_QUEUE_MESSAGE_PRD_ID_CAT_PRD_ENTT_ENTT_ID": true
+        }
+    },
+    "gubee_integration_queue_message_detail": {
+        "column": {
+            "detail_id": true,
+            "level": true,
+            "message_id": true,
+            "message": true,
+            "context": true,
+            "created_at": true
+        },
+        "index": {
+            "GUBEE_INTEGRATION_QUEUE_MESSAGE_DETAIL_MESSAGE_ID": true,
+            "GUBEE_INTEGRATION_QUEUE_MESSAGE_DETAIL_LEVEL": true
+        },
+        "constraint": {
+            "FK_ED4F7DD80F7A49BE936D73394B791B9C": true,
+            "PRIMARY": true
+        }
+    },
+    "gubee_integration_invoice": {
+        "column": {
+            "invoice_id": true,
+            "danfeLink": true,
+            "danfeXml": true,
+            "issueDate": true,
+            "key": true,
+            "line": true,
+            "number": true,
+            "origin": true,
+            "shipment_id": true,
+            "order_id": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "GUBEE_INTEGRATION_INVOICE_KEY": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "GUBEE_INTEGRATION_INVOICE_ORDER_ID_SALES_ORDER_ENTITY_ID": true,
+            "GUBEE_INTEGRATION_INVOICE_SHIPMENT_ID_SALES_SHIPMENT_ENTITY_ID": true
+        }
+    },
+    "gubee_integration_order": {
+        "column": {
+            "entity_id": true,
+            "order_id": true,
+            "gubee_order_id": true,
+            "gubee_marketplace": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "GUBEE_INTEGRATION_ORDER_ORDER_ID_SALES_ORDER_ENTITY_ID": true
+        }
+    },
+    "sales_order": {
+        "column": {
+            "gubee_marketplace_total_amount": true,
+            "base_gubee_marketplace_total_amount": true
+        }
+    },
+    "quote": {
+        "column": {
+            "gubee_marketplace_total_amount": true,
+            "base_gubee_marketplace_total_amount": true
+        }
+    },
+    "sales_invoice": {
+        "column": {
+            "gubee_marketplace_total_amount": true,
+            "base_gubee_marketplace_total_amount": true
+        }
+    },
+    "sales_creditmemo": {
+        "column": {
+            "gubee_marketplace_total_amount": true,
+            "base_gubee_marketplace_total_amount": true
+        }
+    },
+    "quote_address": {
+        "column": {
+            "gubee_marketplace_total_amount": true,
+            "base_gubee_marketplace_total_amount": true
+        }
+    }
+}
