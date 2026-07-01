@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Service\Model\Catalog;
 
+use Gubee\Integration\Api\Enum\MainCategoryEnum;
 use Gubee\Integration\Helper\Catalog\Attribute;
-use Gubee\Integration\Model\Catalog\ProductV2;
-use Gubee\Integration\Model\Catalog\ProductV2\Variation;
+use Gubee\SDK\Model\Catalog\ProductV2;
+use Gubee\SDK\Model\Catalog\ProductV2\Variation;
 use Gubee\Integration\Model\Config;
+use Gubee\Integration\Service\Model\Catalog\ProductSimplified\VariationFactory;
 use Gubee\SDK\Api\ServiceProviderInterface;
 use Gubee\SDK\Enum\Catalog\Product\Attribute\Dimension\UnitTime\TypeEnum as UnitTimeTypeEnum;
 use Gubee\SDK\Enum\Catalog\Product\Attribute\OriginEnum;
 use Gubee\SDK\Enum\Catalog\Product\StatusEnum;
 use Gubee\SDK\Enum\Catalog\Product\TypeEnum;
-use Gubee\SDK\Enum\Catalog\Product\Variation\ConditionEnum;
 use Gubee\SDK\Enum\Catalog\Product\Variation\Price\TypeEnum as PriceTypeEnum;
 use Gubee\SDK\Model\Catalog\Product\Variation\Stock;
 use Gubee\SDK\Resource\Catalog\Product\Variation\PriceResource;
@@ -23,21 +24,14 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 
-use function array_filter;
-use function count;
-use function preg_replace;
-
 class ProductSimplified
 {
     public string $sku;
-    public string $name;
     public ?string $description = null;
     public ?string $brand       = null;
     public ?string $category    = null;
     public ?float $price        = null;
-    public ?float $weight       = null;
     public ?int $quantity       = null;
-    public ?string $imageUrl    = null;
 
     public ?ProductV2 $gubeeProduct = null;
 
@@ -49,6 +43,7 @@ class ProductSimplified
     protected PriceResource $priceResource;
     protected CollectionFactory $categoryCollectionFactory;
     protected StockRegistryInterface $stockRegistry;
+    protected VariationFactory $variationFactory;
     protected string $sellerId;
     protected ProductInterface $product;
 
@@ -61,7 +56,7 @@ class ProductSimplified
         PriceResource $priceResource,
         CollectionFactory $categoryCollectionFactory,
         StockRegistryInterface $stockRegistry,
-        string $sellerId,
+        VariationFactory $variationFactory,
         ProductInterface $product
     ) {
         $this->config                    = $config;
@@ -72,32 +67,11 @@ class ProductSimplified
         $this->priceResource             = $priceResource;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->stockRegistry             = $stockRegistry;
-        $this->sellerId                  = $sellerId;
+        $this->variationFactory          = $variationFactory;
         $this->product                   = $product;
 
-        $this->hydrate();
+        $this->buildGubeeProduct();
     }
-
-    protected function hydrate(): void
-    {
-        $product = $this->product;
-
-        $this->sku         = $product->getSku();
-        $this->name        = $product->getName();
-        $this->description = $product->getDescription();
-        $this->brand       = $this->attribute->getAttributeValueLabel(
-            $this->config->getBrandAttribute(),
-            $product
-        );
-        $this->category    = $this->buildCategoryName();
-        $this->price       = (float) $product->getPrice();
-        $this->weight      = (float) $product->getWeight();
-        $this->quantity    = (int) $this->stockRegistry->getStockItem(
-            $product->getId()
-        )->getQty();
-        $this->imageUrl    = $this->buildImageUrl();
-    }
-
     public function save(): ProductV2
     {
         return $this->productResource->createOrUpdate(
@@ -126,11 +100,11 @@ class ProductSimplified
         return $this->serviceProvider->create(
             ProductV2::class,
             [
-                'sellerId'         => $this->sellerId,
-                'mainSku'          => $this->sku,
-                'name'             => $this->name,
-                'mainCategory'     => $this->category ?? 'Default',
-                'brand'            => $this->brand ?? '',
+                // 'sellerId'         => $this->sellerId,
+                'mainSku'          => $this->product->getSku(),
+                'name'             => $this->product->getName(),
+                'mainCategory'     => $this->buildMainCategory(),
+                'brand'            => $this->buildBrand(),
                 'type'             => TypeEnum::SIMPLE(),
                 'origin'           => OriginEnum::NATIONAL(),
                 'status'           => StatusEnum::ACTIVE(),
@@ -143,118 +117,64 @@ class ProductSimplified
         );
     }
 
+    private function buildBrand()
+    {
+        $brand = $this->attribute->getAttributeValueLabel(
+            $this->config->getBrandAttribute(),
+            $this->product
+        );
+
+        if (! $brand) {
+            return null;
+        }
+
+        return (string) $brand;
+    }
+
     protected function buildVariation(): Variation
     {
-        return $this->serviceProvider->create(
-            Variation::class,
-            array_filter(
-                [
-                    'sku'                  => $this->sku,
-                    'main'                 => true,
-                    'name'                 => $this->name,
-                    'condition'            => ConditionEnum::NEW(),
-                    'status'               => StatusEnum::ACTIVE(),
-                    'warrantyTime'         => (string) $this->config->getDefaultDeliveryTime(),
-                    'cost'                 => [
-                        'currency' => 'BRL',
-                        'amount'   => (float) ($this->price ?? 0),
-                    ],
-                    'dimension'            => $this->buildDimension(),
-                    'prices'               => [$this->buildPrice()],
-                    'stocks'               => [$this->buildStock()],
-                    'images'               => $this->buildImages(),
-                    'variantSpecification' => [],
-                    'description'          => $this->description,
-                ],
-                fn ($value) => $value !== null
-            )
-        );
-    }
-
-    protected function buildDimension(): array
-    {
-        return [
-            'height' => [
-                'type'  => $this->config->getMeasureUnitAttribute(),
-                'value' => 0.0,
-            ],
-            'width'  => [
-                'type'  => $this->config->getMeasureUnitAttribute(),
-                'value' => 0.0,
-            ],
-            'depth'  => [
-                'type'  => $this->config->getMeasureUnitAttribute(),
-                'value' => 0.0,
-            ],
-            'weight' => [
-                'type'  => $this->config->getWeightUnit(),
-                'value' => (float) ($this->weight ?? 0),
-            ],
-        ];
-    }
-
-    protected function buildPrice(): array
-    {
-        return [
-            'type'  => PriceTypeEnum::DEFAULT(),
-            'value' => [
-                'currency' => 'BRL',
-                'amount'   => (float) ($this->price ?? 0),
-            ],
-        ];
-    }
-
-    protected function buildStock(): array
-    {
-        return [
-            'warehouseId' => 'default-warehouse',
-            'qty'         => $this->quantity ?? 0,
-            'priority'    => 1,
-        ];
-    }
-
-    protected function buildImages(): array
-    {
-        if ($this->imageUrl === null) {
-            return [];
-        }
-        return [
+        return $this->variationFactory->create(
             [
-                'url'   => $this->imageUrl,
-                'order' => 0,
-                'name'  => 'Image',
-                'main'  => true,
-            ],
-        ];
+                'product' => $this->product,
+            ]
+        )->getVariation();
     }
 
-    protected function buildCategoryName(): ?string
+    private function buildMainCategory()
     {
         $categories = $this->product->getCategoryIds();
-        if (empty($categories)) {
-            return null;
-        }
         $collection = $this->categoryCollectionFactory->create()
             ->addAttributeToFilter('entity_id', ['in' => $categories])
-            ->addAttributeToSelect('name')
-            ->setPageSize(1)
-            ->setOrder('level', 'DESC');
-        $category   = $collection->getFirstItem();
-        return $category->getId() ? $category->getName() : null;
+            ->addAttributeToSelect('*');
+        $collection->getSelect()->limit(1);
+        $collection->getSelect()->order(
+            'level',
+            $this->config->getMainCategoryPosition()
+            ==
+            MainCategoryEnum::DEEPER()
+            ? 'DESC'
+            : 'ASC'
+        );
+        $category = $collection->getFirstItem();
+        if (! $category->getId()) {
+            // get root category
+            $category = $this->categoryCollectionFactory->create()
+                ->addAttributeToFilter('level', 2)
+                ->addAttributeToSelect('*')
+                ->getFirstItem();
+        }
+        return $category->getName();
     }
 
-    protected function buildImageUrl(): ?string
+    private function buildMainSku()
     {
-        $images = $this->product->getMediaGalleryImages();
-        if ($images === null || count($images) === 0) {
-            return null;
+        foreach ($this->buildVariations() as $variation) {
+            if ($variation->getMain()) {
+                return $variation->getSku();
+            }
         }
-        $first = $images->getFirstItem();
-        $url   = $first->getUrl();
-        if ($url === null || $url === '') {
-            return null;
-        }
-        return preg_replace('/^https?:/', '', $url);
+
+        return $this->product->getSku();
     }
 
     public function saveStock()
