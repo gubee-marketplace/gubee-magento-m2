@@ -10,6 +10,8 @@ use Gubee\SDK\Model\Catalog\ProductV2;
 use Gubee\SDK\Model\Catalog\ProductV2\Variation;
 use Gubee\Integration\Model\Config;
 use Gubee\Integration\Service\Model\Catalog\ProductSimplified\VariationFactory;
+use Gubee\Integration\Model\ResourceModel\Catalog\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
+use Gubee\Integration\Service\Model\Catalog\Product\Variation as ProductVariation;
 use Gubee\SDK\Api\ServiceProviderInterface;
 use Gubee\SDK\Enum\Catalog\Product\Attribute\Dimension\UnitTime\TypeEnum as UnitTimeTypeEnum;
 use Gubee\SDK\Enum\Catalog\Product\Attribute\OriginEnum;
@@ -17,12 +19,14 @@ use Gubee\SDK\Enum\Catalog\Product\StatusEnum;
 use Gubee\SDK\Enum\Catalog\Product\TypeEnum;
 use Gubee\SDK\Enum\Catalog\Product\Variation\Price\TypeEnum as PriceTypeEnum;
 use Gubee\SDK\Model\Catalog\Product\Variation\Stock;
+use Gubee\SDK\Model\Catalog\ProductV2\Specification;
 use Gubee\SDK\Resource\Catalog\Product\Variation\PriceResource;
 use Gubee\SDK\Resource\Catalog\Product\Variation\StockResource;
 use Gubee\SDK\Resource\Catalog\ProductResource;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 class ProductSimplified
 {
@@ -32,6 +36,8 @@ class ProductSimplified
     public ?string $category    = null;
     public ?float $price        = null;
     public ?int $quantity       = null;
+    public ?array $specifications = null;
+    public ?array $variations = null;
 
     public ?ProductV2 $gubeeProduct = null;
 
@@ -47,6 +53,10 @@ class ProductSimplified
     protected string $sellerId;
     protected ProductInterface $product;
 
+    protected \Magento\Framework\ObjectManagerInterface $objectManager;
+
+    protected $attributeCollection;
+
     public function __construct(
         Config $config,
         Attribute $attribute,
@@ -57,6 +67,7 @@ class ProductSimplified
         CollectionFactory $categoryCollectionFactory,
         StockRegistryInterface $stockRegistry,
         VariationFactory $variationFactory,
+        AttributeCollectionFactory $attributeCollectionFactory,
         ProductInterface $product
     ) {
         $this->config                    = $config;
@@ -69,7 +80,8 @@ class ProductSimplified
         $this->stockRegistry             = $stockRegistry;
         $this->variationFactory          = $variationFactory;
         $this->product                   = $product;
-
+        $this->attributeCollection       = $attributeCollectionFactory->create();
+        $this->objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->buildGubeeProduct();
     }
     public function save(): ProductV2
@@ -100,17 +112,17 @@ class ProductSimplified
         return $this->serviceProvider->create(
             ProductV2::class,
             [
-                // 'sellerId'         => $this->sellerId,
+                'sellerId'         => '',
                 'mainSku'          => $this->product->getSku(),
                 'name'             => $this->product->getName(),
                 'mainCategory'     => $this->buildMainCategory(),
-                'brand'            => $this->buildBrand(),
+                'brand'            => $this->buildBrand() ?? '',
                 'type'             => TypeEnum::SIMPLE(),
                 'origin'           => OriginEnum::NATIONAL(),
                 'status'           => StatusEnum::ACTIVE(),
                 'accounts'         => [],
-                'specifications'   => [],
-                'variations'       => [$this->buildVariation()],
+                'specifications'   => $this->buildSpecifications(),
+                'variations'       => $this->buildVariations(),
                 'addNewVariations' => true,
                 'downloadImages'   => true,
             ]
@@ -131,13 +143,52 @@ class ProductSimplified
         return (string) $brand;
     }
 
-    protected function buildVariation(): Variation
+    /**
+     * @return Variation[]
+     */
+    private function buildVariations()
     {
-        return $this->variationFactory->create(
-            [
-                'product' => $this->product,
-            ]
-        )->getVariation();
+        if ($this->variations) {
+            return $this->variations;
+        }
+        if ($this->product->getTypeId() != Configurable::TYPE_CODE) {
+            $variation = $this->objectManager->create(
+                ProductVariation::class,
+                [
+                    'product' => $this->product,
+                ]
+            )->getVariation();
+
+            // remove variantSpecification from simple products
+            $variation->setVariantSpecification([]);
+
+            $variation->setMain(true);
+            $this->variations = [
+                $variation,
+            ];
+            return $this->variations;
+        }
+
+        $variations = [];
+        $main       = true;
+        $children   = $this->product
+            ->getTypeInstance()
+            ->getUsedProducts($this->product);
+        foreach ($children as $child) {
+            $variation = $this->objectManager->create(
+                ProductVariation::class,
+                [
+                    'product' => $child,
+                    'parent'  => $this->product,
+                ]
+            )->getVariation();
+            $variation->setMain($main);
+            $variations[] = $variation;
+            $main         = false;
+        }
+
+        $this->variations = $variations;
+        return $variations;
     }
 
     private function buildMainCategory()
@@ -163,7 +214,62 @@ class ProductSimplified
                 ->addAttributeToSelect('*')
                 ->getFirstItem();
         }
-        return $category->getName();
+
+        $hierarchy = $this->buildCategoryHierarchy((int) $category->getId());
+
+        return $hierarchy ?: (string) $category->getName();
+    }
+
+    private function buildCategoryHierarchy(int $categoryId): ?string
+    {
+        if ($categoryId <= 0) {
+            return null;
+        }
+
+        $category = $this->categoryCollectionFactory->create()
+            ->addAttributeToFilter('entity_id', $categoryId)
+            ->addAttributeToSelect('path')
+            ->getFirstItem();
+
+        if (! $category->getId()) {
+            return null;
+        }
+
+        $pathIds = array_values(
+            array_filter(
+                array_map('intval', explode('/', (string) $category->getPath())),
+                static function (int $id): bool {
+                    // Ignore the global root node (id 1), keep store root and below.
+                    return $id > 1;
+                }
+            )
+        );
+
+        if (empty($pathIds)) {
+            return (string) $category->getName();
+        }
+
+        $pathCollection = $this->categoryCollectionFactory->create()
+            ->addAttributeToFilter('entity_id', ['in' => $pathIds])
+            ->addAttributeToSelect('name');
+
+        $namesById = [];
+        foreach ($pathCollection as $pathCategory) {
+            $namesById[(int) $pathCategory->getId()] = (string) $pathCategory->getName();
+        }
+
+        $hierarchyNames = [];
+        foreach ($pathIds as $pathId) {
+            if (isset($namesById[$pathId]) && $namesById[$pathId] !== '') {
+                $hierarchyNames[] = $namesById[$pathId];
+            }
+        }
+
+        if (empty($hierarchyNames)) {
+            return null;
+        }
+
+        return implode(' > ', $hierarchyNames);
     }
 
     private function buildMainSku()
@@ -209,5 +315,43 @@ class ProductSimplified
                 ],
             ]
         );
+    }
+
+    private function buildSpecifications()
+    {
+        $specs          = [];
+        $attributes     = $this->attributeCollection->getItems();
+        $attributeCodes = array_map(
+            function ($attribute) {
+                return $attribute->getAttributeCode();
+            },
+            $attributes
+        );
+        foreach ($this->product->getAttributes() as $attribute) {
+            if (! $attribute->getIsUserDefined()) {
+                continue;
+            }
+
+            if (! in_array($attribute->getAttributeCode(), $attributeCodes)) {
+                continue;
+            }
+
+            $value = $this->attribute->getAttributeValueLabel(
+                $attribute->getAttributeCode(),
+                $this->product
+            );
+            if (! $value) {
+                continue;
+            }
+            $specs[] = $this->objectManager->create(
+                Specification::class,
+                [
+                    'name' => $attribute->getAttributeCode(),
+                    'values'    => is_array($value) ? $value : [$value],
+                ]
+            );
+        }
+
+        return $specs;
     }
 }

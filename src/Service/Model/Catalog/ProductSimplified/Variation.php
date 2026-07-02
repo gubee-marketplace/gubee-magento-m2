@@ -75,6 +75,7 @@ class Variation
         $this->objectManager = $objectManager;
         $this->salableQtyGetter = $salableQtyGetter;
         $this->isProductSalableGetter = $isProductSalableGetter;
+        die('hello');
         $this->variation = $this->objectManager->create(
                 \Gubee\SDK\Model\Catalog\ProductV2\Variation::class,
             [
@@ -238,7 +239,7 @@ class Variation
             $this->product
         );
 
-        return is_array($description) ? implode("\n", $description) : $description; 
+        return is_array($description) ? implode("\n", $description) : $description;
     }
 
     protected function buildEan()
@@ -289,7 +290,7 @@ class Variation
 
         return $status;
     }
-    protected function buildStocks() 
+    protected function buildStocks()
     {
         $stocks = [];
         if (($relation = $this->config->getMultistockRelation()) && $this->config->getMultistockEnabled()) {
@@ -333,7 +334,7 @@ class Variation
     {
         $specs = [];
         $attributes = $this->attributeCollection->getItems();
-        
+
         $attributeCodes = array_map(
             function ($attribute) {
                 return $attribute->getAttributeCode();

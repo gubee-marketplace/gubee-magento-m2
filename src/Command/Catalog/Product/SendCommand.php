@@ -72,7 +72,6 @@ class SendCommand extends AbstractCommand
                 ]
             );
         } catch (Exception $e) {
-            var_dump($e->getMessage());die;
             throw new \InvalidArgumentException(__(
                 "An error occurred while building the gubee product from "
                 . "the SKU '%1' verify the product data and try again, The error was: %2. with the trace: %3",
@@ -80,7 +79,6 @@ class SendCommand extends AbstractCommand
             )->__toString(), $e->getCode(), $e);
         }
         try {
-            die('hello');
             $product->save();
             $this->updateAttribute(
                 'gubee_integration_status',
