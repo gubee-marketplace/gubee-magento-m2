@@ -285,7 +285,7 @@ class Variation
             $this->product
         );
 
-        return is_array($description) ? implode("\n", $description) : $description; 
+        return is_array($description) ? implode("\n", $description) : $description;
     }
 
     protected function buildEan()
@@ -333,7 +333,7 @@ class Variation
 
         return $status;
     }
-    protected function buildStocks() 
+    protected function buildStocks()
     {
         $stocks = [];
         if (($relation = $this->config->getMultistockRelation()) && $this->config->getMultistockEnabled()) {
@@ -347,7 +347,7 @@ class Variation
     }
     protected function buildStocksSingle($stockId = null, $warehouseId = 'default-warehouse')
     {
-        
+
         if ($stockId == null) {
             $stockId = $this->config->getDefaultStockId();
         }
@@ -365,7 +365,7 @@ class Variation
             'gubee_cross_docking_time',
             $this->product
         );
-        
+
         $crossDockingTime = $this->objectManager->create(
             UnitTime::class,
             [
@@ -383,10 +383,10 @@ class Variation
             'crossDockingTime' => $crossDockingTime,
             'warehouseId' => $warehouseId
         ];
-        
+
         $stock = $this->objectManager->create(
             Stock::class,
-            $stockData  
+            $stockData
         );
 
         $stocks[] = $stock;
@@ -398,7 +398,7 @@ class Variation
     {
         $specs = [];
         $attributes = $this->attributeCollection->getItems();
-        
+
         $attributeCodes = array_map(
             function ($attribute) {
                 return $attribute->getAttributeCode();

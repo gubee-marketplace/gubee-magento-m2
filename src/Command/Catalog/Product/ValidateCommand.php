@@ -21,7 +21,6 @@ class ValidateCommand extends AbstractCommand
 {
     protected ProductRepositoryInterface $productRepository;
     protected ObjectManagerInterface $objectManager;
-    protected LoggerInterface $log;
     protected Resolver $resolver;
 
     public function __construct(
@@ -53,7 +52,7 @@ class ValidateCommand extends AbstractCommand
     {
         $product = $this->resolver->resolve($this->input->getArgument('sku'));
         if (! $product->getId()) {
-            $this->log->error(
+            $this->logger->error(
                 __(
                     "The product with the SKU '%1' does not exist",
                     $this->input->getArgument('sku')

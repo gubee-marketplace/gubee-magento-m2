@@ -22,7 +22,6 @@ use function sprintf;
 
 class SendCommand extends AbstractCommand
 {
-    public $log;
     protected ProductRepositoryInterface $productRepository;
     protected ObjectManagerInterface $objectManager;
     protected Resolver $resolver;
@@ -56,7 +55,7 @@ class SendCommand extends AbstractCommand
     {
         $mageProduct = $this->resolver->resolve($this->input->getArgument('sku'));
         if (!$mageProduct->getId()) {
-            $this->log->error(
+            $this->logger->error(
                 __(
                     "The product with the SKU '%1' does not exist",
                 $this->input->getArgument('sku')
@@ -71,6 +70,9 @@ class SendCommand extends AbstractCommand
                     'product' => $mageProduct,
                 ]
             );
+
+        // echo '<pre>';
+        // var_dump (json_encode($product->getGubeeProduct()->jsonSerialize()));die;
         } catch (Exception $e) {
             throw new \InvalidArgumentException(__(
                 "An error occurred while building the gubee product from "
@@ -101,7 +103,7 @@ class SendCommand extends AbstractCommand
      * Update a attribute value of a product
      * @param mixed $value
      */
-    protected function updateAttribute(string $attributeCode, $value, \Magento\Catalog\Model\Product $product): void
+    protected function updateAttribute(string $attributeCode, $value, \Magento\Catalog\Api\Data\ProductInterface $product): void
     {
         $resource = ObjectManager::getInstance()->get('Magento\Catalog\Model\ResourceModel\Product\Action');
         $resource->updateAttributes([$product->getId()], [$attributeCode => $value], 0);

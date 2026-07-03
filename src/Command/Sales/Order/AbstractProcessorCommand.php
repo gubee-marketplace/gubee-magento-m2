@@ -93,7 +93,7 @@ abstract class AbstractProcessorCommand extends AbstractCommand
         }
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->beforeExecute($input, $output);
         $result = parent::execute($input, $output);

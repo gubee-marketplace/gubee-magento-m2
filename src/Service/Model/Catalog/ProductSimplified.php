@@ -11,7 +11,7 @@ use Gubee\SDK\Model\Catalog\ProductV2\Variation;
 use Gubee\Integration\Model\Config;
 use Gubee\Integration\Service\Model\Catalog\ProductSimplified\VariationFactory;
 use Gubee\Integration\Model\ResourceModel\Catalog\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
-use Gubee\Integration\Service\Model\Catalog\Product\Variation as ProductVariation;
+use Gubee\Integration\Service\Model\Catalog\ProductSimplified\Variation as ProductVariation;
 use Gubee\SDK\Api\ServiceProviderInterface;
 use Gubee\SDK\Enum\Catalog\Product\Attribute\Dimension\UnitTime\TypeEnum as UnitTimeTypeEnum;
 use Gubee\SDK\Enum\Catalog\Product\Attribute\OriginEnum;
@@ -84,7 +84,7 @@ class ProductSimplified
         $this->objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->buildGubeeProduct();
     }
-    public function save(): ProductV2
+    public function save()
     {
         return $this->productResource->createOrUpdate(
             $this->getGubeeProduct()

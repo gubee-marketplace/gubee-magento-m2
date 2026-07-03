@@ -25,6 +25,8 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
+use Gubee\SDK\Enum\Catalog\Product\Attribute\Dimension\UnitTime\TypeEnum as UnitTimeTypeEnum;
+use Gubee\SDK\Model\Catalog\ProductV2\Specification;
 
 use function array_map;
 use function in_array;
@@ -75,7 +77,6 @@ class Variation
         $this->objectManager = $objectManager;
         $this->salableQtyGetter = $salableQtyGetter;
         $this->isProductSalableGetter = $isProductSalableGetter;
-        die('hello');
         $this->variation = $this->objectManager->create(
                 \Gubee\SDK\Model\Catalog\ProductV2\Variation::class,
             [
@@ -211,12 +212,44 @@ class Variation
         return $this->product->getSku();
     }
 
-    protected function buildWarrantyTime(): string
+    protected function buildWarrantyTime()
     {
-        return (string) (float) $this->attribute->getRawAttributeValue(
+        $type = $this->attribute->getRawAttributeValue(
+            'gubee_warranty_time_unit',
+            $this->product
+        );
+
+        if (empty($type) || is_array($type)) {
+            $type = UnitTimeTypeEnum::DAYS();
+        } else {
+            $type = UnitTimeTypeEnum::fromValue((string) $type);
+        }
+
+        $value = $this->attribute->getRawAttributeValue(
             $this->config->getWarrantyTimeAttribute() ?? 'gubee_warranty_time',
             $this->product
         );
+
+        if (empty($value) || is_array($value)) {
+            $value = 0;
+        }
+        return $value;
+        $value = max(0, (int) $value);
+
+        if ($value === 0) {
+            return 'PT0S';
+        }
+
+        if ((string) $type === (string) UnitTimeTypeEnum::HOURS()) {
+            return "PT{$value}H";
+        }
+
+        if ((string) $type === (string) UnitTimeTypeEnum::MONTH()) {
+            // Java Duration does not support months directly; use 30 days per month.
+            return 'P' . ($value * 30) . 'D';
+        }
+
+        return "P{$value}D";
     }
 
     protected function buildCondition(): ConditionEnum
@@ -224,12 +257,9 @@ class Variation
         return ConditionEnum::NEW();
     }
 
-    protected function buildCost(): array
+    protected function buildCost(): float
     {
-        return [
-            'currency' => 'BRL',
-            'amount' => (float) $this->product->getCost(),
-        ];
+        return (float) $this->product->getCost();
     }
 
     protected function buildDescription()
@@ -262,13 +292,10 @@ class Variation
             Price::class,
             [
                 'type' => PriceTypeEnum::DEFAULT (),
-                'value' => [
-                    'currency' => 'BRL',
-                    'amount' => (float) $this->attribute->getRawAttributeValue(
-                        $this->config->getPriceAttribute(),
-                        $this->product
-                    ),
-                ],
+                'value' => (float) $this->attribute->getRawAttributeValue(
+                    $this->config->getPriceAttribute(),
+                    $this->product
+                ),
             ]
         );
 
@@ -372,9 +399,9 @@ class Variation
                 continue;
             }
             $specs[] = $this->objectManager->create(
-                AttributeValue::class,
+                Specification::class,
                 [
-                    'attribute' => $attribute->getAttributeCode(),
+                    'name' => $attribute->getAttributeCode(),
                     'values' => is_array($value) ? $value : [$value],
                 ]
             );
