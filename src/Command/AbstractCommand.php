@@ -200,7 +200,7 @@ abstract class AbstractCommand extends Command
      * @return $this
      * @throws InvalidArgumentException When the name is invalid.
      */
-    public function setName(string $name): static
+    public function setName(string $name)
     {
         return parent::setName(
             sprintf(
