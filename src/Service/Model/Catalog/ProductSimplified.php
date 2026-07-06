@@ -25,9 +25,11 @@ use Gubee\SDK\Resource\Catalog\Product\Variation\PriceResource;
 use Gubee\SDK\Resource\Catalog\Product\Variation\StockResource;
 use Gubee\SDK\Resource\Catalog\ProductResource;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Store\Model\StoreManagerInterface;
 
 class ProductSimplified
 {
@@ -49,6 +51,7 @@ class ProductSimplified
     protected StockResource $stockResource;
     protected PriceResource $priceResource;
     protected CollectionFactory $categoryCollectionFactory;
+    protected StoreManagerInterface $storeManager;
     protected StockRegistryInterface $stockRegistry;
     protected VariationFactory $variationFactory;
     protected string $sellerId;
@@ -66,6 +69,7 @@ class ProductSimplified
         StockResource $stockResource,
         PriceResource $priceResource,
         CollectionFactory $categoryCollectionFactory,
+        StoreManagerInterface $storeManager,
         StockRegistryInterface $stockRegistry,
         VariationFactory $variationFactory,
         AttributeCollectionFactory $attributeCollectionFactory,
@@ -78,6 +82,7 @@ class ProductSimplified
         $this->stockResource             = $stockResource;
         $this->priceResource             = $priceResource;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
+        $this->storeManager              = $storeManager;
         $this->stockRegistry             = $stockRegistry;
         $this->variationFactory          = $variationFactory;
         $this->product                   = $product;
@@ -220,7 +225,7 @@ class ProductSimplified
         $categories = $this->product->getCategoryIds();
         $collection = $this->categoryCollectionFactory->create()
             ->addAttributeToFilter('entity_id', ['in' => $categories])
-            ->addAttributeToSelect('*');
+            ->addAttributeToSelect('name');
         $collection->getSelect()->limit(1);
         $collection->getSelect()->order(
             'level',
@@ -232,29 +237,21 @@ class ProductSimplified
         );
         $category = $collection->getFirstItem();
         if (! $category->getId()) {
-            // get root category
-            $category = $this->categoryCollectionFactory->create()
-                ->addAttributeToFilter('level', 2)
-                ->addAttributeToSelect('*')
+            // fall back to the current store's own root category
+            $rootCategoryId = $this->storeManager->getStore()->getRootCategoryId();
+            $category       = $this->categoryCollectionFactory->create()
+                ->addAttributeToFilter('entity_id', $rootCategoryId)
+                ->addAttributeToSelect('name')
                 ->getFirstItem();
         }
 
-        $hierarchy = $this->buildCategoryHierarchy((int) $category->getId());
+        $hierarchy = $this->buildCategoryHierarchy($category);
 
         return $hierarchy ?: (string) $category->getName();
     }
 
-    private function buildCategoryHierarchy(int $categoryId): ?string
+    private function buildCategoryHierarchy(Category $category): ?string
     {
-        if ($categoryId <= 0) {
-            return null;
-        }
-
-        $category = $this->categoryCollectionFactory->create()
-            ->addAttributeToFilter('entity_id', $categoryId)
-            ->addAttributeToSelect('path')
-            ->getFirstItem();
-
         if (! $category->getId()) {
             return null;
         }
@@ -273,13 +270,18 @@ class ProductSimplified
             return (string) $category->getName();
         }
 
-        $pathCollection = $this->categoryCollectionFactory->create()
-            ->addAttributeToFilter('entity_id', ['in' => $pathIds])
-            ->addAttributeToSelect('name');
+        // the category itself is already loaded (with its name), no need to refetch it
+        $leafId    = (int) $category->getId();
+        $namesById = [$leafId => (string) $category->getName()];
 
-        $namesById = [];
-        foreach ($pathCollection as $pathCategory) {
-            $namesById[(int) $pathCategory->getId()] = (string) $pathCategory->getName();
+        $ancestorIds = array_diff($pathIds, [$leafId]);
+        if (! empty($ancestorIds)) {
+            $ancestors = $this->categoryCollectionFactory->create()
+                ->addAttributeToFilter('entity_id', ['in' => $ancestorIds])
+                ->addAttributeToSelect('name');
+            foreach ($ancestors as $ancestor) {
+                $namesById[(int) $ancestor->getId()] = (string) $ancestor->getName();
+            }
         }
 
         $hierarchyNames = [];
