@@ -18,6 +18,7 @@ use Gubee\SDK\Enum\Catalog\Product\Attribute\OriginEnum;
 use Gubee\SDK\Enum\Catalog\Product\StatusEnum;
 use Gubee\SDK\Enum\Catalog\Product\TypeEnum;
 use Gubee\SDK\Enum\Catalog\Product\Variation\Price\TypeEnum as PriceTypeEnum;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Gubee\SDK\Model\Catalog\Product\Variation\Stock;
 use Gubee\SDK\Model\Catalog\ProductV2\Specification;
 use Gubee\SDK\Resource\Catalog\Product\Variation\PriceResource;
@@ -117,9 +118,9 @@ class ProductSimplified
                 'name'             => $this->product->getName(),
                 'mainCategory'     => $this->buildMainCategory(),
                 'brand'            => $this->buildBrand() ?? '',
-                'type'             => TypeEnum::SIMPLE(),
+                'type'             => $this->buildType(),
                 'origin'           => OriginEnum::NATIONAL(),
-                'status'           => StatusEnum::ACTIVE(),
+                'status'           => $this->buildStatus(),
                 'accounts'         => [],
                 'specifications'   => $this->buildSpecifications(),
                 'variations'       => $this->buildVariations(),
@@ -127,6 +128,29 @@ class ProductSimplified
                 'downloadImages'   => true,
             ]
         );
+    }
+
+    private function buildStatus()
+    {
+        return $this->product->getStatus() == Status::STATUS_DISABLED ?
+            StatusEnum::INACTIVE() :
+            StatusEnum::ACTIVE();
+    }
+
+    private function buildType()
+    {
+        if ($this->product->getTypeId() == Configurable::TYPE_CODE) {
+            return TypeEnum::VARIANT();
+        }
+        $parents = $this->product
+            ->getTypeInstance()
+            ->getParentIdsByChild(
+                $this->product->getId()
+            );
+        if (count($parents) > 0) {
+            return TypeEnum::VARIANT();
+        }
+        return TypeEnum::SIMPLE();
     }
 
     private function buildBrand()

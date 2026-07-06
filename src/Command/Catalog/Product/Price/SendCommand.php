@@ -113,6 +113,6 @@ class SendCommand extends AbstractCommand
             ) === StatusEnum::INTEGRATED()->__toString();
         }
 
-        return $this->productResource->getBySku($product->getSku())->getId() !== null;
+        return true;
     }
 }

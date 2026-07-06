@@ -377,7 +377,6 @@ class Variation
         {
             $this->productQty[$stockId] = $this->salableQtyGetter->execute($this->product->getSku(), (int) $stockId); // fetch its salable qty
         }
-
         $stockData = [
             'qty' => $this->productQty[$stockId] ?? 0,
             'crossDockingTime' => $crossDockingTime,
