@@ -46,6 +46,7 @@ class Product
     protected Attribute $attribute;
     protected Config $config;
     protected ObjectManagerInterface $objectManager;
+    protected ?\Psr\Log\LoggerInterface $logger = null;
     /** @var AttributeSearchResultsInterface|ProductAttributeSearchResultsInterface */
     protected $attributeCollection;
     protected CollectionFactory $categoryCollectionFactory;
@@ -66,11 +67,13 @@ class Product
         CollectionFactory $categoryCollectionFactory,
         AttributeCollectionFactory $attributeCollectionFactory,
         StockRegistryInterface $stockRegistry,
+        ?\Psr\Log\LoggerInterface $logger = null,
         bool $lazyMode = false
     ) {
         $this->lazyMode                  = $lazyMode;
         $this->validateResource          = $validateResource;
         $this->attributeCollection       = $attributeCollectionFactory->create();
+        $this->logger                    = $logger;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->stockItem                 = $stockRegistry->getStockItem($product->getId());
         $this->categoryCollectionFactory = $categoryCollectionFactory;
@@ -136,8 +139,23 @@ class Product
     {
         foreach ($this->getGubeeProduct()->getVariations() as $variation) {
             foreach ($variation->getStocks() as $stock) {
-                $stock->setSku($variation->getSku());
-                $this->stockResource->updateStockBySku($stock);
+                try {
+                    $stock->setSku($variation->getSku());
+                    $this->stockResource->updateStockBySku($stock);
+                }
+                catch (\Exception $e) {
+                    // Log the error and continue with the next stock
+                    // Assuming there's a logger available in the context
+                    if (isset($this->logger)) {
+                        $this->logger->error(
+                            sprintf(
+                                'Failed to update stock for SKU %s: %s',
+                                $variation->getSku(),
+                                $e->getMessage()
+                            )
+                        );
+                    }
+                }
             }
         }
     }
