@@ -121,8 +121,7 @@ class Variation
             $images[] = $this->objectManager->create(
                 Image::class,
                 [
-                    // remove protocol from image url
-                    'url' => preg_replace('/^https?:/', '', $image->getUrl()),
+                    'url' => str_replace('http://', 'https://', strtolower($image->getUrl())),
                     'order' => $image->getPosition() ?: $key,
                     'name' => $image->getLabel() ?: pathinfo($image->getFile(), PATHINFO_FILENAME),
                     'id' => $image->getId(),
