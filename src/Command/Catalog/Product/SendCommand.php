@@ -53,7 +53,7 @@ class SendCommand extends AbstractCommand
 
     protected function doExecute(): int
     {
-        $mageProduct = $this->resolver->resolve($this->input->getArgument('sku'));
+        $mageProduct = $this->resolver->resolve($this->input->getArgument('sku'), 'sku');
         if (!$mageProduct->getId()) {
             $this->logger->error(
                 __(
