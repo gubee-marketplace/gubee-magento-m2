@@ -234,6 +234,9 @@ class Variation
         if (empty($value) || is_array($value)) {
             $value = 0;
         }
+        if (!is_numeric($value)) {
+            $value = 30;
+        }
         return $value;
         $value = max(0, (int) $value);
 
