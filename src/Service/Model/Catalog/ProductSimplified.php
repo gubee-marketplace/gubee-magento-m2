@@ -97,6 +97,22 @@ class ProductSimplified
         );
     }
 
+    public function deactivate()
+    {
+        $this->productResource->patchStatus(
+            $this->product->getSku(),
+            StatusEnum::INACTIVE()->jsonSerialize()
+        );
+    }
+
+    public function activate()
+    {
+        $this->productResource->patchStatus(
+            $this->product->getSku(),
+            StatusEnum::ACTIVE()->jsonSerialize()
+        );
+    }
+
     public function desativate(): void
     {
         $this->getGubeeProduct()->setStatus(

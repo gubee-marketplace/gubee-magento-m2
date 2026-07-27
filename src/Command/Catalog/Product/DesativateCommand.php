@@ -7,7 +7,7 @@ namespace Gubee\Integration\Command\Catalog\Product;
 use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Command\AbstractCommand;
 use Gubee\Integration\Model\Catalog\Product\Identifier\Resolver;
-use Gubee\Integration\Service\Model\Catalog\Product;
+use Gubee\Integration\Service\Model\Catalog\ProductSimplified;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -60,14 +60,15 @@ class DesativateCommand extends AbstractCommand
             return 1;
         }
 
+        /** @var ProductSimplified $product */
         $product = $this->objectManager->create(
-            Product::class,
+            ProductSimplified::class,
             [
                 'product' => $product,
             ]
         );
 
-        $product->desativate();
+        $product->deactivate();
         return 0;
     }
 
