@@ -118,12 +118,14 @@ class Variation
         //switch between child and parent depending on its gallery status
         $productToUploadImages = count($this->product->getMediaGalleryImages()) == 0 ? $this->parent : $this->product;
         foreach ($productToUploadImages->getMediaGalleryImages() as $key => $image) {
+            $name = $image->getLabel() ?: pathinfo($image->getFile(), PATHINFO_FILENAME);
+            $name = "$name - $key";
             $images[] = $this->objectManager->create(
                 Image::class,
                 [
                     'url' => str_replace('http://', 'https://', strtolower($image->getUrl())),
                     'order' => $image->getPosition() ?: $key,
-                    'name' => $image->getLabel() ?: pathinfo($image->getFile(), PATHINFO_FILENAME),
+                    'name' => $name,
                     'id' => $image->getId(),
                     'main' => $main,
                 ]
