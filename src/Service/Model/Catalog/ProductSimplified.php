@@ -239,6 +239,11 @@ class ProductSimplified
     private function buildMainCategory()
     {
         $categories = $this->product->getCategoryIds();
+
+        if (empty($categories)) {
+            return $this->getProductRootCategoryName();
+        }
+
         $collection = $this->categoryCollectionFactory->create()
             ->addAttributeToFilter('entity_id', ['in' => $categories])
             ->addAttributeToSelect('name');
@@ -253,17 +258,39 @@ class ProductSimplified
         );
         $category = $collection->getFirstItem();
         if (! $category->getId()) {
-            // fall back to the current store's own root category
-            $rootCategoryId = $this->storeManager->getStore()->getRootCategoryId();
-            $category       = $this->categoryCollectionFactory->create()
-                ->addAttributeToFilter('entity_id', $rootCategoryId)
-                ->addAttributeToSelect('name')
-                ->getFirstItem();
+            // fall back to product-context root category resolution
+            return $this->getProductRootCategoryName();
         }
 
         $hierarchy = $this->buildCategoryHierarchy($category);
 
         return $hierarchy ?: (string) $category->getName();
+    }
+
+    private function getProductRootCategoryName(): string
+    {
+        $storeId = (int) $this->product->getStoreId();
+
+        if ($storeId > 0) {
+            $store = $this->storeManager->getStore($storeId);
+        } else {
+            $websiteIds = $this->product->getWebsiteIds();
+            if (! empty($websiteIds)) {
+                $website        = $this->storeManager->getWebsite((int) reset($websiteIds));
+                $defaultStoreId = (int) $website->getDefaultGroup()->getDefaultStoreId();
+                $store          = $this->storeManager->getStore($defaultStoreId);
+            } else {
+                $store = $this->storeManager->getStore();
+            }
+        }
+
+        $rootCategoryId = (int) $store->getRootCategoryId();
+        $rootCategory   = $this->categoryCollectionFactory->create()
+            ->addAttributeToFilter('entity_id', $rootCategoryId)
+            ->addAttributeToSelect('name')
+            ->getFirstItem();
+
+        return (string) $rootCategory->getName();
     }
 
     private function buildCategoryHierarchy(Category $category): ?string
