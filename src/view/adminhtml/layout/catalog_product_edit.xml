@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="product_edit">
+            <block class="Gubee\Integration\Block\Adminhtml\Catalog\Product\Sync\Buttons" name="gubee_sync_buttons"/>
+        </referenceBlock>
+    </body>
+</page>
