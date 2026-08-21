@@ -144,6 +144,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="Gubee\Integration\Command\Gubee\Queue\ConsumeCommand" xsi:type="object">Gubee\Integration\Command\Gubee\Queue\ConsumeCommand</item>
+                <item name="Gubee\Integration\Command\Gubee\Queue\CleanupCommand" xsi:type="object">Gubee\Integration\Command\Gubee\Queue\CleanupCommand</item>
             </argument>
         </arguments>
     </type>

@@ -192,6 +192,12 @@ interface ConfigInterface
      */
     public const CONFIG_PATH_QUEUE_PAGE_SIZE = 'gubee/general/queue_page_size';
     /**
+     * Path to 'queue_cleanup_days' system config.
+     *
+     * @var string
+     */
+    public const CONFIG_PATH_QUEUE_CLEANUP_DAYS = 'gubee/general/queue_cleanup_days';
+    /**
      * Path to 'prevent_email_send' system config.
      *
      * @var string
@@ -538,6 +544,11 @@ interface ConfigInterface
      * Get the 'queue_page_size' system config.
      */
     public function getQueuePageSize(): int;
+
+    /**
+     * Get the 'queue_cleanup_days' system config.
+     */
+    public function getQueueCleanupDays(): int;
 
     /**
      * Get the 'default_delivery_time' system config.

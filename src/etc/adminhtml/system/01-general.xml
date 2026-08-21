@@ -42,6 +42,16 @@
                 <field id="active">1</field>
             </depends>
         </field>
+        <field id="queue_cleanup_days" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Queue Cleanup Days</label>
+            <validate>required-entry validate-digits</validate>
+            <comment>
+                <![CDATA[Queue messages that finished successfully more than this many days ago are deleted, by <b>default it is 30.</b>]]>
+            </comment>
+            <depends>
+                <field id="active">1</field>
+            </depends>
+        </field>
         <field id="max_backoff_attempts" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Max Backoff Attempts</label>
             <validate>required-entry validate-digits</validate>

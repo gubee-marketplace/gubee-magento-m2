@@ -478,6 +478,13 @@ class Config extends AbstractHelper implements ConfigInterface
         ) ?: 100;
     }
 
+    public function getQueueCleanupDays(): int
+    {
+        return (int) $this->scopeConfig->getValue(
+            self::CONFIG_PATH_QUEUE_CLEANUP_DAYS
+        ) ?: 30;
+    }
+
     /**
      * Get the 'blacklist' attribute.
      *
