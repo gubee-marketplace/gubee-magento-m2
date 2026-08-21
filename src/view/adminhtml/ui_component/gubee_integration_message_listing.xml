@@ -74,6 +74,7 @@
         </column>
         <column name="payload">
             <settings>
+                <filter>text</filter>
                 <label translate="true">Payload</label>
             </settings>
         </column>
