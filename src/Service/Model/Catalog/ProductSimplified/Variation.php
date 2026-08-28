@@ -20,7 +20,6 @@ use Gubee\SDK\Model\Catalog\ProductV2\Price;
 use Gubee\SDK\Model\Catalog\ProductV2\Specification;
 use Gubee\SDK\Model\Catalog\ProductV2\Stock;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\Pricing\SpecialPriceService;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
@@ -32,6 +31,7 @@ use function array_merge;
 use function array_sum;
 use function array_unique;
 use function count;
+use function date;
 use function implode;
 use function in_array;
 use function is_array;
@@ -41,6 +41,7 @@ use function max;
 use function pathinfo;
 use function str_replace;
 use function strtolower;
+use function strtotime;
 
 use const PATHINFO_FILENAME;
 
@@ -57,7 +58,6 @@ class Variation
     protected GetProductSalableQtyInterface $salableQtyGetter;
     protected IsProductSalableInterface $isProductSalableGetter;
     protected TimezoneInterface $localeDate;
-    protected SpecialPriceService $specialPriceService;
     /** @var array product stock qty by stock_id */
     protected $productQty = [];
 
@@ -71,7 +71,6 @@ class Variation
         IsProductSalableInterface $isProductSalableGetter,
         ReadHandler $galleryReadHandler,
         TimezoneInterface $localeDate,
-        SpecialPriceService $specialPriceService,
         ?ProductInterface $parent = null
     ) {
         if ($parent instanceof ProductInterface) {
@@ -86,7 +85,6 @@ class Variation
         $this->salableQtyGetter       = $salableQtyGetter;
         $this->isProductSalableGetter = $isProductSalableGetter;
         $this->localeDate             = $localeDate;
-        $this->specialPriceService    = $specialPriceService;
         $this->variation              = $this->objectManager->create(
             \Gubee\SDK\Model\Catalog\ProductV2\Variation::class,
             [
@@ -306,7 +304,7 @@ class Variation
             $this->product
         );
         $specialPrice         = $this->attribute->getRawAttributeValue('special_price', $this->product);
-        $specialPriceTo       = $this->specialPriceService->execute(
+        $specialPriceTo       = $this->normalizeSpecialPriceToDate(
             $this->attribute->getRawAttributeValue('special_to_date', $this->product)
         );
         $isSpecialPriceActive = $specialPrice && $this->localeDate->isScopeDateInInterval(
@@ -331,6 +329,26 @@ class Variation
                 ]
             ),
         ];
+    }
+
+    /**
+     * Ported from Magento\Catalog\Model\Pricing\SpecialPriceService::execute()
+     * (not available before Magento 2.4.6): subtracts one day from $dateTo when it
+     * carries a specific time, because TimezoneInterface::isScopeDateInInterval()
+     * adds one day, so the special price expires exactly at the specified time.
+     *
+     * @param mixed $dateTo
+     * @return mixed
+     */
+    private function normalizeSpecialPriceToDate($dateTo)
+    {
+        if ($dateTo
+            && strtotime($dateTo) !== false
+            && date('H:i:s', strtotime($dateTo)) !== '00:00:00') {
+            $dateTo = date('Y-m-d H:i:s', strtotime($dateTo) - 86400);
+        }
+
+        return $dateTo;
     }
 
     private function buildStatus()
