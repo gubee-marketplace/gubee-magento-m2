@@ -4,36 +4,43 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Service\Model\Catalog\ProductSimplified;
 
-use Gubee\Integration\Helper\Catalog\Attribute;
 use Gubee\Integration\Api\Data\ConfigInterface;
+use Gubee\Integration\Helper\Catalog\Attribute;
 use Gubee\Integration\Model\ResourceModel\Catalog\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Gubee\SDK\Enum\Catalog\Product\Attribute\Dimension\Measure\TypeEnum;
+use Gubee\SDK\Enum\Catalog\Product\Attribute\Dimension\UnitTime\TypeEnum as UnitTimeTypeEnum;
 use Gubee\SDK\Enum\Catalog\Product\StatusEnum;
 use Gubee\SDK\Enum\Catalog\Product\Variation\ConditionEnum;
 use Gubee\SDK\Enum\Catalog\Product\Variation\Price\TypeEnum as PriceTypeEnum;
-use Gubee\SDK\Model\Catalog\Product\Attribute\AttributeValue;
 use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension;
 use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension\Measure;
 use Gubee\SDK\Model\Catalog\Product\Attribute\Dimension\Weight;
 use Gubee\SDK\Model\Catalog\Product\Variation\Media\Image;
 use Gubee\SDK\Model\Catalog\ProductV2\Price;
+use Gubee\SDK\Model\Catalog\ProductV2\Specification;
 use Gubee\SDK\Model\Catalog\ProductV2\Stock;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Pricing\SpecialPriceService;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler;
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
-use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
-use Gubee\SDK\Enum\Catalog\Product\Attribute\Dimension\UnitTime\TypeEnum as UnitTimeTypeEnum;
-use Gubee\SDK\Model\Catalog\ProductV2\Specification;
 
 use function array_map;
+use function array_merge;
+use function array_sum;
+use function array_unique;
+use function count;
+use function implode;
 use function in_array;
 use function is_array;
+use function is_null;
+use function is_numeric;
+use function max;
 use function pathinfo;
-use function preg_replace;
-use function sprintf;
+use function str_replace;
+use function strtolower;
 
 use const PATHINFO_FILENAME;
 
@@ -49,9 +56,9 @@ class Variation
     protected ObjectManagerInterface $objectManager;
     protected GetProductSalableQtyInterface $salableQtyGetter;
     protected IsProductSalableInterface $isProductSalableGetter;
-    /**
-     * @var array product stock qty by stock_id
-     */
+    protected TimezoneInterface $localeDate;
+    protected SpecialPriceService $specialPriceService;
+    /** @var array product stock qty by stock_id */
     protected $productQty = [];
 
     public function __construct(
@@ -63,37 +70,40 @@ class Variation
         GetProductSalableQtyInterface $salableQtyGetter,
         IsProductSalableInterface $isProductSalableGetter,
         ReadHandler $galleryReadHandler,
+        TimezoneInterface $localeDate,
+        SpecialPriceService $specialPriceService,
         ?ProductInterface $parent = null
-    )
-    {
-        if ($parent instanceof \Magento\Catalog\Api\Data\ProductInterface) {
+    ) {
+        if ($parent instanceof ProductInterface) {
             $this->parent = $parent;
         }
         $this->attributeCollection = $attributeCollectionFactory->create();
         $galleryReadHandler->execute($product);
-        $this->product = $product;
-        $this->attribute = $attribute;
-        $this->config = $config;
-        $this->objectManager = $objectManager;
-        $this->salableQtyGetter = $salableQtyGetter;
+        $this->product                = $product;
+        $this->attribute              = $attribute;
+        $this->config                 = $config;
+        $this->objectManager          = $objectManager;
+        $this->salableQtyGetter       = $salableQtyGetter;
         $this->isProductSalableGetter = $isProductSalableGetter;
-        $this->variation = $this->objectManager->create(
-                \Gubee\SDK\Model\Catalog\ProductV2\Variation::class,
+        $this->localeDate             = $localeDate;
+        $this->specialPriceService    = $specialPriceService;
+        $this->variation              = $this->objectManager->create(
+            \Gubee\SDK\Model\Catalog\ProductV2\Variation::class,
             [
-                'sku' => $this->buildSku(),
-                'main' => $this->buildMain(),
-                'name' => $this->buildName(),
-                'condition' => $this->buildCondition(),
-                'warrantyTime' => $this->buildWarrantyTime(),
-                'cost' => $this->buildCost(),
-                'dimension' => $this->buildDimension(),
-                'prices' => $this->buildPrices(),
-                'stocks' => $this->buildStocks(),
-                'status' => $this->buildStatus(),
-                'images' => $this->buildImages(),
+                'sku'                  => $this->buildSku(),
+                'main'                 => $this->buildMain(),
+                'name'                 => $this->buildName(),
+                'condition'            => $this->buildCondition(),
+                'warrantyTime'         => $this->buildWarrantyTime(),
+                'cost'                 => $this->buildCost(),
+                'dimension'            => $this->buildDimension(),
+                'prices'               => $this->buildPrices(),
+                'stocks'               => $this->buildStocks(),
+                'status'               => $this->buildStatus(),
+                'images'               => $this->buildImages(),
                 'variantSpecification' => $this->buildVariantSpecification(),
-                'ean' => $this->buildEan(),
-                'description' => $this->buildDescription(),
+                'ean'                  => $this->buildEan(),
+                'description'          => $this->buildDescription(),
             ]
         );
     }
@@ -101,15 +111,15 @@ class Variation
     /**
      * Verifies if parent is defined and checks its media gallery information
      */
-    private function parentHasMedia() : bool
+    private function parentHasMedia(): bool
     {
-        return !is_null($this->parent) && count($this->parent->getMediaGalleryImages()) > 0;
+        return ! is_null($this->parent) && count($this->parent->getMediaGalleryImages()) > 0;
     }
 
     protected function buildImages()
     {
         $images = [];
-        if (count($this->product->getMediaGalleryImages()) == 0 && !$this->parentHasMedia()) {
+        if (count($this->product->getMediaGalleryImages()) == 0 && ! $this->parentHasMedia()) {
             return [
                 $this->createPlaceholder(),
             ];
@@ -118,19 +128,19 @@ class Variation
         //switch between child and parent depending on its gallery status
         $productToUploadImages = count($this->product->getMediaGalleryImages()) == 0 ? $this->parent : $this->product;
         foreach ($productToUploadImages->getMediaGalleryImages() as $key => $image) {
-            $name = $image->getLabel() ?: pathinfo($image->getFile(), PATHINFO_FILENAME);
-            $name = "$name - $key";
+            $name     = $image->getLabel() ?: pathinfo($image->getFile(), PATHINFO_FILENAME);
+            $name     = "$name - $key";
             $images[] = $this->objectManager->create(
                 Image::class,
                 [
-                    'url' => str_replace('http://', 'https://', strtolower($image->getUrl())),
+                    'url'   => str_replace('http://', 'https://', strtolower($image->getUrl())),
                     'order' => $image->getPosition() ?: $key,
-                    'name' => $name,
-                    'id' => $image->getId(),
-                    'main' => $main,
+                    'name'  => $name,
+                    'id'    => $image->getId(),
+                    'main'  => $main,
                 ]
             );
-            $main = false;
+            $main     = false;
         }
         return $images;
     }
@@ -140,11 +150,11 @@ class Variation
         return $this->objectManager->create(
             Image::class,
             [
-                'url' => '#',
+                'url'   => '#',
                 'order' => 0,
-                'name' => 'Placeholder',
-                'id' => 0,
-                'main' => true,
+                'name'  => 'Placeholder',
+                'id'    => 0,
+                'main'  => true,
             ]
         );
     }
@@ -158,27 +168,27 @@ class Variation
                     $this->config->getHeightAttribute(),
                     $this->product
                 ),
-                'type' => TypeEnum::fromValue($this->config->getMeasureUnitAttribute()),
+                'type'  => TypeEnum::fromValue($this->config->getMeasureUnitAttribute()),
             ]
         );
-        $width = $this->objectManager->create(
+        $width  = $this->objectManager->create(
             Measure::class,
             [
                 'value' => (float) $this->attribute->getRawAttributeValue(
                     $this->config->getWidthAttribute(),
                     $this->product
                 ),
-                'type' => TypeEnum::fromValue($this->config->getMeasureUnitAttribute()),
+                'type'  => TypeEnum::fromValue($this->config->getMeasureUnitAttribute()),
             ]
         );
-        $depth = $this->objectManager->create(
+        $depth  = $this->objectManager->create(
             Measure::class,
             [
                 'value' => (float) $this->attribute->getRawAttributeValue(
                     $this->config->getDepthAttribute(),
                     $this->product
                 ),
-                'type' => TypeEnum::fromValue($this->config->getMeasureUnitAttribute()),
+                'type'  => TypeEnum::fromValue($this->config->getMeasureUnitAttribute()),
             ]
         );
         $weight = $this->objectManager->create(
@@ -188,7 +198,7 @@ class Variation
                     'weight',
                     $this->product
                 ),
-                'type' => $this->config->getWeightUnit(),
+                'type'  => $this->config->getWeightUnit(),
             ]
         );
 
@@ -196,8 +206,8 @@ class Variation
             Dimension::class,
             [
                 'height' => $height,
-                'width' => $width,
-                'depth' => $depth,
+                'width'  => $width,
+                'depth'  => $depth,
                 'weight' => $weight,
             ]
         );
@@ -234,7 +244,7 @@ class Variation
         if (empty($value) || is_array($value)) {
             $value = 0;
         }
-        if (!is_numeric($value)) {
+        if (! is_numeric($value)) {
             $value = 30;
         }
         return $value;
@@ -286,32 +296,47 @@ class Variation
 
     protected function buildMain()
     {
-        return !(bool) $this->parent;
+        return ! (bool) $this->parent;
     }
 
     protected function buildPrices()
     {
-        $prices = [];
-        $price = $this->objectManager->create(
-            Price::class,
-            [
-                'type' => PriceTypeEnum::DEFAULT (),
-                'value' => (float) $this->attribute->getRawAttributeValue(
-                    $this->config->getPriceAttribute(),
-                    $this->product
-                ),
-            ]
+        $regularPrice         = (float) $this->attribute->getRawAttributeValue(
+            $this->config->getPriceAttribute(),
+            $this->product
+        );
+        $specialPrice         = $this->attribute->getRawAttributeValue('special_price', $this->product);
+        $specialPriceTo       = $this->specialPriceService->execute(
+            $this->attribute->getRawAttributeValue('special_to_date', $this->product)
+        );
+        $isSpecialPriceActive = $specialPrice && $this->localeDate->isScopeDateInInterval(
+            $this->product->getStoreId(),
+            $this->attribute->getRawAttributeValue('special_from_date', $this->product),
+            $specialPriceTo
         );
 
-        $prices[] = $price;
-
-        return $prices;
+        return [
+            $this->objectManager->create(
+                Price::class,
+                [
+                    'type'  => PriceTypeEnum::DEFAULT(),
+                    'value' => $regularPrice,
+                ]
+            ),
+            $this->objectManager->create(
+                Price::class,
+                [
+                    'type'  => PriceTypeEnum::PROMOTION(),
+                    'value' => $isSpecialPriceActive ? (float) $specialPrice : $regularPrice,
+                ]
+            ),
+        ];
     }
 
     private function buildStatus()
     {
         $status = StatusEnum::ACTIVE();
-        if (!$this->product->isSalable()) {
+        if (! $this->product->isSalable()) {
             return StatusEnum::INACTIVE();
         }
 
@@ -321,18 +346,19 @@ class Variation
 
         return $status;
     }
+
     protected function buildStocks()
     {
         $stocks = [];
         if (($relation = $this->config->getMultistockRelation()) && $this->config->getMultistockEnabled()) {
-            foreach ($relation as $stockInfo)
-            {
+            foreach ($relation as $stockInfo) {
                 $stocks = array_merge($stocks, $this->buildStocksSingle($stockInfo['stock_id'], $stockInfo['gubee_code']));
             }
             return $stocks;
         }
         return array_merge($stocks, $this->buildStocksSingle());
     }
+
     protected function buildStocksSingle($stockId = null, $warehouseId = 'default-warehouse')
     {
         if ($stockId == null) {
@@ -340,15 +366,14 @@ class Variation
         }
         $stocks = [];
 
-        if ($this->isProductSalableGetter->execute($this->product->getSku(), (int)$stockId)) // if product is salable
-        {
+        if ($this->isProductSalableGetter->execute($this->product->getSku(), (int) $stockId)) { // if product is salable
             $this->productQty[$stockId] = $this->salableQtyGetter->execute($this->product->getSku(), (int) $stockId); // fetch its salable qty
         }
 
         $stockData = [
-            'qty' => (int) ($this->productQty[$stockId] ?? 0),
-            'priority' => 1,
-            'warehouseId' => $warehouseId
+            'qty'         => (int) ($this->productQty[$stockId] ?? 0),
+            'priority'    => 1,
+            'warehouseId' => $warehouseId,
         ];
 
         $stock = $this->objectManager->create(
@@ -363,17 +388,17 @@ class Variation
 
     protected function buildVariantSpecification()
     {
-        $specs = [];
+        $specs      = [];
         $attributes = $this->attributeCollection->getItems();
 
-        $attributeCodes = array_map(
+        $attributeCodes  = array_map(
             function ($attribute) {
                 return $attribute->getAttributeCode();
             },
             $attributes
         );
         $sAttributeCodes = [];
-        if (!is_null($this->parent)) {
+        if (! is_null($this->parent)) {
             $configurableAttributes = $this->parent->getTypeInstance()->getConfigurableOptions($this->parent);
             foreach ($configurableAttributes as $a) {
                 foreach ($a as $p) {
@@ -386,11 +411,11 @@ class Variation
          * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
          */
         foreach ($this->product->getAttributes() as $attribute) {
-            if (!$attribute->getIsUserDefined()) {
+            if (! $attribute->getIsUserDefined()) {
                 continue;
             }
 
-            if (!in_array($attribute->getAttributeCode(), $attributeCodes) || !in_array($attribute->getAttributeCode(), $sAttributeCodes)) {
+            if (! in_array($attribute->getAttributeCode(), $attributeCodes) || ! in_array($attribute->getAttributeCode(), $sAttributeCodes)) {
                 continue;
             }
 
@@ -399,13 +424,13 @@ class Variation
                 $this->product
             );
 
-            if (!$value) {
+            if (! $value) {
                 continue;
             }
             $specs[] = $this->objectManager->create(
                 Specification::class,
                 [
-                    'name' => $attribute->getAttributeCode(),
+                    'name'   => $attribute->getAttributeCode(),
                     'values' => is_array($value) ? $value : [$value],
                 ]
             );
