@@ -345,7 +345,7 @@ class Variation
                     if ($beginDt <= $endDt) {
                         $priceData['validityPeriod'] = ['beginDt' => $beginDt, 'endDt' => $endDt];
                     }
-                } catch (Exception) {
+                } catch (Exception $err) {
                     // invalid dates: send the special price without a validityPeriod
                 }
             }
