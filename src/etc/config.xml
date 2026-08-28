@@ -7,6 +7,7 @@
                 <brand>gubee_brand</brand>
                 <price>price</price>
                 <nbm>gubee_nbm</nbm>
+                <ncm>gubee_ncm</ncm>
                 <ean>gubee_ean</ean>
                 <color>color</color>
                 <width>gubee_width</width>

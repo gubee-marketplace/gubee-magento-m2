@@ -38,6 +38,14 @@
                 <field id="gubee/integration/active">1</field>
             </depends>
         </field>
+        <field id="ncm" type="select" sortOrder="45" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Ncm Attribute</label>
+            <validate>required-entry</validate>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\Attribute</source_model>
+            <depends>
+                <field id="gubee/integration/active">1</field>
+            </depends>
+        </field>
         <field id="ean" type="select" sortOrder="50" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Ean Attribute</label>
             <validate>required-entry</validate>

@@ -142,6 +142,7 @@ class ProductSimplified
                 'type'             => $this->buildType(),
                 'origin'           => OriginEnum::NATIONAL(),
                 'status'           => $this->buildStatus(),
+                'ncm'              => $this->buildNcm(),
                 'accounts'         => [],
                 'specifications'   => $this->buildSpecifications(),
                 'variations'       => $this->buildVariations(),
@@ -186,6 +187,14 @@ class ProductSimplified
         }
 
         return (string) $brand;
+    }
+
+    private function buildNcm()
+    {
+        return $this->attribute->getRawAttributeValue(
+            $this->config->getNcmAttribute(),
+            $this->product
+        ) ?: null;
     }
 
     /**

@@ -282,6 +282,24 @@ class Config extends AbstractHelper implements ConfigInterface
     }
 
     /**
+     * Set the 'ncm' attribute.
+     *
+     * @param mixed $ncm
+     */
+    public function setNcmAttribute($ncm): self
+    {
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_NCM, $ncm);
+    }
+
+    /**
+     * Get the 'ncm' attribute.
+     */
+    public function getNcmAttribute(): string
+    {
+        return (string) $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_NCM);
+    }
+
+    /**
      * Set the 'ean' attribute.
      *
      * @param mixed $ean

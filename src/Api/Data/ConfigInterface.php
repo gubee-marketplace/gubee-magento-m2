@@ -102,6 +102,13 @@ interface ConfigInterface
     public const CONFIG_PATH_NBM = "gubee/attributes/nbm";
 
     /**
+     * Path to 'ncm' system config.
+     *
+     * @var string
+     */
+    public const CONFIG_PATH_NCM = "gubee/attributes/ncm";
+
+    /**
      * Path to 'ean' system config.
      *
      * @var string
@@ -401,6 +408,18 @@ interface ConfigInterface
      * Get the 'nbm' attribute.
      */
     public function getNbmAttribute(): string;
+
+    /**
+     * Set the 'ncm' attribute.
+     *
+     * @param mixed $ncm
+     */
+    public function setNcmAttribute($ncm): self;
+
+    /**
+     * Get the 'ncm' attribute.
+     */
+    public function getNcmAttribute(): string;
 
     /**
      * Set the 'ean' attribute.
