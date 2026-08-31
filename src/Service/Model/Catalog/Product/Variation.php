@@ -335,14 +335,13 @@ class Variation
             'value' => $regularPrice,
         ];
 
-        if ($specialPrice) {
-            $priceData['value'] = (float) $specialPrice;
-
+        if ($specialPrice && $specialPrice > 0) {
             if ($from && $to) {
                 try {
                     $beginDt = new DateTime($from);
                     $endDt   = new DateTime($to);
-                    if ($beginDt <= $endDt) {
+                    if ($beginDt <= $endDt && $beginDt <= new DateTime()) {
+                        $priceData['value'] = (float) $specialPrice;
                         $priceData['validityPeriod'] = ['beginDt' => $beginDt, 'endDt' => $endDt];
                     }
                 } catch (Exception $err) {
