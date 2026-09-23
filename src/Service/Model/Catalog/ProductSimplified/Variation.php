@@ -40,7 +40,6 @@ use function is_numeric;
 use function max;
 use function pathinfo;
 use function str_replace;
-use function strtolower;
 use function strtotime;
 
 use const PATHINFO_FILENAME;
@@ -131,7 +130,7 @@ class Variation
             $images[] = $this->objectManager->create(
                 Image::class,
                 [
-                    'url'   => str_replace('http://', 'https://', strtolower($image->getUrl())),
+                    'url'   => str_replace('http://', 'https://', $image->getUrl()),
                     'order' => $image->getPosition() ?: $key,
                     'name'  => $name,
                     'id'    => $image->getId(),
