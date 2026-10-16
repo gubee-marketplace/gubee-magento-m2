@@ -16,6 +16,45 @@
                     </item>
                 </argument>
             </action>
+            <action name="gubee_sync_stock">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">gubee_sync_stock</item>
+                        <item name="label" xsi:type="string" translate="true">Sync Stock</item>
+                        <item name="url" xsi:type="url" path="gubee/catalog_product_masssync/stock"/>
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Are you sure?</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure you want to do this action?</item>
+                        </item>
+                    </item>
+                </argument>
+            </action>
+            <action name="gubee_sync_price">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">gubee_sync_price</item>
+                        <item name="label" xsi:type="string" translate="true">Sync Pricing</item>
+                        <item name="url" xsi:type="url" path="gubee/catalog_product_masssync/price"/>
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Are you sure?</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure you want to do this action?</item>
+                        </item>
+                    </item>
+                </argument>
+            </action>
+            <action name="gubee_sync_product">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">gubee_sync_product</item>
+                        <item name="label" xsi:type="string" translate="true">Sync Whole Product</item>
+                        <item name="url" xsi:type="url" path="gubee/catalog_product_masssync/product"/>
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Are you sure?</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure you want to do this action?</item>
+                        </item>
+                    </item>
+                </argument>
+            </action>
         </massaction>
     </listingToolbar>
 </listing>

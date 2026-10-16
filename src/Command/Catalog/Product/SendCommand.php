@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Gubee\Integration\Command\Catalog\Product;
 
 use Exception;
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Command\AbstractCommand;
+use Gubee\Integration\Model\Catalog\Product\Identifier\Resolver;
 use Gubee\Integration\Service\Model\Catalog\Product;
+use Gubee\Integration\Service\Model\Catalog\ProductSimplified;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ManagerInterface;
@@ -19,20 +22,23 @@ use function sprintf;
 
 class SendCommand extends AbstractCommand
 {
-    public $log;
     protected ProductRepositoryInterface $productRepository;
     protected ObjectManagerInterface $objectManager;
+    protected Resolver $resolver;
 
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
+        ConfigInterface $configManager,
         ProductRepositoryInterface $productRepository,
-        ObjectManagerInterface $objectManager
+        ObjectManagerInterface $objectManager,
+        Resolver $resolver
     )
     {
-        parent::__construct($eventDispatcher, $logger, "catalog:product:send");
+        parent::__construct($eventDispatcher, $logger, $configManager, "catalog:product:send");
         $this->productRepository = $productRepository;
         $this->objectManager = $objectManager;
+        $this->resolver = $resolver;
     }
 
     protected function configure()
@@ -47,9 +53,9 @@ class SendCommand extends AbstractCommand
 
     protected function doExecute(): int
     {
-        $mageProduct = $this->productRepository->get($this->input->getArgument('sku'));
+        $mageProduct = $this->resolver->resolve($this->input->getArgument('sku'), 'sku');
         if (!$mageProduct->getId()) {
-            $this->log->error(
+            $this->logger->error(
                 __(
                     "The product with the SKU '%1' does not exist",
                 $this->input->getArgument('sku')
@@ -59,11 +65,14 @@ class SendCommand extends AbstractCommand
         }
         try {
             $product = $this->objectManager->create(
-                Product::class,
+                ProductSimplified::class,
                 [
                     'product' => $mageProduct,
                 ]
             );
+
+        // echo '<pre>';
+        // var_dump (json_encode($product->getGubeeProduct()->jsonSerialize()));die;
         } catch (Exception $e) {
             throw new \InvalidArgumentException(__(
                 "An error occurred while building the gubee product from "
@@ -94,7 +103,7 @@ class SendCommand extends AbstractCommand
      * Update a attribute value of a product
      * @param mixed $value
      */
-    protected function updateAttribute(string $attributeCode, $value, \Magento\Catalog\Model\Product $product): void
+    protected function updateAttribute(string $attributeCode, $value, \Magento\Catalog\Api\Data\ProductInterface $product): void
     {
         $resource = ObjectManager::getInstance()->get('Magento\Catalog\Model\ResourceModel\Product\Action');
         $resource->updateAttributes([$product->getId()], [$attributeCode => $value], 0);

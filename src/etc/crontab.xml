@@ -4,5 +4,8 @@
         <job name="gubee_process_queue" instance="Gubee\Integration\Cron\Queue\Process" method="execute">
             <schedule>* * * * *</schedule>
         </job>
+        <job name="gubee_cleanup_queue" instance="Gubee\Integration\Cron\Queue\Cleanup" method="execute">
+            <schedule>0 3 * * *</schedule>
+        </job>
     </group>
 </config>

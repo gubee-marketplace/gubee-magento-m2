@@ -8,6 +8,7 @@ use Exception;
 use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Api\OrderRepositoryInterface as GubeeOrderRepositoryInterface;
 use Gubee\Integration\Command\Sales\Order\AbstractProcessorCommand;
+use Gubee\Integration\Model\Catalog\Product\Identifier\Resolver;
 use Gubee\Integration\Model\InvoiceFactory;
 use Gubee\Integration\Model\Order;
 use Gubee\Integration\Service\Model\Catalog\Product\Variation;
@@ -63,10 +64,12 @@ class CreatedCommand extends AbstractProcessorCommand
     protected $storeId;
     protected $orderWarehouseId;
     protected $isFulfillment;
+    protected Resolver $resolver;
 
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
+        ConfigInterface $configManager,
         CollectionFactory $orderCollectionFactory,
         OrderResource $orderResource,
         QuoteManagement $quoteManagement,
@@ -87,12 +90,14 @@ class CreatedCommand extends AbstractProcessorCommand
         OrderManagementInterface $orderManagement,
         ConvertOrder $convertOrder,
         ConfigInterface $config,
-        GetAssignedSalesChannelsDataForStock $getAssignedSalesChannelsDataForStock
+        GetAssignedSalesChannelsDataForStock $getAssignedSalesChannelsDataForStock,
+        Resolver $resolver
     )
     {
         parent::__construct(
             $eventDispatcher,
             $logger,
+            $configManager,
             $orderResource,
             $orderCollectionFactory,
             $orderRepository,
@@ -117,6 +122,7 @@ class CreatedCommand extends AbstractProcessorCommand
         $this->cartManagement = $cartManagement;
         $this->config = $config;
         $this->getAssignedSalesChannelsDataForStock = $getAssignedSalesChannelsDataForStock;
+        $this->resolver = $resolver;
     }
 
     protected function doExecute(): int
@@ -474,10 +480,8 @@ class CreatedCommand extends AbstractProcessorCommand
         );
 
         foreach ($gubeeOrder['items'] as $item) {
-            // echo '<pre><hr/>';
-            // print_r($item);
             $this->logger->debug(
-                __("Adding item '%1' to quote", $item['skuId'])
+                __("Adding item '%1' SKU: '%2' to quote", $item['skuId'], $item['sku'] ?? '')
             );
             try {
                 if (!isset($item['salePrice'])) {
@@ -491,14 +495,30 @@ class CreatedCommand extends AbstractProcessorCommand
                         if (!isset($toBeAdded['percentageOfTotal'])) {
                             $toBeAdded['percentageOfTotal'] = 100;
                         }
-                        $productToBeAdd = $this->getProductByGubeeSku(
-                            $toBeAdded['skuId']
-                        );
+                        $productToBeAdd = null;
+                        $skuToBeUsed = $toBeAdded['skuId'];
+                        try {
+                            $productToBeAdd = $this->getProductByGubeeSku(
+                                $toBeAdded['skuId']
+                            );
+                        } catch (Throwable $e) {
+                            $message = __(
+                                "Error fetching product with SKU '%1', error: " . $e->getMessage(),
+                                $toBeAdded['skuId'],
+                            );
+                            $this->logger->error($message);
+                            $skuToBeUsed = $toBeAdded['sku'];
+                        }
+                        if (!isset($productToBeAdd)) {
+                            $productToBeAdd = $this->getProductByGubeeSku(
+                                $skuToBeUsed
+                            );
+                        }
                         // the price of this item is the percentage of the total, divided by the quantity of the subitem
                         $price = ($fullPrice / $toBeAdded['qty']) * $toBeAdded['percentageOfTotal'] / 100;
 
                         $this->logger->debug(
-                            __("Adding product '%1' to quote", $toBeAdded['skuId'])
+                            __("Adding product '%1' SKU: '%2' to quote", $toBeAdded['skuId'], $toBeAdded['sku'] ?? '')
                         );
                         try {
                             $quoteItem = $quote->addProduct(
@@ -517,8 +537,9 @@ class CreatedCommand extends AbstractProcessorCommand
                             $quoteItem->setStoreId($quote->getStoreId());
                         } catch (Throwable $e) {
                             $message = __(
-                                "Error adding product with SKU '%1' to quote, error: " . $e->getMessage(),
+                                "Error adding product with SKU ID '%1' and SKU '%2' to quote, error: " . $e->getMessage(),
                                 $toBeAdded['skuId'],
+                                $toBeAdded['sku'] ?? ''
                             );
                             $this->logger->error($message);
                             throw new LocalizedException(
@@ -529,9 +550,25 @@ class CreatedCommand extends AbstractProcessorCommand
                     }
                 } else {
                     try {
-                        $productToBeAdd = $this->getProductByGubeeSku(
-                            $item['skuId']
-                        );
+                        $productToBeAdd = null;
+                        $skuToBeUsed = $item['skuId'];
+                        try {
+                            $productToBeAdd = $this->getProductByGubeeSku(
+                                $item['skuId']
+                            );
+                        } catch (Throwable $e) {
+                            $message = __(
+                                "Error fetching product with SKU '%1', error: " . $e->getMessage(),
+                                $item['skuId'],
+                            );
+                            $this->logger->error($message);
+                            $skuToBeUsed = $item['sku'];
+                        }
+                        if (!isset($productToBeAdd)) {
+                            $productToBeAdd = $this->getProductByGubeeSku(
+                                $skuToBeUsed
+                            );
+                        }
                         $price = $fullPrice;
                         // echo"<hr>", "Price: ",  $price, "<hr>";
                         $quoteItem = $quote->addProduct(
@@ -548,8 +585,9 @@ class CreatedCommand extends AbstractProcessorCommand
                         $quoteItem->setStoreId($quote->getStoreId());
                     } catch (Throwable $e) {
                         $message = __(
-                            "Error adding product with SKU '%1' to quote, error: " . $e->getMessage(),
+                            "Error adding product with SKU ID '%1' and SKU '%2' to quote, error: " . $e->getMessage(),
                             $item['skuId'],
+                            $item['sku'] ?? ''
                         );
                         $this->logger->error($message);
                         throw new LocalizedException(
@@ -615,7 +653,7 @@ class CreatedCommand extends AbstractProcessorCommand
             $this->logger->debug(
                 __("Loading product with SKU '%1'", $sku)
             );
-            $product = $this->productRepository->get($sku);
+            $product = $this->resolver->resolve($sku);
             if (!$product->getId()) {
                 throw new NoSuchEntityException(
                     __("Product with SKU '%1' not found on Magento", $sku)

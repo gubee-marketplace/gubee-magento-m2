@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Catalog\Product;
 
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Command\AbstractCommand;
-use Gubee\Integration\Service\Model\Catalog\Product;
+use Gubee\Integration\Model\Catalog\Product\Identifier\Resolver;
+use Gubee\Integration\Service\Model\Catalog\ProductSimplified;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -17,19 +19,22 @@ use function sprintf;
 
 class DesativateCommand extends AbstractCommand
 {
-    public $log;
     protected ProductRepositoryInterface $productRepository;
     protected ObjectManagerInterface $objectManager;
+    protected Resolver $resolver;
 
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
+        ConfigInterface $configManager,
         ProductRepositoryInterface $productRepository,
-        ObjectManagerInterface $objectManager
+        ObjectManagerInterface $objectManager,
+        Resolver $resolver
     ) {
-        parent::__construct($eventDispatcher, $logger, "catalog:product:desativate");
+        parent::__construct($eventDispatcher, $logger, $configManager, "catalog:product:desativate");
         $this->productRepository = $productRepository;
         $this->objectManager     = $objectManager;
+        $this->resolver          = $resolver;
     }
 
     protected function configure()
@@ -44,9 +49,9 @@ class DesativateCommand extends AbstractCommand
 
     protected function doExecute(): int
     {
-        $product = $this->productRepository->get($this->input->getArgument('sku'));
+        $product = $this->resolver->resolve($this->input->getArgument('sku'));
         if (! $product->getId()) {
-            $this->log->error(
+            $this->logger->error(
                 __(
                     "The product with the SKU '%1' does not exist",
                     $this->input->getArgument('sku')
@@ -55,14 +60,15 @@ class DesativateCommand extends AbstractCommand
             return 1;
         }
 
+        /** @var ProductSimplified $product */
         $product = $this->objectManager->create(
-            Product::class,
+            ProductSimplified::class,
             [
                 'product' => $product,
             ]
         );
 
-        $product->desativate();
+        $product->deactivate();
         return 0;
     }
 

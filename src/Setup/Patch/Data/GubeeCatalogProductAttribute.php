@@ -52,6 +52,10 @@ class GubeeCatalogProductAttribute extends AbstractMigration
             'type'  => 'varchar',
             'label' => 'NBM',
         ],
+        'gubee_ncm'                     => [
+            'type'  => 'varchar',
+            'label' => 'NCM',
+        ],
         'gubee_ean'                     => [
             'type'  => 'varchar',
             'label' => 'EAN',

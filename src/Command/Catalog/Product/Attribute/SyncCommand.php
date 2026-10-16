@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Catalog\Product\Attribute;
 
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Command\AbstractCommand;
 use Gubee\Integration\Model\ResourceModel\Catalog\Product\Attribute\CollectionFactory;
 use Gubee\Integration\Service\Model\Catalog\Product\Attribute;
@@ -21,6 +22,7 @@ class SyncCommand extends AbstractCommand
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
+        ConfigInterface $configManager,
         ObjectManagerInterface $objectManager,
         AttributeResource $attributeResource,
         CollectionFactory $collectionFactory
@@ -31,6 +33,7 @@ class SyncCommand extends AbstractCommand
         parent::__construct(
             $eventDispatcher,
             $logger,
+            $configManager,
             "catalog:product:attribute:sync"
         );
     }

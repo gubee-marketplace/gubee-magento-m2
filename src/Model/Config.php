@@ -109,7 +109,8 @@ class Config extends AbstractHelper implements ConfigInterface
                 __("The API Key is not set")->__toString()
             );
         }
-        if (! $this->isTokenValid()) {
+        if (! $this->isTokenValid() || $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_API_TOKEN) === '') {
+
             $this->getLogger()->debug(
                 __("The API Token is not valid. Renewing it.")
                     ->__toString()
@@ -133,7 +134,10 @@ class Config extends AbstractHelper implements ConfigInterface
                 $output->fetch()
             );
         }
-        return (string) $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_API_TOKEN);
+        if ($token = $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_API_TOKEN)) {
+            return $token;
+        }
+        return $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_API_KEY);
     }
 
     protected function isTokenValid(): bool
@@ -275,6 +279,24 @@ class Config extends AbstractHelper implements ConfigInterface
     public function getNbmAttribute(): string
     {
         return (string) $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_NBM);
+    }
+
+    /**
+     * Set the 'ncm' attribute.
+     *
+     * @param mixed $ncm
+     */
+    public function setNcmAttribute($ncm): self
+    {
+        return $this->saveConfig(ConfigInterface::CONFIG_PATH_NCM, $ncm);
+    }
+
+    /**
+     * Get the 'ncm' attribute.
+     */
+    public function getNcmAttribute(): string
+    {
+        return (string) $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_NCM);
     }
 
     /**
@@ -472,6 +494,13 @@ class Config extends AbstractHelper implements ConfigInterface
         return (int) $this->scopeConfig->getValue(
             self::CONFIG_PATH_QUEUE_PAGE_SIZE
         ) ?: 100;
+    }
+
+    public function getQueueCleanupDays(): int
+    {
+        return (int) $this->scopeConfig->getValue(
+            self::CONFIG_PATH_QUEUE_CLEANUP_DAYS
+        ) ?: 30;
     }
 
     /**
@@ -922,5 +951,53 @@ class Config extends AbstractHelper implements ConfigInterface
     public function getMultistockRelation() : ?array
     {
         return json_decode($this->scopeConfig->getValue(self::CONFIG_PATH_MULTISTOCK_RELATION)?? '', true);
+    }
+
+    public function setIdentifierAttribute(string $identifierAttribute): self
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_IDENTIFIER_ATTRIBUTE,
+            $identifierAttribute
+        );
+    }
+
+    /**
+     * Get the 'identifier_attribute' system config
+     */
+    public function getIdentifierAttribute(): string
+    {
+        return (string) $this->scopeConfig->getValue(self::CONFIG_PATH_IDENTIFIER_ATTRIBUTE);
+    }
+
+    public function setSyncEntities(array $syncEntities): self
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_SYNC_ENTITIES,
+            implode(',', $syncEntities)
+        );
+    }
+
+    public function getSyncEntities(): array
+    {
+        return explode(',', $this->scopeConfig->getValue(self::CONFIG_PATH_SYNC_ENTITIES) ?? '');
+    }
+
+    /**
+     * Get the 'validate_by_sku' system config.
+     */
+    public function getValidateBySku(): bool
+    {
+        return (bool) $this->scopeConfig->getValue(self::CONFIG_PATH_VALIDATE_BY_SKU);
+    }
+
+    /**
+     * Set the 'validate_by_sku' system config.
+     */
+    public function setValidateBySku(bool $validateBySku): self
+    {
+        return $this->saveConfig(
+            self::CONFIG_PATH_VALIDATE_BY_SKU,
+            $validateBySku
+        );
     }
 }

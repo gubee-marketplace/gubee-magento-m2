@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Catalog\Product;
 
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Command\AbstractCommand;
+use Gubee\Integration\Model\Catalog\Product\Identifier\Resolver;
 use Gubee\Integration\Service\Model\Catalog\Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Event\ManagerInterface;
@@ -19,17 +21,20 @@ class ValidateCommand extends AbstractCommand
 {
     protected ProductRepositoryInterface $productRepository;
     protected ObjectManagerInterface $objectManager;
-    protected LoggerInterface $log;
+    protected Resolver $resolver;
 
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $log,
+        ConfigInterface $configManager,
         ProductRepositoryInterface $productRepository,
-        ObjectManagerInterface $objectManager
+        ObjectManagerInterface $objectManager,
+        Resolver $resolver
     ) {
-        parent::__construct($eventDispatcher, $log, "catalog:product:validate");
+        parent::__construct($eventDispatcher, $log, $configManager, "catalog:product:validate");
         $this->productRepository = $productRepository;
         $this->objectManager     = $objectManager;
+        $this->resolver          = $resolver;
     }
 
     protected function configure()
@@ -45,9 +50,9 @@ class ValidateCommand extends AbstractCommand
 
     protected function doExecute(): int
     {
-        $product = $this->productRepository->get($this->input->getArgument('sku'));
+        $product = $this->resolver->resolve($this->input->getArgument('sku'));
         if (! $product->getId()) {
-            $this->log->error(
+            $this->logger->error(
                 __(
                     "The product with the SKU '%1' does not exist",
                     $this->input->getArgument('sku')

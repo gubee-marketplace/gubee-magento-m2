@@ -6,6 +6,7 @@ namespace Gubee\Integration\Command\Sales\Order\Shipment;
 
 use DateTime;
 use Gubee\Integration\Api\OrderRepositoryInterface as GubeeOrderRepositoryInterface;
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Command\Sales\Order\AbstractProcessorCommand;
 use Gubee\Integration\Model\Config;
 use Gubee\Integration\Service\Model\Catalog\Product\Variation;
@@ -37,6 +38,7 @@ class SendCommand extends AbstractProcessorCommand
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
+        ConfigInterface $configManager,
         OrderResource $orderResource,
         CollectionFactory $orderCollectionFactory,
         OrderRepositoryInterface $orderRepository,
@@ -49,6 +51,7 @@ class SendCommand extends AbstractProcessorCommand
         parent::__construct(
             $eventDispatcher,
             $logger,
+            $configManager,
             $orderResource,
             $orderCollectionFactory,
             $orderRepository,

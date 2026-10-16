@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Catalog\Category;
 
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Command\AbstractCommand;
 use Gubee\SDK\Model\Catalog\Category;
 use Gubee\SDK\Resource\Catalog\CategoryResource;
@@ -28,12 +29,13 @@ class SyncCommand extends AbstractCommand
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
+        ConfigInterface $configManager,
         CategoryResource $categoryResource,
         ObjectManagerInterface $objectManager,
         CategoryRepositoryInterface $categoryRepository,
         CollectionFactory $categoryCollectionFactory
     ) {
-        parent::__construct($eventDispatcher, $logger, "catalog:category:sync");
+        parent::__construct($eventDispatcher, $logger, $configManager, "catalog:category:sync");
         $this->categoryResource   = $categoryResource;
         $this->collection         = $categoryCollectionFactory->create()
             ->addAttributeToSelect('*')

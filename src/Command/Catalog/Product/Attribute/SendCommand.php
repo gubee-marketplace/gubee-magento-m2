@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Gubee\Integration\Command\Catalog\Product\Attribute;
 
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Command\AbstractCommand;
 use Gubee\Integration\Service\Model\Catalog\Product\Attribute;
 use Gubee\SDK\Client;
@@ -22,6 +23,7 @@ class SendCommand extends AbstractCommand
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
+        ConfigInterface $configManager,
         ObjectManagerInterface $objectManager,
         Client $client,
         ProductAttributeRepositoryInterface $productAttributeRepository
@@ -32,6 +34,7 @@ class SendCommand extends AbstractCommand
         parent::__construct(
             $eventDispatcher,
             $logger,
+            $configManager,
             "catalog:product:attribute:send"
         );
     }

@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Gubee\Integration\Command\Catalog\Product\Price;
 
 use Gubee\Integration\Api\Enum\Integration\StatusEnum;
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Command\AbstractCommand;
 use Gubee\Integration\Helper\Catalog\Attribute;
+use Gubee\Integration\Model\Catalog\Product\Identifier\Resolver;
 use Gubee\Integration\Service\Model\Catalog\Product;
+use Gubee\SDK\Resource\Catalog\ProductResource;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -23,17 +26,26 @@ class SendCommand extends AbstractCommand
     protected ObjectManagerInterface $objectManager;
     protected Attribute $attribute;
 
+    protected Resolver $resolver;
+
+    protected ProductResource $productResource;
+
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
+        ConfigInterface $configManager,
         ProductRepositoryInterface $productRepository,
         ObjectManagerInterface $objectManager,
-        Attribute $attribute
+        Attribute $attribute,
+        Resolver $resolver,
+        ProductResource $productResource
     ) {
-        parent::__construct($eventDispatcher, $logger, "catalog:product:price:send");
+        parent::__construct($eventDispatcher, $logger, $configManager, "catalog:product:price:send");
         $this->productRepository = $productRepository;
         $this->objectManager     = $objectManager;
         $this->attribute         = $attribute;
+        $this->resolver          = $resolver;
+        $this->productResource   = $productResource;
     }
 
     protected function configure()
@@ -48,7 +60,7 @@ class SendCommand extends AbstractCommand
 
     protected function doExecute(): int
     {
-        $product = $this->productRepository->get($this->input->getArgument('sku'));
+        $product = $this->resolver->resolve($this->input->getArgument('sku'));
         if (! $product->getId()) {
             $this->logger->error(
                 __(
@@ -58,12 +70,7 @@ class SendCommand extends AbstractCommand
             );
             return 1;
         }
-        if (
-            $this->attribute->getRawAttributeValue(
-                'gubee_integration_status',
-                $product
-            ) !== StatusEnum::INTEGRATED()->__toString()
-        ) {
+        if (! $this->shouldUpdate($product)) {
             $this->logger->error(
                 __(
                     "The product with the SKU '%1' is not integrated with Gubee yet",
@@ -95,5 +102,17 @@ class SendCommand extends AbstractCommand
     public function getPriority(): int
     {
         return 700;
+    }
+
+    protected function shouldUpdate($product): bool
+    {
+        if (! $this->configManager->getValidateBySku()) {
+            return $this->attribute->getRawAttributeValue(
+                'gubee_integration_status',
+                $product
+            ) === StatusEnum::INTEGRATED()->__toString();
+        }
+
+        return true;
     }
 }

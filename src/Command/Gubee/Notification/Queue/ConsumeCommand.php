@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gubee\Integration\Command\Gubee\Notification\Queue;
 
 use Gubee\Integration\Api\Queue\ManagementInterface;
+use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Command\AbstractCommand;
 use Gubee\Integration\Command\Sales\Order\Processor\CanceledCommand;
 use Gubee\Integration\Command\Sales\Order\Processor\CreatedCommand;
@@ -33,6 +34,7 @@ class ConsumeCommand extends AbstractCommand
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
+        ConfigInterface $configManager,
         ManagementInterface $management,
         NotificationResource $notificationResource,
         ResultPager $resultPager
@@ -43,6 +45,7 @@ class ConsumeCommand extends AbstractCommand
         parent::__construct(
             $eventDispatcher,
             $logger,
+            $configManager,
             "notification:queue:consume"
         );
     }

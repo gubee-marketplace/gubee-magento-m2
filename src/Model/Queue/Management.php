@@ -9,6 +9,7 @@ use Gubee\Integration\Api\Data\MessageInterfaceFactory;
 use Gubee\Integration\Api\Enum\Message\StatusEnum;
 use Gubee\Integration\Api\MessageRepositoryInterface;
 use Gubee\Integration\Api\Queue\ManagementInterface;
+use Gubee\Integration\Command\Catalog\Product\SendCommand;
 use Gubee\Integration\Helper\Catalog\Attribute;
 use Gubee\Integration\Model\ResourceModel\Message\CollectionFactory as MessageCollectionFactory;
 use InvalidArgumentException;

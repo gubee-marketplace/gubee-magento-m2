@@ -20,6 +20,9 @@
     <event name="catalog_product_delete_after_done">
         <observer name="Gubee\Integration\Observer\Catalog\Product\Delete\After" instance="Gubee\Integration\Observer\Catalog\Product\Delete\After" />
     </event>
+    <event name="catalog_product_import_bunch_save_after">
+        <observer name="Gubee\Integration\Observer\Catalog\Product\Import\Bunch\Save\After" instance="Gubee\Integration\Observer\Catalog\Product\Import\Bunch\Save\After" />
+    </event>
     <event name="catalog_category_save_after">
         <observer name="Gubee\Integration\Observer\Catalog\Category\Save\After" instance="Gubee\Integration\Observer\Catalog\Category\Save\After" />
     </event>

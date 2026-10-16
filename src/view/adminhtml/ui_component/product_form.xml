@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <settings>
+        <buttons>
+            <button name="gubee_sync_stock" class="Gubee\Integration\Block\Adminhtml\Product\Edit\Button\SyncStock"/>
+            <button name="gubee_sync_price" class="Gubee\Integration\Block\Adminhtml\Product\Edit\Button\SyncPrice"/>
+            <button name="gubee_sync_product" class="Gubee\Integration\Block\Adminhtml\Product\Edit\Button\SyncProduct"/>
+        </buttons>
+    </settings>
+</form>

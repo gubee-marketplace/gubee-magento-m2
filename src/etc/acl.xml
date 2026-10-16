@@ -5,6 +5,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Gubee_Integration::gubee_integration" title="gubee integration" sortOrder="10">
                     <resource id="Gubee_Integration::Message" title="Gubee Messages" sortOrder="20"/>
+                    <resource id="Gubee_Integration::Sync" title="Sync to Gubee" sortOrder="25"/>
                     <resource id="Gubee_Integration::UnsuccessfulOrders" title="Unsuccessful Orders Integration" sortOrder="30"/>
                 </resource>
             </resource>

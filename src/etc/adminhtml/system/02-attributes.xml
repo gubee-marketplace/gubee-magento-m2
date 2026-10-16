@@ -38,6 +38,14 @@
                 <field id="gubee/integration/active">1</field>
             </depends>
         </field>
+        <field id="ncm" type="select" sortOrder="45" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Ncm Attribute</label>
+            <validate>required-entry</validate>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\Attribute</source_model>
+            <depends>
+                <field id="gubee/integration/active">1</field>
+            </depends>
+        </field>
         <field id="ean" type="select" sortOrder="50" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
             <label>Ean Attribute</label>
             <validate>required-entry</validate>
@@ -135,6 +143,17 @@
             <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\Attribute</source_model>
             <comment>
                 <![CDATA[This configuration specifies the attributes that will <b>not</b> be integrated into the Gubee platform.]]>
+            </comment>
+            <depends>
+                <field id="gubee/integration/active">1</field>
+            </depends>
+        </field>
+        <field id="identifier_attribute" type="select" sortOrder="150" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Identifier Attribute</label>
+            <validate>required-entry</validate>
+            <source_model>Gubee\Integration\Model\Source\System\Config\Catalog\Product\Attribute</source_model>
+            <comment>
+                <![CDATA[This configuration specifies the attribute that will be used as the product identifier in the Gubee platform.]]>
             </comment>
             <depends>
                 <field id="gubee/integration/active">1</field>

@@ -74,6 +74,13 @@ interface ConfigInterface
     public const CONFIG_PATH_PRODUCT_HEADING = "gubee/attributes/product_heading";
 
     /**
+     * Path to 'sync_entities' system config.
+     *
+     * @var string
+     */
+    public const CONFIG_PATH_SYNC_ENTITIES = "gubee/general/sync_entities";
+
+    /**
      * Path to 'brand' system config.
      *
      * @var string
@@ -93,6 +100,13 @@ interface ConfigInterface
      * @var string
      */
     public const CONFIG_PATH_NBM = "gubee/attributes/nbm";
+
+    /**
+     * Path to 'ncm' system config.
+     *
+     * @var string
+     */
+    public const CONFIG_PATH_NCM = "gubee/attributes/ncm";
 
     /**
      * Path to 'ean' system config.
@@ -170,6 +184,13 @@ interface ConfigInterface
      * @var string
      */
     public const CONFIG_PATH_BLACKLIST = "gubee/attributes/blacklist";
+   
+    /**
+     * Path to 'identifier_attribute' system config.
+     *
+     * @var string
+     */
+    public const CONFIG_PATH_IDENTIFIER_ATTRIBUTE = 'gubee/attributes/identifier_attribute';
 
     /**
      * Path to 'queue_page_size' system config.
@@ -178,11 +199,24 @@ interface ConfigInterface
      */
     public const CONFIG_PATH_QUEUE_PAGE_SIZE = 'gubee/general/queue_page_size';
     /**
+     * Path to 'queue_cleanup_days' system config.
+     *
+     * @var string
+     */
+    public const CONFIG_PATH_QUEUE_CLEANUP_DAYS = 'gubee/general/queue_cleanup_days';
+    /**
      * Path to 'prevent_email_send' system config.
      *
      * @var string
      */
     public const CONFIG_PATH_PREVENT_EMAIL_SEND = 'gubee/general/prevent_email_send';
+
+    /**
+     * Path to 'validate_by_sku' system config.
+     *
+     * @var string
+     */
+    public const CONFIG_PATH_VALIDATE_BY_SKU = 'gubee/general/validate_by_sku';
 
     public const CONFIG_PATH_DEFAULT_DELIVERY_TIME = 'carriers/gubee/default_delivery_time';
 
@@ -255,6 +289,7 @@ interface ConfigInterface
     public const CONFIG_PATH_MULTISTOCK_ENABLE = 'gubee/multiple_inventory/enable_multi_inventory';
 
     public const CONFIG_PATH_MULTISTOCK_RELATION = 'gubee/multiple_inventory/stock_relation';
+
     /**
      * Set the 'active' system config.
      */
@@ -373,6 +408,18 @@ interface ConfigInterface
      * Get the 'nbm' attribute.
      */
     public function getNbmAttribute(): string;
+
+    /**
+     * Set the 'ncm' attribute.
+     *
+     * @param mixed $ncm
+     */
+    public function setNcmAttribute($ncm): self;
+
+    /**
+     * Get the 'ncm' attribute.
+     */
+    public function getNcmAttribute(): string;
 
     /**
      * Set the 'ean' attribute.
@@ -516,6 +563,11 @@ interface ConfigInterface
      * Get the 'queue_page_size' system config.
      */
     public function getQueuePageSize(): int;
+
+    /**
+     * Get the 'queue_cleanup_days' system config.
+     */
+    public function getQueueCleanupDays(): int;
 
     /**
      * Get the 'default_delivery_time' system config.
@@ -677,4 +729,25 @@ interface ConfigInterface
     public function setMultistockRelation(array $flag) : self;
 
     public function getMultistockRelation() : ?array;
+
+    public function setIdentifierAttribute(string $identifierAttribute): self;
+    
+    /**
+     * Get the 'identifier_attribute' system config
+     */
+    public function getIdentifierAttribute(): string;
+
+    public function setSyncEntities(array $syncEntities): self;
+
+    public function getSyncEntities(): array;
+
+    /**
+     * Get the 'validate_by_sku' system config.
+     */
+    public function getValidateBySku(): bool;
+
+    /**
+     * Set the 'validate_by_sku' system config.
+     */
+    public function setValidateBySku(bool $validateBySku): self;
 }

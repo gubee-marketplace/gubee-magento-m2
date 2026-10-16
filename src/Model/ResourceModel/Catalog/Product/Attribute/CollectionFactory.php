@@ -78,6 +78,11 @@ class CollectionFactory
                 ->create()
             )->addFilter(
                 $this->filterBuilder->setField('attribute_code')
+                ->setValue($this->config->getNcmAttribute())
+                ->setConditionType('neq')
+                ->create()
+            )->addFilter(
+                $this->filterBuilder->setField('attribute_code')
                 ->setValue($this->config->getBrandAttribute())
                 ->setConditionType('neq')
                 ->create()
