@@ -9,6 +9,7 @@ use DateTimeInterface;
 use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Api\Enum\MainCategoryEnum;
 use Gubee\Integration\Command\Gubee\Token\RenewCommand;
+use Gubee\Integration\Service\Gubee\OAuth;
 use Gubee\SDK\Enum\Catalog\Product\Attribute\Dimension\Weight\TypeEnum;
 use LogicException;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
@@ -31,19 +32,22 @@ class Config extends AbstractHelper implements ConfigInterface
     protected ReinitableConfigInterface $reinitableConfig;
     protected ObjectManagerInterface $objectManager;
     protected LoggerInterface $logger;
+    private OAuth $oauth;
 
     public function __construct(
         Context $context,
         WriterInterface $configWriter,
         ReinitableConfigInterface $reinitableConfig,
         ObjectManagerInterface $objectManager,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        OAuth $oauth
     ) {
         parent::__construct($context);
         $this->reinitableConfig = $reinitableConfig;
         $this->objectManager    = $objectManager;
         $this->configWriter     = $configWriter;
         $this->logger           = $logger;
+        $this->oauth            = $oauth;
     }
 
     /**
@@ -104,6 +108,10 @@ class Config extends AbstractHelper implements ConfigInterface
      */
     public function getApiToken(): string
     {
+        $oauthToken = $this->oauth->getAccessToken();
+        if ($oauthToken !== null) {
+            return $oauthToken;
+        }
         if ($this->getApiKey() === '' || $this->getApiKey() === '0') {
             throw new LogicException(
                 __("The API Key is not set")->__toString()
@@ -138,6 +146,11 @@ class Config extends AbstractHelper implements ConfigInterface
             return $token;
         }
         return $this->scopeConfig->getValue(ConfigInterface::CONFIG_PATH_API_KEY);
+    }
+
+    public function hasOAuthConnection(): bool
+    {
+        return $this->oauth->hasConnection();
     }
 
     protected function isTokenValid(): bool

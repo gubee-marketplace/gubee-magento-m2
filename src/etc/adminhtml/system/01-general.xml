@@ -6,15 +6,26 @@
             <label><![CDATA[Active]]></label>
             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
         </field>
-        <field id="api_key" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
-            <label>API Key</label>
-            <comment><![CDATA[API Key is the token to access the Gubee API, you can get it in the Gubee panel.]]></comment>
-            <validate>required-entry</validate>
+        <field id="oauth_client_id" type="text" sortOrder="11" showInWebsite="0" showInStore="0" showInDefault="1" translate="label comment">
+            <label>OAuth Client ID</label>
+            <comment>Register an app in Gubee under Integrations → My apps. This connection applies to the entire Magento installation.</comment>
+        </field>
+        <field id="oauth_client_secret" type="obscure" sortOrder="12" showInWebsite="0" showInStore="0" showInDefault="1" translate="label">
+            <label>OAuth Client Secret</label>
+            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+        </field>
+        <field id="oauth_connection" type="text" sortOrder="13" showInWebsite="0" showInStore="0" showInDefault="1" translate="label">
+            <label>Gubee Connection</label>
+            <frontend_model>Gubee\Integration\Block\Adminhtml\System\Config\Form\Field\Oauth</frontend_model>
+        </field>
+        <field id="api_key" type="text" sortOrder="14" showInWebsite="0" showInStore="0" showInDefault="1" translate="label">
+            <label>Legacy API Key</label>
+            <comment><![CDATA[For existing installations only. Used until the first successful OAuth connection; ignored afterwards. New installations should connect with OAuth.]]></comment>
             <depends>
                 <field id="active">1</field>
             </depends>
         </field>
-        <field id="api_token" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+        <field id="api_token" type="obscure" sortOrder="15" showInWebsite="0" showInStore="0" showInDefault="1" translate="label">
             <label>API Token</label>
             <frontend_model>Gubee\Integration\Block\Adminhtml\System\Config\Form\Field\Disabled</frontend_model>
             <comment>
@@ -24,7 +35,7 @@
                 <field id="active">1</field>
             </depends>
         </field>
-        <field id="api_timeout" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+        <field id="api_timeout" type="text" sortOrder="16" showInWebsite="0" showInStore="0" showInDefault="1" translate="label">
             <label>API Timeout</label>
             <frontend_model>Gubee\Integration\Block\Adminhtml\System\Config\Form\Field\Disabled</frontend_model>
             <comment><![CDATA[API Timeout indicate the valid time of the token.]]></comment>

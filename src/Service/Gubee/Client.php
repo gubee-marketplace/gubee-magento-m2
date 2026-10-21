@@ -8,9 +8,9 @@ use Gubee\Integration\Model\Config;
 use Gubee\SDK\Api\ServiceProviderInterface;
 use Gubee\SDK\Library\HttpClient\Builder;
 use Http\Client\Common\HttpMethodsClientInterface;
-use LogicException;
 use Magento\Framework\App\ObjectManager;
 use Psr\Log\LoggerInterface;
+use Throwable;
 
 use function time;
 
@@ -27,6 +27,7 @@ class Client extends \Gubee\SDK\Client
 
     private Config $config;
     private ?int $lastAuthAttempt = null;
+    private ?Throwable $authError = null;
 
     public function __construct(
         Config $config,
@@ -37,7 +38,6 @@ class Client extends \Gubee\SDK\Client
     ) {
         parent::__construct($serviceProvider, $logger, $httpClientBuilder, $retryCount);
         $this->config = $config;
-        $this->refreshAuthentication();
     }
 
     /**
@@ -49,8 +49,14 @@ class Client extends \Gubee\SDK\Client
      */
     public function getHttpClient(): HttpMethodsClientInterface
     {
-        if ($this->lastAuthAttempt === null || (time() - $this->lastAuthAttempt) >= self::AUTH_RETRY_INTERVAL) {
+        if (
+            $this->config->hasOAuthConnection() || $this->lastAuthAttempt === null
+            || (time() - $this->lastAuthAttempt) >= self::AUTH_RETRY_INTERVAL
+        ) {
             $this->refreshAuthentication();
+        }
+        if ($this->authError !== null) {
+            throw $this->authError;
         }
         return parent::getHttpClient();
     }
@@ -60,8 +66,10 @@ class Client extends \Gubee\SDK\Client
         $this->lastAuthAttempt = time();
         try {
             $this->authenticate($this->config->getApiToken());
-        } catch (LogicException $err) {
-            $this->logger->error($err->getMessage(), ['exception' => $err]);
+            $this->authError = null;
+        } catch (Throwable $err) {
+            $this->authError = $err;
+            throw $err;
         }
     }
 

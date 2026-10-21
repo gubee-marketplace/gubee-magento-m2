@@ -8,6 +8,7 @@ use DateTimeInterface;
 use Exception;
 use Gubee\Integration\Api\Data\ConfigInterface;
 use Gubee\Integration\Command\AbstractCommand;
+use Gubee\Integration\Service\Gubee\OAuth;
 use Gubee\SDK\Api\ServiceProviderInterface;
 use Gubee\SDK\Client;
 use Magento\Framework\Event\ManagerInterface;
@@ -20,13 +21,15 @@ class RenewCommand extends AbstractCommand
     protected Client $client;
     protected ConfigInterface $config;
     protected Registry $registry;
+    private OAuth $oauth;
 
     public function __construct(
         ManagerInterface $eventDispatcher,
         LoggerInterface $logger,
         ConfigInterface $configManager,
         ServiceProviderInterface $serviceProvider,
-        Registry $registry
+        Registry $registry,
+        OAuth $oauth
     ) {
         $this->client   = new Client(
             $serviceProvider,
@@ -34,6 +37,7 @@ class RenewCommand extends AbstractCommand
         );
         $this->registry = $registry;
         $this->config   = $configManager;
+        $this->oauth    = $oauth;
         parent::__construct(
             $eventDispatcher,
             $logger,
@@ -59,6 +63,10 @@ class RenewCommand extends AbstractCommand
      */
     protected function doExecute(): int
     {
+        if ($this->oauth->hasConnection()) {
+            $this->getLogger()->error('Legacy token renewal is disabled after connecting Gubee OAuth.');
+            return self::FAILURE;
+        }
         $this->logger->info("Renewing token");
         try {
             $token = $this->getClient()->token()->revalidate(

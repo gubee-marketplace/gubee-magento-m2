@@ -9,10 +9,16 @@ use Gubee\Integration\Model\Message\DetailFactory;
 use Magento\Framework\Registry;
 use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use Throwable;
 
 use function array_merge;
 use function implode;
+use function in_array;
+use function is_array;
+use function is_string;
 use function php_sapi_name;
+use function preg_replace;
+use function strtolower;
 
 class Logger implements LoggerInterface
 {
@@ -188,8 +194,8 @@ class Logger implements LoggerInterface
         );
         $detail->setLevel($level)
             ->setMessage(
-                (string) $message
-            )->setContext($context);
+                $this->redact((string) $message)
+            )->setContext($this->redactContext($context));
         if ($queueMessage = $this->registry->registry('gubee_current_message')) {
             $detail->setMessageId($queueMessage->getMessageId());
         }
@@ -200,5 +206,43 @@ class Logger implements LoggerInterface
                 echo $e->getMessage();
             }
         }
+    }
+
+    private function redactContext(array $context): array
+    {
+        foreach ($context as $key => $value) {
+            if (
+                in_array(strtolower((string) $key), [
+                    'authorization',
+                    'proxy-authorization',
+                    'cookie',
+                    'set-cookie',
+                    'client_secret',
+                    'access_token',
+                    'refresh_token',
+                    'code',
+                    'state',
+                    'code_verifier',
+                ], true)
+            ) {
+                $context[$key] = '[REDACTED]';
+            } elseif (is_array($value)) {
+                $context[$key] = $this->redactContext($value);
+            } elseif (is_string($value)) {
+                $context[$key] = $this->redact($value);
+            } elseif ($value instanceof Throwable) {
+                $context[$key] = Throwable::class;
+            }
+        }
+        return $context;
+    }
+
+    private function redact(string $value): string
+    {
+        return preg_replace([
+            '/\bBearer\s+[^\s"\x27<>]+/i',
+            '/([?&](?:code|state|code_verifier|client_secret|access_token|refresh_token)=)[^&#\s]*/i',
+            '/("(?:client_secret|access_token|refresh_token|code_verifier)"\s*:\s*")[^"]*/i',
+        ], ['Bearer [REDACTED]', '$1[REDACTED]', '$1[REDACTED]'], $value);
     }
 }

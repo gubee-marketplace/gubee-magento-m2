@@ -9,6 +9,7 @@ use Gubee\Integration\Command\Gubee\Token\RenewCommand;
 use Gubee\Integration\Model\Config;
 use Gubee\Integration\Model\Queue\Management;
 use Gubee\Integration\Observer\AbstractObserver;
+use Gubee\Integration\Service\Gubee\OAuth;
 use Magento\Framework\App\Cache\Frontend\Pool;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -25,6 +26,7 @@ class OnChange extends AbstractObserver
     protected Pool $pool;
     protected RenewCommand $renewCommand;
     protected ObjectManagerInterface $objectManager;
+    private OAuth $oauth;
 
     public function __construct(
         Config $config,
@@ -33,13 +35,15 @@ class OnChange extends AbstractObserver
         TypeListInterface $typeList,
         ObjectManagerInterface $objectManager,
         RenewCommand $renewCommand,
-        Pool $pool
+        Pool $pool,
+        OAuth $oauth
     ) {
         parent::__construct($config, $logger, $queueManagement);
         $this->typeList      = $typeList;
         $this->renewCommand  = $renewCommand;
         $this->objectManager = $objectManager;
         $this->pool          = $pool;
+        $this->oauth         = $oauth;
     }
 
     protected function process(): void
@@ -52,6 +56,9 @@ class OnChange extends AbstractObserver
 
         $changedPaths = $this->getObserver()
             ->getData('changed_paths');
+        if (in_array(OAuth::CLIENT_ID, $changedPaths, true)) {
+            $this->oauth->credentialsChanged();
+        }
         if (in_array('gubee/general/active', $changedPaths)) {
             $this->getLogger()->debug(
                 __(
@@ -65,7 +72,7 @@ class OnChange extends AbstractObserver
          * If the api key has changed we need to generate a new token
          * and save it in the configuration
          */
-        if (in_array('gubee/general/api_key', $changedPaths)) {
+        if (in_array('gubee/general/api_key', $changedPaths) && ! $this->getConfig()->hasOAuthConnection()) {
             $this->getLogger()->debug(
                 __(
                     "The Gubee Integration API Key has been changed."
