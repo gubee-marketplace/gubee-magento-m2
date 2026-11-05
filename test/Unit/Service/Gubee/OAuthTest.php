@@ -47,6 +47,7 @@ class OAuthTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->credentials[OAuth::CLIENT_SECRET] = 'encrypted:' . base64_encode('secret&+value');
         $resource = $this->createMock(ResourceConnection::class);
         $db       = $this->createMock(AdapterInterface::class);
         $select   = $this->createMock(Select::class);
@@ -156,7 +157,7 @@ class OAuthTest extends TestCase
         } elseif ($change === 'admin') {
             $attempt['admin_id'] = 8;
         } elseif ($change === 'credentials') {
-            $this->credentials[OAuth::CLIENT_SECRET] = 'rotated';
+            $this->credentials[OAuth::CLIENT_SECRET] = 'encrypted:' . base64_encode('rotated');
         } elseif ($change === 'cancelled') {
             $code = '';
         } else {
@@ -361,7 +362,7 @@ class OAuthTest extends TestCase
     {
         $this->storeConnection();
         $this->onLock = function () {
-            $this->credentials[OAuth::CLIENT_SECRET] = 'rotated-secret';
+            $this->credentials[OAuth::CLIENT_SECRET] = 'encrypted:' . base64_encode('rotated-secret');
         };
         self::assertSame('new-access', $this->oauth->getAccessToken());
         self::assertSame('rotated-secret', $this->requests[0]['client_secret']);

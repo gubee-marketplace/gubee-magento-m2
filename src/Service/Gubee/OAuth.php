@@ -243,7 +243,7 @@ class OAuth
         }
         return [
             (string) $this->config->getValue(self::CLIENT_ID),
-            (string) $this->config->getValue(self::CLIENT_SECRET),
+            $this->encryptor->decrypt((string) $this->config->getValue(self::CLIENT_SECRET)),
         ];
     }
 
